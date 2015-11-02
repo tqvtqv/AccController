@@ -29,6 +29,7 @@ namespace AccController.Ais
         public String LastUpdated { get; set; }
         public String LastUpdatedby { get; set; }
         public String Description { get; set; }
+        public String Name { get; set; }
     
         [Imported, PreserveMemberCase]
         public static class Fields
@@ -46,6 +47,7 @@ namespace AccController.Ais
             [InlineConstant] public const string LastUpdated = "LastUpdated";
             [InlineConstant] public const string LastUpdatedby = "LastUpdatedby";
             [InlineConstant] public const string Description = "Description";
+            [InlineConstant] public const string Name = "Name";
         }
     }
     

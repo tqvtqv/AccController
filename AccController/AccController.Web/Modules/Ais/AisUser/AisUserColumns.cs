@@ -28,5 +28,6 @@ namespace AccController.Ais.Columns
         public DateTime LastUpdated { get; set; }
         public String LastUpdatedby { get; set; }
         public String Description { get; set; }
+        public String Name { get; set; }
     }
 }

@@ -591,6 +591,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisUserGrid
 	var $AccController_Ais_AisUserGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Ais_AisUserGrid.__typeName = 'AccController.Ais.AisUserGrid';
@@ -1694,6 +1695,9 @@
 	ss.initClass($AccController_Ais_AisAddOUService, $asm, {});
 	ss.initClass($AccController_Ais_AisFileDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisFileForm, $asm, {
+		get_fileName: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'FileName');
+		},
 		get_fileSize: function() {
 			return this.byId(Serenity.IntegerEditor).call(this, 'FileSize');
 		},
@@ -1859,9 +1863,32 @@
 		},
 		get_description: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
+		},
+		get_name: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Name');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Ais_AisUserGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Ais_AisUserGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserRequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Ais_AisUserService, $asm, {});
 	ss.initClass($AccController_Ais_GroupDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_GroupForm, $asm, {

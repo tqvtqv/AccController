@@ -15,6 +15,7 @@ namespace AccController.Ais
     
         public AisFileForm(string idPrefix) : base(idPrefix) {}
     
+        public StringEditor FileName { get { return ById<StringEditor>("FileName"); } }
         public IntegerEditor FileSize { get { return ById<IntegerEditor>("FileSize"); } }
         public StringEditor ContentType { get { return ById<StringEditor>("ContentType"); } }
         public StringEditor FilePath { get { return ById<StringEditor>("FilePath"); } }

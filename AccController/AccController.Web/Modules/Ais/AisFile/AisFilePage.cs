@@ -35,10 +35,10 @@ namespace AccController.Ais.Pages
 
             if (file.FileName.IsEmptyOrNull())
                 throw new ArgumentNullException("filename");
-            var response = this.ExecuteMethod(() => HandleGroupRequest(file));
+            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
             AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
             if (fileRow != null) {
-                ListContainer list = new ListContainer();
+                ListContainer<GroupRow> list = new ListContainer<GroupRow>();
                 var fileRowResponse = this.InTransaction("Default", (uow) => new AisFileRepository().Create(uow, new SaveRequest<AisFileRow>
                 {
                     Entity = fileRow
@@ -90,9 +90,74 @@ namespace AccController.Ais.Pages
             ((UploadResponse)response.Data).UploadedFile = null;
             return response;
         }
-        
 
-        private ServiceResponse HandleGroupRequest(HttpPostedFileBase file)
+        [AcceptVerbs("POST")]
+        public ActionResult CreateUserRequest()
+        {
+            HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            if (file.FileName.IsEmptyOrNull())
+                throw new ArgumentNullException("filename");
+            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
+            AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+            if (fileRow != null)
+            {
+                ListContainer<AisUserRow> list = new ListContainer<AisUserRow>();
+                var fileRowResponse = this.InTransaction("Default", (uow) => new AisFileRepository().Create(uow, new SaveRequest<AisFileRow>
+                {
+                    Entity = fileRow
+                })).Data;
+                if (fileRowResponse.EntityId.HasValue)
+                {
+                    try
+                    {
+                        file.InputStream.Seek(0, SeekOrigin.Begin);
+                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/TaoMoiNguoiDung.xlsx")).ReadFromFile(list, file.InputStream);
+                        if (list != null)
+                        {
+                            foreach (var item in list.Entities)
+                            {
+                                this.InTransaction("Default", (uow) =>
+                                {
+                                    var saveresponse = new AisUserRepository().Create(uow, new SaveRequest<AisUserRow>
+                                    {
+                                        Entity = item
+                                    });
+                                    if (saveresponse.EntityId.HasValue)
+                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        {
+                                            Entity = new AisFileResultsRow
+                                            {
+                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
+                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                                ReqType = 2
+                                            }
+                                        });
+                                    return saveresponse;
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        string s = ex.Message;
+                    }
+                }
+                //this.InTransaction("Default", (uow) => {
+                //}
+                //);
+            }
+
+            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                response.ContentType = "text/plain";
+            ((UploadResponse)response.Data).UploadedFile = null;
+            return response;
+        }
+
+
+        private ServiceResponse HandleUploadRequest(HttpPostedFileBase file)
         {
             AisFileRow fileRow = new AisFileRow
             {
@@ -127,8 +192,8 @@ namespace AccController.Ais.Pages
             public string ContenType { get; set; }
             public AisFileRow UploadedFile { get; set; }
         }
-        private class ListContainer {
-            public List<GroupRow> Entities { get; set; }
+        private class ListContainer<T> {
+            public List<T> Entities { get; set; }
         }
     }
 }

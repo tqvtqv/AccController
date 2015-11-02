@@ -107,6 +107,13 @@ namespace AccController.Ais.Entities
             set { Fields.Description[this] = value; }
         }
 
+        [DisplayName("Name"), Size(150), NotNull]
+        public String Name
+        {
+            get { return Fields.Name[this]; }
+            set { Fields.Name[this] = value; }
+        }
+
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -139,6 +146,7 @@ namespace AccController.Ais.Entities
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
+            public readonly StringField Name;
 
             public RowFields()
                 : base("[Acc].AisUser")

@@ -36,7 +36,10 @@ namespace AccController.Ais.Entities
             get { return Fields.ReqId[this]; }
             set { Fields.ReqId[this] = value; }
         }
-
+        /// <summary>
+        /// 1 - Create Group
+        /// 2 - Create User
+        /// </summary>
         [DisplayName("Req Type"), NotNull]
         public Int16? ReqType
         {

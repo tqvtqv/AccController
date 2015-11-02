@@ -27,6 +27,7 @@ namespace AccController.Migrations.DefaultDB
                ;
             Create.Table("AisUser").InSchema(AccSchema)
                 .WithColumn("Id").AsInt32().Identity().PrimaryKey().NotNullable()
+                .WithColumn("Name").AsString(150).NotNullable()
                 .WithColumn("OU").AsString(255).NotNullable()
                 .WithColumn("Email").AsString(150).NotNullable()
                 .WithColumn("Phone").AsString(50).Nullable()

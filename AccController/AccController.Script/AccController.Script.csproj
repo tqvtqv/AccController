@@ -228,6 +228,12 @@
     <Compile Include="Imports\ServiceContracts\Ais.GroupService.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
+    <Compile Include="Imports\ServiceContracts\Ais.Pages.AisFileController.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Ais.Pages.UploadResponse.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
     <Compile Include="Imports\ServiceContracts\Common.Pages.FileController.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
@@ -303,8 +309,6 @@
     <Compile Include="Administration\UserPermission\UserPermissionDialog.cs" />
     <Compile Include="Ais\Group\GroupGrid.cs" />
     <Compile Include="Ais\Group\GroupDialog.cs" />
-    <Compile Include="Ais\AisUser\AisUserGrid.cs" />
-    <Compile Include="Ais\AisUser\AisUserDialog.cs" />
     <Compile Include="Ais\AisFileResults\AisFileResultsGrid.cs" />
     <Compile Include="Ais\AisFileResults\AisFileResultsDialog.cs" />
     <Compile Include="Ais\AisFile\AisFileGrid.cs" />
@@ -333,6 +337,8 @@
     <Compile Include="Email\EmailNew\EmailNewDialog.cs" />
     <Compile Include="Email\EmailUpdateInfo\EmailUpdateInfoGrid.cs" />
     <Compile Include="Email\EmailUpdateInfo\EmailUpdateInfoDialog.cs" />
+    <Compile Include="Ais\AisUser\AisUserGrid.cs" />
+    <Compile Include="Ais\AisUser\AisUserDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Imports\FormContexts\FormContexts.log">

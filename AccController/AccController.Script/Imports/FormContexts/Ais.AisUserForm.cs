@@ -27,6 +27,7 @@ namespace AccController.Ais
         public DateEditor LastUpdated { get { return ById<DateEditor>("LastUpdated"); } }
         public StringEditor LastUpdatedby { get { return ById<StringEditor>("LastUpdatedby"); } }
         public StringEditor Description { get { return ById<StringEditor>("Description"); } }
+        public StringEditor Name { get { return ById<StringEditor>("Name"); } }
     }
 }
 
