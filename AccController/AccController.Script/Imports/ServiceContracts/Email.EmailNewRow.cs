@@ -28,7 +28,7 @@ namespace AccController.Email
         public String Company { get; set; }
         public String Phone { get; set; }
         public String Mobile { get; set; }
-        public byte[] Birthday { get; set; }
+        public String Birthday { get; set; }
         public String Ou { get; set; }
         public String UserPrincipal { get; set; }
         public Int16? Status { get; set; }

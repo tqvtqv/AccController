@@ -101,7 +101,7 @@ namespace AccController.Email.Entities
         }
 
         [DisplayName("Birthday")]
-        public Stream Birthday
+        public DateTime? Birthday
         {
             get { return Fields.Birthday[this]; }
             set { Fields.Birthday[this] = value; }
@@ -128,7 +128,7 @@ namespace AccController.Email.Entities
             set { Fields.Status[this] = value; }
         }
 
-        [DisplayName("Result"), NotNull]
+        [DisplayName("Result")]
         public Int16? Result
         {
             get { return Fields.Result[this]; }
@@ -187,7 +187,7 @@ namespace AccController.Email.Entities
             public readonly StringField Company;
             public readonly StringField Phone;
             public readonly StringField Mobile;
-            public readonly StreamField Birthday;
+            public readonly DateTimeField Birthday;
             public readonly StringField Ou;
             public readonly StringField UserPrincipal;
             public readonly Int16Field Status;

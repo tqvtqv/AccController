@@ -20,7 +20,7 @@ namespace AccController.Email.Forms
         public String Company { get; set; }
         public String Phone { get; set; }
         public String Mobile { get; set; }
-        public Stream Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public String Ou { get; set; }
         public Int16 Status { get; set; }
         public Int16 Result { get; set; }

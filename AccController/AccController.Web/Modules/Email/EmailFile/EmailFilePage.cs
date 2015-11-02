@@ -77,14 +77,16 @@ namespace AccController.Email.Pages
                     }
                     catch (Exception ex)
                     {
-                        response = new Result<ServiceResponse>(new ServiceResponse
-                        {
-                            Error = new ServiceError()
-                            {
-                                Code = "Exception",
-                                Message = ex.Message
-                            }
-                        });
+                        throw ex;
+                        //((UploadResponse)response.Data).UploadedFile = null;
+                        //response = new Result<ServiceResponse>(new ServiceResponse
+                        //{
+                        //    Error = new ServiceError()
+                        //    {
+                        //        Code = "Exception",
+                        //        Message = ex.Message
+                        //    }
+                        //});
                     }
                 }
 
@@ -92,7 +94,7 @@ namespace AccController.Email.Pages
 
             if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                 response.ContentType = "text/plain";
-            ((UploadResponse)response.Data).UploadedFile = null;
+            
             return response;
         }
 

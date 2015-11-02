@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace AccController.Modules.Common.Helpers
 {
@@ -624,29 +625,38 @@ namespace AccController.Modules.Common.Helpers
                     value = GetQueryFKValue(container, item, value);
                     break;
             }
-            // Create the parameter for the ObjectType (typically the 'x' in your expression (x => 'x')
-            // The "parm" string is used strictly for debugging purposes
-            ParameterExpression param = Expression.Parameter(container.GetType(), "parm");
-            MemberExpression member = Expression.Property(param, item.Parameter.Field);
-            ConstantExpression constant;
-            if (member.Type.IsGenericType && member.Type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            if (!string.IsNullOrEmpty(value))
             {
-                constant = Expression.Constant(Convert.ChangeType(value, Nullable.GetUnderlyingType(member.Type)));
-                Expression.Assign(member, Expression.Convert(constant, member.Type));
-                BinaryExpression assignExp = Expression.Assign(member, Expression.Convert(constant, member.Type));
-                var actionT = typeof(Action<>).MakeGenericType(container.GetType());
-                //Delegate.CreateDelegate(actionT, container.GetType().GetMethod("Invoke"))
-                Expression.Lambda<Action<T>>(assignExp, param)
-                    .Compile()
-                    .Invoke(container);
-            }
-            else
-            {
-                constant = Expression.Constant(Convert.ChangeType(value, member.Type));
-                BinaryExpression assignExp = Expression.Assign(member, constant);
-                Expression.Lambda<Action<T>>(assignExp, param)
-                     .Compile()
-                     .Invoke(container);
+                // Create the parameter for the ObjectType (typically the 'x' in your expression (x => 'x')
+                // The "parm" string is used strictly for debugging purposes
+                ParameterExpression param = Expression.Parameter(container.GetType(), "parm");
+                MemberExpression member = Expression.Property(param, item.Parameter.Field);
+                ConstantExpression constant;
+                if (member.Type.IsGenericType && member.Type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+                {
+                    if (Nullable.GetUnderlyingType(member.Type) == typeof(DateTime) && !value.Contains("/"))
+                        constant = Expression.Constant(Convert.ChangeType(FromExcelSerialDate(Convert.ToInt32(value)), Nullable.GetUnderlyingType(member.Type), Thread.CurrentThread.CurrentUICulture));
+                    else
+                        constant = Expression.Constant(Convert.ChangeType(value, Nullable.GetUnderlyingType(member.Type), Thread.CurrentThread.CurrentUICulture));
+                    Expression.Assign(member, Expression.Convert(constant, member.Type));
+                    BinaryExpression assignExp = Expression.Assign(member, Expression.Convert(constant, member.Type));
+                    var actionT = typeof(Action<>).MakeGenericType(container.GetType());
+                    //Delegate.CreateDelegate(actionT, container.GetType().GetMethod("Invoke"))
+                    Expression.Lambda<Action<T>>(assignExp, param)
+                        .Compile()
+                        .Invoke(container);
+                }
+                else
+                {
+                    if (member.Type == typeof(DateTime))
+                        constant = Expression.Constant(FromExcelSerialDate(Convert.ToInt32(value)), member.Type);
+                    else
+                        constant = Expression.Constant(Convert.ChangeType(value, member.Type, Thread.CurrentThread.CurrentUICulture));
+                    BinaryExpression assignExp = Expression.Assign(member, constant);
+                    Expression.Lambda<Action<T>>(assignExp, param)
+                         .Compile()
+                         .Invoke(container);
+                }
             }
         }
 
@@ -684,6 +694,12 @@ namespace AccController.Modules.Common.Helpers
             //    if (!string.IsNullOrEmpty(fkValue)) return fkValue;
             //}
             return value;
+        }
+
+        public static DateTime FromExcelSerialDate(int SerialDate)
+        {
+            if (SerialDate > 59) SerialDate -= 1; //Excel/Lotus 2/29/1900 bug   
+            return new DateTime(1899, 12, 31).AddDays(SerialDate);
         }
         #endregion
 
