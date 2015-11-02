@@ -30,7 +30,7 @@ namespace AccController.Ais.Entities
             set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("New Ou"), Column("NewOU"), Size(255)]
+        [DisplayName("New Ou"), Column("NewOU"), Size(255), NotNull]
         public String NewOu
         {
             get { return Fields.NewOu[this]; }
@@ -51,7 +51,7 @@ namespace AccController.Ais.Entities
             set { Fields.NewRole[this] = value; }
         }
 
-        [DisplayName("Priority"), NotNull]
+        [DisplayName("Priority")]
         public Int32? Priority
         {
             get { return Fields.Priority[this]; }
@@ -65,7 +65,7 @@ namespace AccController.Ais.Entities
             set { Fields.Status[this] = value; }
         }
 
-        [DisplayName("Result"), NotNull]
+        [DisplayName("Result")]
         public Int16? Result
         {
             get { return Fields.Result[this]; }

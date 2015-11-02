@@ -39,6 +39,7 @@ namespace AccController.Ais.Entities
         /// <summary>
         /// 1 - Create Group
         /// 2 - Create User
+        /// 3 - Change user's OU
         /// </summary>
         [DisplayName("Req Type"), NotNull]
         public Int16? ReqType

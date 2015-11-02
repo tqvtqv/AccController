@@ -339,6 +339,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisAddOUGrid
 	var $AccController_Ais_AisAddOUGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Ais_AisAddOUGrid.__typeName = 'AccController.Ais.AisAddOUGrid';
@@ -507,6 +508,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisUserChangeInfoGrid
 	var $AccController_Ais_AisUserChangeInfoGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Ais_AisUserChangeInfoGrid.__typeName = 'AccController.Ais.AisUserChangeInfoGrid';
@@ -549,6 +551,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisUserChangeOUGrid
 	var $AccController_Ais_AisUserChangeOUGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Ais_AisUserChangeOUGrid.__typeName = 'AccController.Ais.AisUserChangeOUGrid';
@@ -877,6 +880,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailChangeGrid
 	var $AccController_Email_EmailChangeGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Email_EmailChangeGrid.__typeName = 'AccController.Email.EmailChangeGrid';
@@ -1087,6 +1091,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailNewGrid
 	var $AccController_Email_EmailNewGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Email_EmailNewGrid.__typeName = 'AccController.Email.EmailNewGrid';
@@ -1129,6 +1134,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailUpdateInfoGrid
 	var $AccController_Email_EmailUpdateInfoGrid = function(container) {
+		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Email_EmailUpdateInfoGrid.__typeName = 'AccController.Email.EmailUpdateInfoGrid';
@@ -1691,7 +1697,27 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Ais_AisAddOUGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Ais_AisAddOUGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Ais/AisFile/CreateAddUserOURequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Ais_AisAddOUService, $asm, {});
 	ss.initClass($AccController_Ais_AisFileDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisFileForm, $asm, {
@@ -1786,7 +1812,27 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Ais_AisUserChangeInfoGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Ais_AisUserChangeInfoGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserChangeInfoRequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Ais_AisUserChangeInfoService, $asm, {});
 	ss.initClass($AccController_Ais_AisUserChangeOUDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisUserChangeOUForm, $asm, {
@@ -1824,7 +1870,27 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Ais_AisUserChangeOUGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Ais_AisUserChangeOUGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserChangeOURequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Ais_AisUserChangeOUService, $asm, {});
 	ss.initClass($AccController_Ais_AisUserDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisUserForm, $asm, {
@@ -2042,7 +2108,27 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Email_EmailChangeGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Email_EmailChangeGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Email/EmailFile/CreateEmailChangeRequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Email_EmailChangeService, $asm, {});
 	ss.initClass($AccController_Email_EmailFileDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailFileForm, $asm, {
@@ -2208,7 +2294,27 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Email_EmailNewGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Email_EmailNewGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Email/EmailFile/CreateNewRequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Email_EmailNewService, $asm, {});
 	ss.initClass($AccController_Email_EmailUpdateInfoDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailUpdateInfoForm, $asm, {
@@ -2255,7 +2361,27 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Email_EmailUpdateInfoGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Email_EmailUpdateInfoGrid, $asm, {
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Email/EmailFile/CreateUpdateInfoRequest');
+				});
+				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					this.refresh();
+				}));
+			}));
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Email_EmailUpdateInfoService, $asm, {});
 	ss.initClass($AccController_Email_FileResultDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_FileResultForm, $asm, {

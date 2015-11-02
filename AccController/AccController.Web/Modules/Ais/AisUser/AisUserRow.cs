@@ -23,6 +23,13 @@ namespace AccController.Ais.Entities
             set { Fields.Id[this] = value; }
         }
 
+        [DisplayName("Name"), Size(150), NotNull]
+        public String Name
+        {
+            get { return Fields.Name[this]; }
+            set { Fields.Name[this] = value; }
+        }
+
         [DisplayName("Ou"), Column("OU"), Size(255), NotNull, QuickSearch]
         public String Ou
         {
@@ -79,7 +86,7 @@ namespace AccController.Ais.Entities
             set { Fields.Status[this] = value; }
         }
 
-        [DisplayName("Result"), NotNull]
+        [DisplayName("Result")]
         public Int16? Result
         {
             get { return Fields.Result[this]; }
@@ -107,12 +114,7 @@ namespace AccController.Ais.Entities
             set { Fields.Description[this] = value; }
         }
 
-        [DisplayName("Name"), Size(150), NotNull]
-        public String Name
-        {
-            get { return Fields.Name[this]; }
-            set { Fields.Name[this] = value; }
-        }
+        
 
         IIdField IIdRow.IdField
         {

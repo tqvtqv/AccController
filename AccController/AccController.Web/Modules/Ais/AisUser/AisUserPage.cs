@@ -1,7 +1,5 @@
 ﻿
 
-[assembly:Serenity.Navigation.NavigationLink(int.MaxValue, "Ais/AisUser", typeof(AccController.Ais.Pages.AisUserController))]
-
 namespace AccController.Ais.Pages
 {
     using Serenity;

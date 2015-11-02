@@ -36,7 +36,11 @@ namespace AccController.Email.Entities
             get { return Fields.ReqId[this]; }
             set { Fields.ReqId[this] = value; }
         }
-
+        /// <summary>
+        /// 1 - Create
+        /// 2 - Update info
+        /// 3 - Change
+        /// </summary>
         [DisplayName("Req Type"), NotNull]
         public Int16? ReqType
         {

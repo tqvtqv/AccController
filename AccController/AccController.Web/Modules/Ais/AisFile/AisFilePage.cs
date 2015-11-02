@@ -77,12 +77,17 @@ namespace AccController.Ais.Pages
                     }
                     catch (Exception ex)
                     {
-                        string s = ex.Message;
+                        response = new Result<ServiceResponse>(new ServiceResponse
+                        {
+                            Error = new ServiceError()
+                            {
+                                Code = "Exception",
+                                Message = ex.Message
+                            }
+                        });
                     }
                 }
-                //this.InTransaction("Default", (uow) => {
-                //}
-                //);
+                
             }
             
             if (!(Request.Headers["Accept"] ?? "").Contains("json"))
@@ -142,12 +147,227 @@ namespace AccController.Ais.Pages
                     }
                     catch (Exception ex)
                     {
-                        string s = ex.Message;
+                        response = new Result<ServiceResponse>(new ServiceResponse
+                        {
+                            Error = new ServiceError()
+                            {
+                                Code = "Exception",
+                                Message = ex.Message
+                            }
+                        });
                     }
                 }
-                //this.InTransaction("Default", (uow) => {
-                //}
-                //);
+                
+            }
+
+            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                response.ContentType = "text/plain";
+            ((UploadResponse)response.Data).UploadedFile = null;
+            return response;
+        }
+
+        [AcceptVerbs("POST")]
+        public ActionResult CreateUserChangeOURequest()
+        {
+            HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            if (file.FileName.IsEmptyOrNull())
+                throw new ArgumentNullException("filename");
+            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
+            AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+            if (fileRow != null)
+            {
+                ListContainer<AisUserChangeOURow> list = new ListContainer<AisUserChangeOURow>();
+                var fileRowResponse = this.InTransaction("Default", (uow) => new AisFileRepository().Create(uow, new SaveRequest<AisFileRow>
+                {
+                    Entity = fileRow
+                })).Data;
+                if (fileRowResponse.EntityId.HasValue)
+                {
+                    try
+                    {
+                        file.InputStream.Seek(0, SeekOrigin.Begin);
+                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/CapNhatPhongBanUser.xlsx")).ReadFromFile(list, file.InputStream);
+                        if (list != null)
+                        {
+                            foreach (var item in list.Entities)
+                            {
+                                this.InTransaction("Default", (uow) =>
+                                {
+                                    var saveresponse = new AisUserChangeOURepository().Create(uow, new SaveRequest<AisUserChangeOURow>
+                                    {
+                                        Entity = item
+                                    });
+                                    if (saveresponse.EntityId.HasValue)
+                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        {
+                                            Entity = new AisFileResultsRow
+                                            {
+                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
+                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                                ReqType = 3
+                                            }
+                                        });
+                                    return saveresponse;
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        response = new Result<ServiceResponse>(new ServiceResponse
+                        {
+                            Error = new ServiceError()
+                            {
+                                Code = "Exception",
+                                Message = ex.Message
+                            }
+                        });
+                    }
+                }
+               
+            }
+
+            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                response.ContentType = "text/plain";
+            ((UploadResponse)response.Data).UploadedFile = null;
+            return response;
+        }
+
+        [AcceptVerbs("POST")]
+        public ActionResult CreateUserChangeInfoRequest()
+        {
+            HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            if (file.FileName.IsEmptyOrNull())
+                throw new ArgumentNullException("filename");
+            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
+            AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+            if (fileRow != null)
+            {
+                ListContainer<AisUserChangeInfoRow> list = new ListContainer<AisUserChangeInfoRow>();
+                var fileRowResponse = this.InTransaction("Default", (uow) => new AisFileRepository().Create(uow, new SaveRequest<AisFileRow>
+                {
+                    Entity = fileRow
+                })).Data;
+                if (fileRowResponse.EntityId.HasValue)
+                {
+                    try
+                    {
+                        file.InputStream.Seek(0, SeekOrigin.Begin);
+                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/CapNhatTTUser.xlsx")).ReadFromFile(list, file.InputStream);
+                        if (list != null)
+                        {
+                            foreach (var item in list.Entities)
+                            {
+                                this.InTransaction("Default", (uow) =>
+                                {
+                                    var saveresponse = new AisUserChangeInfoRepository().Create(uow, new SaveRequest<AisUserChangeInfoRow>
+                                    {
+                                        Entity = item
+                                    });
+                                    if (saveresponse.EntityId.HasValue)
+                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        {
+                                            Entity = new AisFileResultsRow
+                                            {
+                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
+                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                                ReqType = 3
+                                            }
+                                        });
+                                    return saveresponse;
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        response = new Result<ServiceResponse>(new ServiceResponse
+                        {
+                            Error = new ServiceError()
+                            {
+                                Code = "Exception",
+                                Message = ex.Message
+                            }
+                        });
+                    }
+                }
+                
+            }
+
+            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                response.ContentType = "text/plain";
+            ((UploadResponse)response.Data).UploadedFile = null;
+            return response;
+        }
+
+        [AcceptVerbs("POST")]
+        public ActionResult CreateAddUserOURequest()
+        {
+            HttpPostedFileBase file = this.HttpContext.Request.Files[0];
+            if (file == null)
+                throw new ArgumentNullException("file");
+
+            if (file.FileName.IsEmptyOrNull())
+                throw new ArgumentNullException("filename");
+            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
+            AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+            if (fileRow != null)
+            {
+                ListContainer<AisAddOURow> list = new ListContainer<AisAddOURow>();
+                var fileRowResponse = this.InTransaction("Default", (uow) => new AisFileRepository().Create(uow, new SaveRequest<AisFileRow>
+                {
+                    Entity = fileRow
+                })).Data;
+                if (fileRowResponse.EntityId.HasValue)
+                {
+                    try
+                    {
+                        file.InputStream.Seek(0, SeekOrigin.Begin);
+                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/ThemDonViUser.xlsx")).ReadFromFile(list, file.InputStream);
+                        if (list != null)
+                        {
+                            foreach (var item in list.Entities)
+                            {
+                                this.InTransaction("Default", (uow) =>
+                                {
+                                    var saveresponse = new AisAddOURepository().Create(uow, new SaveRequest<AisAddOURow>
+                                    {
+                                        Entity = item
+                                    });
+                                    if (saveresponse.EntityId.HasValue)
+                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        {
+                                            Entity = new AisFileResultsRow
+                                            {
+                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
+                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                                ReqType = 3
+                                            }
+                                        });
+                                    return saveresponse;
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        response = new Result<ServiceResponse>(new ServiceResponse
+                        {
+                            Error = new ServiceError()
+                            {
+                                Code = "Exception",
+                                Message = ex.Message
+                            }
+                        });
+                    }
+                }
+                
             }
 
             if (!(Request.Headers["Accept"] ?? "").Contains("json"))

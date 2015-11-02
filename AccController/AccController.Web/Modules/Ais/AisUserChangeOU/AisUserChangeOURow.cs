@@ -30,14 +30,14 @@ namespace AccController.Ais.Entities
             set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("Old Ou"), Column("OldOU"), Size(255)]
+        [DisplayName("Old Ou"), Column("OldOU"), Size(255), NotNull]
         public String OldOu
         {
             get { return Fields.OldOu[this]; }
             set { Fields.OldOu[this] = value; }
         }
 
-        [DisplayName("New Ou"), Column("NewOU"), Size(255)]
+        [DisplayName("New Ou"), Column("NewOU"), Size(255), NotNull]
         public String NewOu
         {
             get { return Fields.NewOu[this]; }

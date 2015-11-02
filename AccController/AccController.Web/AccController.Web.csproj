@@ -565,13 +565,15 @@
     <Content Include="fonts\Simple-Line-Icons.ttf" />
     <Content Include="fonts\Simple-Line-Icons.eot" />
     <Content Include="Modules\Membership\Account\AccountRegister.cshtml" />
-    <Content Include="Content\templates\import\ais\Template AIS %288%29.xlsx" />
+    <Content Include="Content\templates\import\ais\ThemDonViUser.xlsx" />
     <Content Include="Content\templates\import\email\TaoMoi.xlsx" />
     <Content Include="Content\templates\import\email\DoiTenTK.xlsx" />
     <Content Include="Content\templates\import\email\TaoNhom.xls" />
     <Content Include="Content\templates\import\email\CapNhatTT.xlsx" />
     <Content Include="Content\templates\import\ais\TaoMoiDonVi.xlsx" />
     <Content Include="Content\templates\import\ais\TaoMoiNguoiDung.xlsx" />
+    <Content Include="Content\templates\import\ais\CapNhatPhongBanUser.xlsx" />
+    <Content Include="Content\templates\import\ais\CapNhatTTUser.xlsx" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jlayout.border.js" />
     <Content Include="Scripts\jlayout.border.min.js" />

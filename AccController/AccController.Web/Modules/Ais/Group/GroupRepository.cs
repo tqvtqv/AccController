@@ -24,6 +24,8 @@ namespace AccController.Ais.Repositories
 
         public SaveResponse Update(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
+            request.Entity.LastUpdatedby = Thread.CurrentPrincipal.Identity.Name;
+            request.Entity.LastUpdated = DateTime.Now;
             return new MySaveHandler().Process(uow, request, SaveRequestType.Update);
         }
 

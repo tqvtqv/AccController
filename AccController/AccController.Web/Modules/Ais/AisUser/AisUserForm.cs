@@ -13,6 +13,7 @@ namespace AccController.Ais.Forms
     [BasedOnRow(typeof(Entities.AisUserRow))]
     public class AisUserForm
     {
+        public String Name { get; set; }
         public String Ou { get; set; }
         public String Email { get; set; }
         public String Phone { get; set; }
@@ -25,6 +26,6 @@ namespace AccController.Ais.Forms
         public DateTime LastUpdated { get; set; }
         public String LastUpdatedby { get; set; }
         public String Description { get; set; }
-        public String Name { get; set; }
+        
     }
 }
