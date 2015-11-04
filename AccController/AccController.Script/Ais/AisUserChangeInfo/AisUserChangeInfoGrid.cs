@@ -35,7 +35,17 @@ namespace AccController.Ais
                        J("input:file", uploader.Element).Bind2("fileuploaddone",
                            new Action<jQueryEvent, dynamic>((ev, data) =>
                            {
-                               Refresh();
+                               //Q.Alert(data.ToJson());
+                               if (data.Error != null)
+                               {
+                                   //Q.
+                                   if (data.Error.Code == "FileErr")
+                                       Q.NotifyError(data.Error.Message); //Q.Alert("sss", new AlertOptions { OnClose = { } });
+                                   else
+                                       Q.NotifyError(data.Error.Message);
+                               }
+                               else
+                                   Refresh();
                            }));
                    }
                    );

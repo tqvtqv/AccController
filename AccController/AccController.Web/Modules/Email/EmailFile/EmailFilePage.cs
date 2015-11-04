@@ -35,67 +35,79 @@ namespace AccController.Email.Pages
 
             if (file.FileName.IsEmptyOrNull())
                 throw new ArgumentNullException("filename");
-            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
-            EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
-            if (fileRow != null)
+            try
             {
                 ListContainer<EmailNewRow> list = new ListContainer<EmailNewRow>();
-                var fileRowResponse = this.InTransaction("Default", (uow) => new EmailFileRepository().Create(uow, new SaveRequest<EmailFileRow>
+                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/email/TaoMoi.xlsx"));
+                var stream = new MemoryStream();
+                file.InputStream.CopyTo(stream);
+                list = spsHelper.ReadFromFile(list, stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
+                EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+
+                if (fileRow != null)
                 {
-                    Entity = fileRow
-                })).Data;
-                if (fileRowResponse.EntityId.HasValue)
-                {
-                    try
+                    if (spsHelper.HasError)
                     {
-                        file.InputStream.Seek(0, SeekOrigin.Begin);
-                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/email/TaoMoi.xlsx")).ReadFromFile(list, file.InputStream);
-                        if (list != null)
+                        return new Result<ServiceResponse>(new ServiceResponse
+                        {
+                            Error = new ServiceError()
+                            {
+                                Code = "FileErr",
+                                Message = fileRow.FilePath
+                            }
+                        });
+                    }
+                    var fileRowResponse = this.InTransaction("Default", (uow) =>
+                    {
+                        var saveFileResponse = new EmailFileRepository().Create(uow, new SaveRequest<EmailFileRow>
+                        {
+                            Entity = fileRow
+                        });
+                        if (saveFileResponse.EntityId.HasValue)
                         {
                             foreach (var item in list.Entities)
                             {
-                                this.InTransaction("Default", (uow) =>
+                                var saveresponse = new EmailNewRepository().Create(uow, new SaveRequest<EmailNewRow>
                                 {
-                                    var saveresponse = new EmailNewRepository().Create(uow, new SaveRequest<EmailNewRow>
-                                    {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
-                                        {
-                                            Entity = new FileResultRow
-                                            {
-                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 1
-                                            }
-                                        });
-                                    return saveresponse;
+                                    Entity = item
                                 });
+                                if (saveresponse.EntityId.HasValue)
+                                    new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
+                                    {
+                                        Entity = new FileResultRow
+                                        {
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
+                                return saveresponse;
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                        //((UploadResponse)response.Data).UploadedFile = null;
-                        //response = new Result<ServiceResponse>(new ServiceResponse
-                        //{
-                        //    Error = new ServiceError()
-                        //    {
-                        //        Code = "Exception",
-                        //        Message = ex.Message
-                        //    }
-                        //});
-                    }
+                        return saveFileResponse;
+                    }).Data;
+
+
                 }
-
+                if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                    response.ContentType = "text/plain";
+                ((UploadResponse)response.Data).UploadedFile = null;
+                return response;
             }
-
-            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
-                response.ContentType = "text/plain";
-            
-            return response;
+            catch (Exception ex)
+            {
+                return new Result<ServiceResponse>(new ServiceResponse
+                {
+                    Error = new ServiceError()
+                    {
+                        Code = "Exception",
+                        Message = ex.Message
+                    }
+                });
+            }
         }
 
         [AcceptVerbs("POST")]
@@ -107,64 +119,79 @@ namespace AccController.Email.Pages
 
             if (file.FileName.IsEmptyOrNull())
                 throw new ArgumentNullException("filename");
-            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
-            EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
-            if (fileRow != null)
+            try
             {
                 ListContainer<EmailUpdateInfoRow> list = new ListContainer<EmailUpdateInfoRow>();
-                var fileRowResponse = this.InTransaction("Default", (uow) => new EmailFileRepository().Create(uow, new SaveRequest<EmailFileRow>
+                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/email/CapNhatTT.xlsx"));
+                var stream = new MemoryStream();
+                file.InputStream.CopyTo(stream);
+                list = spsHelper.ReadFromFile(list, stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
+                EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+
+                if (fileRow != null)
                 {
-                    Entity = fileRow
-                })).Data;
-                if (fileRowResponse.EntityId.HasValue)
-                {
-                    try
+                    if (spsHelper.HasError)
                     {
-                        file.InputStream.Seek(0, SeekOrigin.Begin);
-                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/email/CapNhatTT.xlsx")).ReadFromFile(list, file.InputStream);
-                        if (list != null)
+                        return new Result<ServiceResponse>(new ServiceResponse
                         {
-                            foreach (var item in list.Entities)
-                            {
-                                this.InTransaction("Default", (uow) =>
-                                {
-                                    var saveresponse = new EmailUpdateInfoRepository().Create(uow, new SaveRequest<EmailUpdateInfoRow>
-                                    {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
-                                        {
-                                            Entity = new FileResultRow
-                                            {
-                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 2
-                                            }
-                                        });
-                                    return saveresponse;
-                                });
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        response = new Result<ServiceResponse>(new ServiceResponse {
                             Error = new ServiceError()
                             {
-                                Code = "Exception",
-                                Message = ex.Message
+                                Code = "FileErr",
+                                Message = fileRow.FilePath
                             }
                         });
                     }
-                }
-                
-            }
+                    var fileRowResponse = this.InTransaction("Default", (uow) =>
+                    {
+                        var saveFileResponse = new EmailFileRepository().Create(uow, new SaveRequest<EmailFileRow>
+                        {
+                            Entity = fileRow
+                        });
+                        if (saveFileResponse.EntityId.HasValue)
+                        {
+                            foreach (var item in list.Entities)
+                            {
+                                var saveresponse = new EmailUpdateInfoRepository().Create(uow, new SaveRequest<EmailUpdateInfoRow>
+                                {
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
+                                    {
+                                        Entity = new FileResultRow
+                                        {
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
+                                return saveresponse;
+                            }
+                        }
+                        return saveFileResponse;
+                    }).Data;
 
-            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
-                response.ContentType = "text/plain";
-            ((UploadResponse)response.Data).UploadedFile = null;
-            return response;
+
+                }
+                if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                    response.ContentType = "text/plain";
+                ((UploadResponse)response.Data).UploadedFile = null;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                return new Result<ServiceResponse>(new ServiceResponse
+                {
+                    Error = new ServiceError()
+                    {
+                        Code = "Exception",
+                        Message = ex.Message
+                    }
+                });
+            }
         }
 
         [AcceptVerbs("POST")]
@@ -176,69 +203,83 @@ namespace AccController.Email.Pages
 
             if (file.FileName.IsEmptyOrNull())
                 throw new ArgumentNullException("filename");
-            var response = this.ExecuteMethod(() => HandleUploadRequest(file));
-            EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
-            if (fileRow != null)
+            try
             {
                 ListContainer<EmailChangeRow> list = new ListContainer<EmailChangeRow>();
-                var fileRowResponse = this.InTransaction("Default", (uow) => new EmailFileRepository().Create(uow, new SaveRequest<EmailFileRow>
+                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/email/DoiTenTK.xlsx"));
+                var stream = new MemoryStream();
+                file.InputStream.CopyTo(stream);
+                list = spsHelper.ReadFromFile(list, stream);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
+                EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+
+                if (fileRow != null)
                 {
-                    Entity = fileRow
-                })).Data;
-                if (fileRowResponse.EntityId.HasValue)
-                {
-                    try
+                    if (spsHelper.HasError)
                     {
-                        file.InputStream.Seek(0, SeekOrigin.Begin);
-                        list = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/email/DoiTenTK.xlsx")).ReadFromFile(list, file.InputStream);
-                        if (list != null)
-                        {
-                            foreach (var item in list.Entities)
-                            {
-                                this.InTransaction("Default", (uow) =>
-                                {
-                                    var saveresponse = new EmailChangeRepository().Create(uow, new SaveRequest<EmailChangeRow>
-                                    {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
-                                        {
-                                            Entity = new FileResultRow
-                                            {
-                                                FileId = Convert.ToInt32(fileRowResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
-                                    return saveresponse;
-                                });
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        response = new Result<ServiceResponse>(new ServiceResponse
+                        return new Result<ServiceResponse>(new ServiceResponse
                         {
                             Error = new ServiceError()
                             {
-                                Code = "Exception",
-                                Message = ex.Message
+                                Code = "FileErr",
+                                Message = fileRow.FilePath
                             }
                         });
                     }
+                    var fileRowResponse = this.InTransaction("Default", (uow) =>
+                    {
+                        var saveFileResponse = new EmailFileRepository().Create(uow, new SaveRequest<EmailFileRow>
+                        {
+                            Entity = fileRow
+                        });
+                        if (saveFileResponse.EntityId.HasValue)
+                        {
+                            foreach (var item in list.Entities)
+                            {
+                                var saveresponse = new EmailChangeRepository().Create(uow, new SaveRequest<EmailChangeRow>
+                                {
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
+                                    {
+                                        Entity = new FileResultRow
+                                        {
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
+                                return saveresponse;
+                            }
+                        }
+                        return saveFileResponse;
+                    }).Data;
+
+
                 }
-
+                if (!(Request.Headers["Accept"] ?? "").Contains("json"))
+                    response.ContentType = "text/plain";
+                ((UploadResponse)response.Data).UploadedFile = null;
+                return response;
             }
-
-            if (!(Request.Headers["Accept"] ?? "").Contains("json"))
-                response.ContentType = "text/plain";
-            ((UploadResponse)response.Data).UploadedFile = null;
-            return response;
+            catch (Exception ex)
+            {
+                return new Result<ServiceResponse>(new ServiceResponse
+                {
+                    Error = new ServiceError()
+                    {
+                        Code = "Exception",
+                        Message = ex.Message
+                    }
+                });
+            }
         }
 
 
-        private ServiceResponse HandleUploadRequest(HttpPostedFileBase file)
+        private ServiceResponse HandleUploadRequest(HttpPostedFileBase file, MemoryStream stream, bool hasErr)
         {
             EmailFileRow fileRow = new EmailFileRow
             {
@@ -248,13 +289,16 @@ namespace AccController.Email.Pages
                 UploadedBy = User.Identity.Name,
                 Uploaded = DateTime.Now
             };
-            var folderPath = HostingEnvironment.MapPath(UploadSettings.Current.Path + "Email");
+            var folderPath = HostingEnvironment.MapPath(UploadSettings.Current.Path + ((hasErr) ? "EmailError" : "Email"));
             bool exists = Directory.Exists(folderPath);
             if (!exists)
                 Directory.CreateDirectory(folderPath);
 
             fileRow.FilePath = Path.Combine(folderPath, Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName));
-            file.SaveAs(fileRow.FilePath); // Save the file
+            using (FileStream fs = new FileStream(fileRow.FilePath, FileMode.Create, FileAccess.Write))
+            {
+                stream.WriteTo(fs);
+            }
             return new UploadResponse()
             {
                 TemporaryFile = fileRow.FilePath,

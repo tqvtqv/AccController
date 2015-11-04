@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,6 +19,9 @@ namespace AccController.Modules.Common.Helpers
     {
         //public DbContext Db { get; set; }
         public string TemplatePath { get; set; }
+        public Boolean HasError { get; set; }
+        protected UInt32Value errCellStyleIndex;
+        
         /// <summary>
         /// Template path to parse input spreadsheet
         /// </summary>
@@ -25,6 +29,9 @@ namespace AccController.Modules.Common.Helpers
         public SpreedSheetHelper(string templatePath)
         {
             this.TemplatePath = templatePath;
+            HasError = false;
+            
+
         }
         //public SpreedSheetHelper(DbContext ctx, string templatePath)
         //{
@@ -66,8 +73,35 @@ namespace AccController.Modules.Common.Helpers
             if (container == null)
                 container = new T();
             WorkbookPart workbookPart;
-            var document = SpreadsheetDocument.Open(file, false);
+            var document = SpreadsheetDocument.Open(file, true);
             workbookPart = document.WorkbookPart;
+            #region add style
+            if (document.WorkbookPart.WorkbookStylesPart == null)
+                document.WorkbookPart.AddNewPart<WorkbookStylesPart>();
+            var stylesPart = document.WorkbookPart.WorkbookStylesPart;
+            stylesPart.Stylesheet = new Stylesheet();
+            stylesPart.Stylesheet.Fills = new Fills();
+            // create a solid red fill
+            var solidRed = new PatternFill() { PatternType = PatternValues.Solid };
+            solidRed.ForegroundColor = new ForegroundColor { Rgb = HexBinaryValue.FromString("FFFF0000") }; // red fill
+            solidRed.BackgroundColor = new BackgroundColor { Indexed = 64 };
+            stylesPart.Stylesheet.Fills.AppendChild(new Fill { PatternFill = new PatternFill { PatternType = PatternValues.None } }); // required, reserved by Excel
+            stylesPart.Stylesheet.Fills.AppendChild(new Fill { PatternFill = new PatternFill { PatternType = PatternValues.Gray125 } }); // required, reserved by Excel
+            stylesPart.Stylesheet.Fills.AppendChild(new Fill { PatternFill = solidRed });
+
+            // cell format list
+            stylesPart.Stylesheet.CellFormats = new CellFormats();
+            // empty one for index 0, seems to be required
+            stylesPart.Stylesheet.CellFormats.AppendChild(new CellFormat());
+            // cell format references style format 0, font 0, border 0, fill 2 and applies the fill
+            stylesPart.Stylesheet.CellFormats.AppendChild(new CellFormat { FormatId = 0, FontId = 0, BorderId = 0, FillId = 2, ApplyFill = true });
+            stylesPart.Stylesheet.CellFormats.Count = 2;
+
+            stylesPart.Stylesheet.Save();
+
+            errCellStyleIndex = 1;
+            #endregion
+
             FillObject(container, workbookPart, GetTemplateSheet());
             return container;
         }
@@ -363,19 +397,9 @@ namespace AccController.Modules.Common.Helpers
         }
 
 
-        public static string GetCellValue(WorkbookPart wbPart, string sheetId, string addressName)
+        public static string GetCellValue(WorkbookPart wbPart, Cell theCell)
         {
             string value = null;
-
-
-            // Retrieve a reference to the worksheet part.
-            WorksheetPart wsPart =
-                (WorksheetPart)(wbPart.GetPartById(sheetId));
-
-            // Use its Worksheet property to get a reference to the cell 
-            // whose address matches the address you supplied.
-            Cell theCell = wsPart.Worksheet.Descendants<Cell>().
-              Where(c => c.CellReference == addressName).FirstOrDefault();
 
             // If the cell does not exist, return an empty string.
             if (theCell != null)
@@ -605,9 +629,26 @@ namespace AccController.Modules.Common.Helpers
 
         private string SetObjValue<T>(T container, DefinedNameVal item, WorkbookPart workbookPart) where T : class, new()
         {
-            var value = GetCellValue(workbookPart, workbookPart.Workbook.Descendants<Sheet>().First().Id, item.Reference);
+            // Retrieve a reference to the worksheet part.
+            WorksheetPart wsPart =
+                (WorksheetPart)(workbookPart.GetPartById(workbookPart.Workbook.Descendants<Sheet>().First().Id));
+            // Use its Worksheet property to get a reference to the cell 
+            // whose address matches the address you supplied.
+            Cell theCell = wsPart.Worksheet.Descendants<Cell>().
+              Where(c => c.CellReference == item.Reference).FirstOrDefault();
+            var value = GetCellValue(workbookPart, theCell);
             if (!string.IsNullOrEmpty(value) && (item.Parameter != null))
-                SetObjValue<T>(container, item, value);
+                try
+                {
+                    SetObjValue<T>(container, item, value);
+                }
+                catch (Exception ex)
+                {
+                    theCell.CellValue = new CellValue(string.Format("{0}({1})", value, ex.Message));
+                    theCell.StyleIndex = errCellStyleIndex;
+                    HasError = true;
+                    //workbookPart
+                }
             return value;
         }
 
@@ -635,7 +676,7 @@ namespace AccController.Modules.Common.Helpers
                 if (member.Type.IsGenericType && member.Type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
                 {
                     if (Nullable.GetUnderlyingType(member.Type) == typeof(DateTime) && !value.Contains("/"))
-                        constant = Expression.Constant(Convert.ChangeType(FromExcelSerialDate(Convert.ToInt32(value)), Nullable.GetUnderlyingType(member.Type), Thread.CurrentThread.CurrentUICulture));
+                        constant = Expression.Constant(Convert.ChangeType(FromExcelSerialDate(Convert.ToInt32(value)), Nullable.GetUnderlyingType(member.Type), new CultureInfo("vi")));
                     else
                         constant = Expression.Constant(Convert.ChangeType(value, Nullable.GetUnderlyingType(member.Type), Thread.CurrentThread.CurrentUICulture));
                     Expression.Assign(member, Expression.Convert(constant, member.Type));

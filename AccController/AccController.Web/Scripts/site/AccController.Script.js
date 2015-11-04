@@ -1713,7 +1713,18 @@
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateAddUserOURequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -1828,7 +1839,19 @@
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserChangeInfoRequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					//Q.Alert(data.ToJson());
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -1886,7 +1909,18 @@
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserChangeOURequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -1950,7 +1984,18 @@
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserRequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -2008,7 +2053,18 @@
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateGroupRequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -2124,7 +2180,18 @@
 					data.url = Q.resolveUrl('~/Email/EmailFile/CreateEmailChangeRequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -2310,7 +2377,18 @@
 					data.url = Q.resolveUrl('~/Email/EmailFile/CreateNewRequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}
@@ -2377,7 +2455,18 @@
 					data.url = Q.resolveUrl('~/Email/EmailFile/CreateUpdateInfoRequest');
 				});
 				$('input:file', this.$uploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
-					this.refresh();
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
 				}));
 			}));
 		}

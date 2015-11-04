@@ -72,7 +72,7 @@ namespace AccController.Ais.Entities
             set { Fields.Status[this] = value; }
         }
 
-        [DisplayName("Result"), NotNull]
+        [DisplayName("Result")]
         public Int16? Result
         {
             get { return Fields.Result[this]; }
