@@ -21,7 +21,7 @@ namespace AccController.Modules.Common.Helpers
         public string TemplatePath { get; set; }
         public Boolean HasError { get; set; }
         protected UInt32Value errCellStyleIndex;
-        
+        protected CultureInfo cultureInfo;
         /// <summary>
         /// Template path to parse input spreadsheet
         /// </summary>
@@ -30,6 +30,8 @@ namespace AccController.Modules.Common.Helpers
         {
             this.TemplatePath = templatePath;
             HasError = false;
+            cultureInfo = new CultureInfo("vi");
+            cultureInfo.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy";
             
 
         }
@@ -652,6 +654,7 @@ namespace AccController.Modules.Common.Helpers
                     theCell.CellValue = new CellValue(string.Format("{0}({1})", value, ex.Message));
                     theCell.StyleIndex = errCellStyleIndex;
                     HasError = true;
+                    workbookPart.Workbook.Save();
                     //workbookPart
                 }
             return value;
@@ -681,9 +684,9 @@ namespace AccController.Modules.Common.Helpers
                 if (member.Type.IsGenericType && member.Type.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
                 {
                     if (Nullable.GetUnderlyingType(member.Type) == typeof(DateTime) && !value.Contains("/"))
-                        constant = Expression.Constant(Convert.ChangeType(FromExcelSerialDate(Convert.ToInt32(value)), Nullable.GetUnderlyingType(member.Type), new CultureInfo("vi")));
+                        constant = Expression.Constant(Convert.ChangeType(FromExcelSerialDate(Convert.ToInt32(value)), Nullable.GetUnderlyingType(member.Type), cultureInfo));
                     else
-                        constant = Expression.Constant(Convert.ChangeType(value, Nullable.GetUnderlyingType(member.Type), Thread.CurrentThread.CurrentUICulture));
+                        constant = Expression.Constant(Convert.ChangeType(value, Nullable.GetUnderlyingType(member.Type), cultureInfo));
                     Expression.Assign(member, Expression.Convert(constant, member.Type));
                     BinaryExpression assignExp = Expression.Assign(member, Expression.Convert(constant, member.Type));
                     var actionT = typeof(Action<>).MakeGenericType(container.GetType());
@@ -694,10 +697,10 @@ namespace AccController.Modules.Common.Helpers
                 }
                 else
                 {
-                    if (member.Type == typeof(DateTime))
-                        constant = Expression.Constant(FromExcelSerialDate(Convert.ToInt32(value)), member.Type);
+                    if (member.Type == typeof(DateTime) && !value.Contains("/"))
+                        constant = Expression.Constant(Convert.ChangeType(FromExcelSerialDate(Convert.ToInt32(value)), member.Type, cultureInfo));
                     else
-                        constant = Expression.Constant(Convert.ChangeType(value, member.Type, Thread.CurrentThread.CurrentUICulture));
+                        constant = Expression.Constant(Convert.ChangeType(value, member.Type, cultureInfo));
                     BinaryExpression assignExp = Expression.Assign(member, constant);
                     Expression.Lambda<Action<T>>(assignExp, param)
                          .Compile()
