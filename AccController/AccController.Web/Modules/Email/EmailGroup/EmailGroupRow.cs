@@ -14,6 +14,7 @@ namespace AccController.Email.Entities
     [ReadPermission("EmailGroup")]
     [ModifyPermission("EmailGroup")]
     [JsonConverter(typeof(JsonRowConverter))]
+    [LookupScript("Email.EmailGroup")]
     public sealed class EmailGroupRow : Row, IIdRow, INameRow
     {
         [DisplayName("Id"), Identity]

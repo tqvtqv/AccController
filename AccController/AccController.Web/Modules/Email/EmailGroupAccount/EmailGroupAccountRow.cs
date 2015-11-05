@@ -24,6 +24,7 @@ namespace AccController.Email.Entities
         }
 
         [DisplayName("Group Id"), NotNull, ForeignKey("[Acc].EmailGroup", "Id"), LeftJoin("jGroup")]
+        [LookupEditor("Email.EmailGroup")]
         public Int32? GroupId
         {
             get { return Fields.GroupId[this]; }
@@ -44,7 +45,7 @@ namespace AccController.Email.Entities
             set { Fields.Status[this] = value; }
         }
 
-        [DisplayName("Result"), NotNull]
+        [DisplayName("Result")]
         public Int16? Result
         {
             get { return Fields.Result[this]; }
