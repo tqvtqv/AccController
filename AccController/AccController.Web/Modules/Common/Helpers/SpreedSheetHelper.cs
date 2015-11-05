@@ -79,27 +79,32 @@ namespace AccController.Modules.Common.Helpers
             if (document.WorkbookPart.WorkbookStylesPart == null)
                 document.WorkbookPart.AddNewPart<WorkbookStylesPart>();
             var stylesPart = document.WorkbookPart.WorkbookStylesPart;
-            stylesPart.Stylesheet = new Stylesheet();
-            stylesPart.Stylesheet.Fills = new Fills();
+            Stylesheet styleSheet = document.WorkbookPart.WorkbookStylesPart.Stylesheet;
+            if (styleSheet == null)
+                styleSheet = new Stylesheet { Fills = new Fills() };
+
+            //stylesPart.Stylesheet.Fills = new Fills();
+
             // create a solid red fill
             var solidRed = new PatternFill() { PatternType = PatternValues.Solid };
             solidRed.ForegroundColor = new ForegroundColor { Rgb = HexBinaryValue.FromString("FFFF0000") }; // red fill
             solidRed.BackgroundColor = new BackgroundColor { Indexed = 64 };
-            stylesPart.Stylesheet.Fills.AppendChild(new Fill { PatternFill = new PatternFill { PatternType = PatternValues.None } }); // required, reserved by Excel
-            stylesPart.Stylesheet.Fills.AppendChild(new Fill { PatternFill = new PatternFill { PatternType = PatternValues.Gray125 } }); // required, reserved by Excel
-            stylesPart.Stylesheet.Fills.AppendChild(new Fill { PatternFill = solidRed });
+            styleSheet.Fills.AppendChild(new Fill { PatternFill = new PatternFill { PatternType = PatternValues.None } }); // required, reserved by Excel
+            styleSheet.Fills.AppendChild(new Fill { PatternFill = new PatternFill { PatternType = PatternValues.Gray125 } }); // required, reserved by Excel
+            styleSheet.Fills.AppendChild(new Fill { PatternFill = solidRed });
 
-            // cell format list
-            stylesPart.Stylesheet.CellFormats = new CellFormats();
-            // empty one for index 0, seems to be required
-            stylesPart.Stylesheet.CellFormats.AppendChild(new CellFormat());
+            if (styleSheet.CellFormats == null)
+            {
+                styleSheet.CellFormats = new CellFormats();// cell format list
+                styleSheet.CellFormats.AppendChild(new CellFormat());// empty one for index 0, seems to be required
+            }
+
             // cell format references style format 0, font 0, border 0, fill 2 and applies the fill
-            stylesPart.Stylesheet.CellFormats.AppendChild(new CellFormat { FormatId = 0, FontId = 0, BorderId = 0, FillId = 2, ApplyFill = true });
-            stylesPart.Stylesheet.CellFormats.Count = 2;
+            styleSheet.CellFormats.AppendChild(new CellFormat { FormatId = 0, FontId = 0, BorderId = 0, FillId = 2, ApplyFill = true });
+            
+            styleSheet.Save();
 
-            stylesPart.Stylesheet.Save();
-
-            errCellStyleIndex = 1;
+            errCellStyleIndex = styleSheet.CellFormats.Count - 1;
             #endregion
 
             FillObject(container, workbookPart, GetTemplateSheet());
