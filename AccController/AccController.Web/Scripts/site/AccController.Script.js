@@ -1928,6 +1928,9 @@
 	ss.initClass($AccController_Ais_AisUserChangeOUService, $asm, {});
 	ss.initClass($AccController_Ais_AisUserDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisUserForm, $asm, {
+		get_name: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Name');
+		},
 		get_ou: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Ou');
 		},
@@ -1963,9 +1966,6 @@
 		},
 		get_description: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
-		},
-		get_name: function() {
-			return this.byId(Serenity.StringEditor).call(this, 'Name');
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisUserGrid, $asm, {
@@ -2038,6 +2038,26 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_GroupGrid, $asm, {
+		getSlickOptions: function() {
+			var opt = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getSlickOptions.call(this);
+			opt.editable = true;
+			//opt.EnableCellNavigation = true;
+			//opt.AsyncEditorLoading = true;
+			//opt.AutoEdit = false;
+			return opt;
+		},
+		createSlickGrid: function() {
+			var grid = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.createSlickGrid.call(this);
+			//grid.SetSelectionModel( new SlickRowSelectionModel());
+			//grid.RegisterPlugin(new CheckboxSelectColumn);
+			return grid;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			//columns[0].Formatter = Type.GetType("Slick.Formatters.CheckboxFormatter").As<SlickColumnFormatter>();
+			//columns[0].
+			return columns;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -2223,7 +2243,7 @@
 	ss.initClass($AccController_Email_EmailGroupAccountDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailGroupAccountForm, $asm, {
 		get_groupId: function() {
-			return this.byId(Serenity.IntegerEditor).call(this, 'GroupId');
+			return this.byId(Serenity.LookupEditor).call(this, 'GroupId');
 		},
 		get_account: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Account');
@@ -2337,7 +2357,7 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Mobile');
 		},
 		get_birthday: function() {
-			return this.byId(Serenity.StringEditor).call(this, 'Birthday');
+			return this.byId(Serenity.DateEditor).call(this, 'Birthday');
 		},
 		get_ou: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Ou');
@@ -2418,7 +2438,7 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Mobile');
 		},
 		get_birthday: function() {
-			return this.byId(Serenity.StringEditor).call(this, 'Birthday');
+			return this.byId(Serenity.DateEditor).call(this, 'Birthday');
 		},
 		get_ou: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Ou');

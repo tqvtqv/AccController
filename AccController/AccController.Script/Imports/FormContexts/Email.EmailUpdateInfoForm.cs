@@ -22,7 +22,7 @@ namespace AccController.Email
         public StringEditor Company { get { return ById<StringEditor>("Company"); } }
         public StringEditor Phone { get { return ById<StringEditor>("Phone"); } }
         public StringEditor Mobile { get { return ById<StringEditor>("Mobile"); } }
-        public StringEditor Birthday { get { return ById<StringEditor>("Birthday"); } }
+        public DateEditor Birthday { get { return ById<DateEditor>("Birthday"); } }
         public StringEditor Ou { get { return ById<StringEditor>("Ou"); } }
         public StringEditor Status { get { return ById<StringEditor>("Status"); } }
         public StringEditor Result { get { return ById<StringEditor>("Result"); } }

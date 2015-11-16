@@ -17,7 +17,36 @@ namespace AccController.Ais
         public GroupGrid(jQueryObject container)
             : base(container)
         {
+            
         }
+        protected override SlickGridOptions GetSlickOptions()
+        {
+            var opt = base.GetSlickOptions();
+            opt.Editable = true;
+            //opt.EnableCellNavigation = true;
+            //opt.AsyncEditorLoading = true;
+            //opt.AutoEdit = false;
+            return opt;
+        }
+        protected override SlickGrid CreateSlickGrid()
+        {
+            var grid = base.CreateSlickGrid();
+            //grid.SetSelectionModel( new SlickRowSelectionModel());
+            //grid.RegisterPlugin(new CheckboxSelectColumn);
+            return grid;
+        }
+        protected override List<SlickColumn> GetColumns()
+        {
+            var columns = base.GetColumns();
+            //columns[0].Formatter = Type.GetType("Slick.Formatters.CheckboxFormatter").As<SlickColumnFormatter>();
+            //columns[0].
+            return columns;
+        }
+        //protected override void OnClick(jQueryEvent e, int row, int cell)
+        //{
+        //    this.View.GetItems()[row].se
+        //    base.OnClick(e, row, cell);
+        //}
         protected override void CreateToolbarExtensions()
         {
             base.CreateToolbarExtensions();

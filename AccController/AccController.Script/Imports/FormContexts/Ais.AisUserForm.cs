@@ -15,6 +15,7 @@ namespace AccController.Ais
     
         public AisUserForm(string idPrefix) : base(idPrefix) {}
     
+        public StringEditor Name { get { return ById<StringEditor>("Name"); } }
         public StringEditor Ou { get { return ById<StringEditor>("Ou"); } }
         public StringEditor Email { get { return ById<StringEditor>("Email"); } }
         public StringEditor Phone { get { return ById<StringEditor>("Phone"); } }
@@ -27,7 +28,6 @@ namespace AccController.Ais
         public DateEditor LastUpdated { get { return ById<DateEditor>("LastUpdated"); } }
         public StringEditor LastUpdatedby { get { return ById<StringEditor>("LastUpdatedby"); } }
         public StringEditor Description { get { return ById<StringEditor>("Description"); } }
-        public StringEditor Name { get { return ById<StringEditor>("Name"); } }
     }
 }
 

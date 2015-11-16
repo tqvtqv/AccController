@@ -16,6 +16,8 @@ namespace AccController.Ais.Entities
     [JsonConverter(typeof(JsonRowConverter))]
     public sealed class GroupRow : Row, IIdRow, INameRow
     {
+
+        public bool Select { get; set; }
         [DisplayName("Id"), Identity]
         public Int32? Id
         {

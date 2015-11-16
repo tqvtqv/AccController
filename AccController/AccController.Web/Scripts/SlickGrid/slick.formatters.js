@@ -16,7 +16,8 @@
         "PercentComplete": PercentCompleteFormatter,
         "PercentCompleteBar": PercentCompleteBarFormatter,
         "YesNo": YesNoFormatter,
-        "Checkmark": CheckmarkFormatter
+        "Checkmark": CheckmarkFormatter,
+        //"CheckboxSelectColumn": Slick.CheckboxSelectColumn
       }
     }
   });

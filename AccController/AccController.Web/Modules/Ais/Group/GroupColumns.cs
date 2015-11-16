@@ -13,6 +13,8 @@ namespace AccController.Ais.Columns
     [BasedOnRow(typeof(Entities.GroupRow))]
     public class GroupColumns
     {
+        [AlignCenter, BooleanEditor]
+        public bool Select { get; set; }
         [EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
         public Int32 Id { get; set; }
         [EditLink]
