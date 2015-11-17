@@ -3598,6 +3598,80 @@
 	$Serenity_GoogleMap.__typeName = 'Serenity.GoogleMap';
 	global.Serenity.GoogleMap = $Serenity_GoogleMap;
 	////////////////////////////////////////////////////////////////////////////////
+	// Serenity.GridRowSelectionMixin
+	var $Serenity_GridRowSelectionMixin = function(grid) {
+		this.$idField = null;
+		this.$grid = null;
+		this.$include = {};
+		Serenity.ScriptContext.call(this);
+		this.$grid = grid;
+		this.$idField = grid.getView().idField;
+		grid.getGrid().onClick.subscribe(ss.mkdel(this, function(e, p) {
+			if ($(e.target).hasClass('select-item')) {
+				e.preventDefault();
+				var item = grid.getView().rows[ss.unbox(ss.cast(p.row, ss.Int32))];
+				var id = item[this.$idField].toString();
+				if (!!ss.keyExists(this.$include, ss.cast(id, String))) {
+					delete this.$include[ss.cast(id, String)];
+				}
+				else {
+					this.$include[ss.cast(id, String)] = true;
+				}
+				for (var i = 0; i < grid.getView().rows.length; i++) {
+					grid.getGrid().updateRow(i);
+				}
+				this.$updateSelectAll();
+			}
+		}));
+		grid.getGrid().onHeaderClick.subscribe(ss.mkdel(this, function(e1, u) {
+			if (e1.isDefaultPrevented()) {
+				return;
+			}
+			if ($(e1.target).hasClass('select-all-items')) {
+				e1.preventDefault();
+				var view = grid.getView();
+				if (ss.getKeyCount(this.$include) > 0) {
+					ss.clearKeys(this.$include);
+				}
+				else {
+					var $t1 = grid.getView().getItems();
+					for (var $t2 = 0; $t2 < $t1.length; $t2++) {
+						var x = $t1[$t2];
+						var id1 = x[this.$idField];
+						this.$include[ss.cast(id1.toString(), String)] = true;
+					}
+				}
+				this.$updateSelectAll();
+				grid.getView().setItems(grid.getView().getItems(), true);
+			}
+		}));
+		grid.getView().onRowsChanged.subscribe(ss.mkdel(this, function(e2, u1) {
+			this.$updateSelectAll();
+		}));
+	};
+	$Serenity_GridRowSelectionMixin.__typeName = 'Serenity.GridRowSelectionMixin';
+	$Serenity_GridRowSelectionMixin.createSelectColumn = function(getMixin) {
+		return {
+			name: '<span class="select-all-items check-box no-float "></span>',
+			toolTip: ' ',
+			field: '__select__',
+			width: 25,
+			minWidth: 25,
+			headerCssClass: 'select-all-header',
+			sortable: false,
+			format: function(ctx) {
+				var item = ctx.item;
+				var mixin = getMixin();
+				if (ss.isNullOrUndefined(mixin)) {
+					return '';
+				}
+				var isChecked = !!ss.keyExists(mixin.$include, ss.cast(ctx.item[mixin.$idField].toString(), String));
+				return '<span class="select-item check-box no-float ' + (isChecked ? ' checked' : '') + '"></span>';
+			}
+		};
+	};
+	global.Serenity.GridRowSelectionMixin = $Serenity_GridRowSelectionMixin;
+	////////////////////////////////////////////////////////////////////////////////
 	// Serenity.GridSelectAllButtonHelper
 	var $Serenity_GridSelectAllButtonHelper = function() {
 	};
@@ -8492,6 +8566,36 @@
 			return this.$map;
 		}
 	}, ss.makeGenericType($Serenity_Widget$1, [Object]));
+	ss.initClass($Serenity_GridRowSelectionMixin, $asm, {
+		clear: function() {
+			ss.clearKeys(this.$include);
+			this.$updateSelectAll();
+		},
+		resetCheckedAndRefresh: function() {
+			this.$include = {};
+			this.$updateSelectAll();
+			this.$grid.getView().populate();
+		},
+		$updateSelectAll: function() {
+			var selectAllButton = this.$grid.getElement().find('.select-all-header .slick-column-name .select-all-items');
+			if (ss.isValue(selectAllButton)) {
+				selectAllButton.toggleClass('checked', ss.getKeyCount(this.$include) > 0 && this.$grid.getView().getItems().length === ss.getKeyCount(this.$include));
+			}
+		},
+		getSelectedKeys: function() {
+			return Enumerable.from(Object.keys(this.$include)).toArray();
+		},
+		getSelectedAsInt32: function() {
+			return Enumerable.from(Object.keys(this.$include)).select(function(x) {
+				return parseInt(x);
+			}).toArray();
+		},
+		getSelectedAsInt64: function() {
+			return Enumerable.from(Object.keys(this.$include)).select(function(x) {
+				return parseInt(x);
+			}).toArray();
+		}
+	}, Serenity.ScriptContext);
 	ss.initClass($Serenity_GridSelectAllButtonHelper, $asm, {});
 	ss.initClass($Serenity_GridUtils, $asm, {});
 	ss.initClass($Serenity_HtmlContentEditor, $asm, {

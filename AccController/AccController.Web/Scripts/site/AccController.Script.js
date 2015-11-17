@@ -638,6 +638,7 @@
 	// AccController.Ais.GroupGrid
 	var $AccController_Ais_GroupGrid = function(container) {
 		this.$uploader = null;
+		this.$checkAll = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Ais_GroupGrid.__typeName = 'AccController.Ais.GroupGrid';
@@ -2046,12 +2047,6 @@
 			//opt.AutoEdit = false;
 			return opt;
 		},
-		createSlickGrid: function() {
-			var grid = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.createSlickGrid.call(this);
-			//grid.SetSelectionModel( new SlickRowSelectionModel());
-			//grid.RegisterPlugin(new CheckboxSelectColumn);
-			return grid;
-		},
 		getColumns: function() {
 			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
 			//columns[0].Formatter = Type.GetType("Slick.Formatters.CheckboxFormatter").As<SlickColumnFormatter>();
@@ -2060,15 +2055,20 @@
 		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
-			var $t2 = ss.mkdel(this, function(e) {
-				e.appendTo(this.toolbar.get_element());
+			this.$checkAll = Serenity.Widget.create(Serenity.BooleanEditor).call(null, ss.mkdel(this, function(e) {
+				e.appendTo($(this.get_slickGrid().getHeaderRow()));
+			}), null, function(e1) {
+				Q.alert('ertertretre');
+			});
+			var $t2 = ss.mkdel(this, function(e2) {
+				e2.appendTo(this.toolbar.get_element());
 			});
 			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
 			$t1.allowNonImage = true;
 			$t1.maxSize = 2048;
-			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
-				$('ul', e1.get_element()).hide();
-				$('.delete-button', e1.get_element()).hide();
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e3) {
+				$('ul', e3.get_element()).hide();
+				$('.delete-button', e3.get_element()).hide();
 				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateGroupRequest');
 				});

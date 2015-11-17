@@ -14,6 +14,7 @@ namespace AccController.Ais
     public class GroupGrid : EntityGrid<GroupRow>
     {
         private ImageUploadEditor uploader;
+        private BooleanEditor checkAll;
         public GroupGrid(jQueryObject container)
             : base(container)
         {
@@ -28,13 +29,7 @@ namespace AccController.Ais
             //opt.AutoEdit = false;
             return opt;
         }
-        protected override SlickGrid CreateSlickGrid()
-        {
-            var grid = base.CreateSlickGrid();
-            //grid.SetSelectionModel( new SlickRowSelectionModel());
-            //grid.RegisterPlugin(new CheckboxSelectColumn);
-            return grid;
-        }
+        
         protected override List<SlickColumn> GetColumns()
         {
             var columns = base.GetColumns();
@@ -50,7 +45,12 @@ namespace AccController.Ais
         protected override void CreateToolbarExtensions()
         {
             base.CreateToolbarExtensions();
-
+            //checkAll = Widget.Create<BooleanEditor>(element:e=>e.AppendTo(J(this.SlickGrid.GetHeaderRow())),
+            //    options: null,
+            //    init: e => {
+            //        Q.Alert("ertertretre");
+            //    }
+            //);
             uploader = Widget.Create<ImageUploadEditor>(
                    element: e => e.AppendTo(toolbar.Element),
                    options: new ImageUploadEditorOptions { AllowNonImage = true, MaxSize = 2048 },
