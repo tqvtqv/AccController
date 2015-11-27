@@ -1,3 +1,4 @@
+
 namespace AccController.Ais
 {
     using jQueryApi;
@@ -7,33 +8,39 @@ namespace AccController.Ais
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
+    [Imported, PreserveMemberCase]
     public partial class AisFileService
     {
         [InlineConstant] public const string BaseUrl = "Ais/AisFile";
     
+        [InlineCode("Q.serviceRequest('Ais/AisFile/Create', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Create(SaveRequest<AisFileRow> request, Action<SaveResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Create, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisFile/Update', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Update(SaveRequest<AisFileRow> request, Action<SaveResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Update, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisFile/Delete', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Delete(DeleteRequest request, Action<DeleteResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Delete, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisFile/Retrieve', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Retrieve(RetrieveRequest request, Action<RetrieveResponse<AisFileRow>> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Retrieve, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisFile/List', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest List(ListRequest request, Action<ListResponse<AisFileRow>> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.List, request, onSuccess, options);
+            return null;
         }
     
         [Imported, PreserveMemberCase]

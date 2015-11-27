@@ -23,14 +23,14 @@ namespace AccController.Ais.Entities
             set { Fields.Id[this] = value; }
         }
 
-        [DisplayName("Name"), Size(150), NotNull]
+        [DisplayName("Tên người dùng"), Size(150), NotNull]
         public String Name
         {
             get { return Fields.Name[this]; }
             set { Fields.Name[this] = value; }
         }
 
-        [DisplayName("Ou"), Column("OU"), Size(255), NotNull, QuickSearch]
+        [DisplayName("Tên đơn vị trực thuộc"), Column("OU"), Size(255), NotNull, QuickSearch]
         public String Ou
         {
             get { return Fields.Ou[this]; }
@@ -44,35 +44,35 @@ namespace AccController.Ais.Entities
             set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("Phone"), Size(50)]
+        [DisplayName("Số cố định"), Size(50)]
         public String Phone
         {
             get { return Fields.Phone[this]; }
             set { Fields.Phone[this] = value; }
         }
 
-        [DisplayName("Mobile"), Size(50)]
+        [DisplayName("Số di động"), Size(50)]
         public String Mobile
         {
             get { return Fields.Mobile[this]; }
             set { Fields.Mobile[this] = value; }
         }
 
-        [DisplayName("Jobtitle"), Size(150)]
+        [DisplayName("Chức danh"), Size(150)]
         public String Jobtitle
         {
             get { return Fields.Jobtitle[this]; }
             set { Fields.Jobtitle[this] = value; }
         }
 
-        [DisplayName("Role"), Size(150)]
+        [DisplayName("Quyền"), Size(150)]
         public String Role
         {
             get { return Fields.Role[this]; }
             set { Fields.Role[this] = value; }
         }
 
-        [DisplayName("Priority"), NotNull]
+        [DisplayName("Mức ưu tiên"), NotNull]
         public Int32? Priority
         {
             get { return Fields.Priority[this]; }
@@ -113,7 +113,19 @@ namespace AccController.Ais.Entities
             get { return Fields.Description[this]; }
             set { Fields.Description[this] = value; }
         }
+        [DisplayName("By_User"), Size(50), NotNull]
+        public String By_User
+        {
+            get { return Fields.By_User[this]; }
+            set { Fields.By_User[this] = value; }
+        }
 
+        [DisplayName("Submit"), Size(50), NotNull]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
+        }
         
 
         IIdField IIdRow.IdField
@@ -149,7 +161,8 @@ namespace AccController.Ais.Entities
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
             public readonly StringField Name;
-
+            public readonly StringField By_User;
+            public readonly StringField Submit;
             public RowFields()
                 : base("[Acc].AisUser")
             {

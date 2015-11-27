@@ -1,6 +1,6 @@
 ﻿
 
-[assembly:Serenity.Navigation.NavigationLink(int.MaxValue, "Email/EmailGroupAccount", typeof(AccController.Email.Pages.EmailGroupAccountController))]
+//[assembly:Serenity.Navigation.NavigationLink(int.MaxValue, "Email/EmailGroupAccount", typeof(AccController.Email.Pages.EmailGroupAccountController))]
 
 namespace AccController.Email.Pages
 {

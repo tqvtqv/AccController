@@ -780,7 +780,7 @@ namespace AccController.Modules.Common.Helpers
                             sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1; 
                     }
 
-                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = $"DanhSach{nameof(T)}" };
+                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = string.Format("DanhSach{0}", typeof(T).Name) };
                     sheets.Append(sheet);
 
 

@@ -8,6 +8,7 @@ namespace AccController.Administration.Repositories
     using System;
     using System.Collections.Generic;
     using System.Data;
+    using System.Threading;
     using System.Web.Security;
     using MyRow = Entities.UserRow;
 
@@ -17,6 +18,7 @@ namespace AccController.Administration.Repositories
 
         public SaveResponse Create(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
+            request.Entity.by_admin = Thread.CurrentPrincipal.Identity.Name;
             return new MySaveHandler().Process(uow, request, SaveRequestType.Create);
         }
 

@@ -13,8 +13,8 @@ namespace AccController.Email.Columns
     [BasedOnRow(typeof(Entities.EmailUpdateInfoRow))]
     public class EmailUpdateInfoColumns
     {
-        [EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
-        public Int32 Id { get; set; }
+        //[EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
+        //public Int32 Id { get; set; }
         [EditLink]
         public String Account { get; set; }
         public String Name { get; set; }
@@ -25,10 +25,10 @@ namespace AccController.Email.Columns
         public String Mobile { get; set; }
         public Stream Birthday { get; set; }
         public String Ou { get; set; }
-        public Int16 Status { get; set; }
-        public Int16 Result { get; set; }
-        public DateTime LastUpdated { get; set; }
-        public String LastUpdatedby { get; set; }
-        public String Description { get; set; }
+        //public Int16 Status { get; set; }
+        //public Int16 Result { get; set; }
+        //public DateTime LastUpdated { get; set; }
+        //public String LastUpdatedby { get; set; }
+        //public String Description { get; set; }
     }
 }

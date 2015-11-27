@@ -146,6 +146,10 @@
     <Content Include="Content\colorbox\images\loading.gif" />
     <Content Include="Content\colorbox\images\loading_background.png" />
     <Content Include="Content\colorbox\jquery.colorbox.css" />
+    <Content Include="Content\css\anhbottom.jpg" />
+    <Content Include="Content\css\banner.jpg" />
+    <Content Include="Content\css\hoa.jpg" />
+    <Content Include="Content\css\mycss.css" />
     <Content Include="Content\css\select2-spinner.gif" />
     <Content Include="Content\css\select2.css" />
     <Content Include="Content\css\select2.png" />
@@ -154,6 +158,7 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\font-open-sans.css" />
     <Content Include="Content\glyphicons.css" />
+    <Content Include="Content\images\anhbottom.jpg" />
     <Content Include="Content\images\collapse.gif" />
     <Content Include="Content\images\down.gif" />
     <Content Include="Content\images\expand.gif" />
@@ -817,6 +822,12 @@
     <Content Include="Modules\Email\EmailNew\EmailNewIndex.cshtml" />
     <Content Include="Modules\Email\EmailUpdateInfo\EmailUpdateInfoIndex.cshtml" />
     <Content Include="Modules\Ais\AisUser\AisUserIndex.cshtml" />
+    <Content Include="Modules\Ais\Testt\TesttIndex.cshtml" />
+    <Content Include="Modules\Request_Ais\Group\GroupIndex.cshtml" />
+    <Content Include="Modules\Request_Ais\AisAddOU\AisAddOUIndex.cshtml" />
+    <Content Include="Modules\Request_Ais\AisUser\AisUserIndex.cshtml" />
+    <Content Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoIndex.cshtml" />
+    <Content Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOUIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -853,6 +864,7 @@
     <Compile Include="Modules\Common\Imports\ScriptFormatterTypes.cs">
       <DependentUpon>ScriptFormatterTypes.tt</DependentUpon>
     </Compile>
+    <Compile Include="Modules\Common\Migrations\DefaultDB\Class1.cs" />
     <Compile Include="Modules\Common\Migrations\DefaultDB\DefaultDB_20151029_095400_AccControllers.cs" />
     <Compile Include="Modules\Common\Migrations\DefaultDB\DefaultDB_20141111_113000_Permissions.cs" />
     <Compile Include="Modules\Common\Migrations\DefaultDB\DefaultDB_20141103_140000_Initial.cs" />
@@ -1001,6 +1013,42 @@
     <Compile Include="Modules\Ais\AisUser\AisUserRepository.cs" />
     <Compile Include="Modules\Ais\AisUser\AisUserEndpoint.cs" />
     <Compile Include="Modules\Ais\AisUser\AisUserPage.cs" />
+    <Compile Include="Modules\Ais\Testt\TesttRow.cs" />
+    <Compile Include="Modules\Ais\Testt\TesttColumns.cs" />
+    <Compile Include="Modules\Ais\Testt\TesttForm.cs" />
+    <Compile Include="Modules\Ais\Testt\TesttRepository.cs" />
+    <Compile Include="Modules\Ais\Testt\TesttEndpoint.cs" />
+    <Compile Include="Modules\Ais\Testt\TesttPage.cs" />
+    <Compile Include="Modules\Request_Ais\Group\GroupRow.cs" />
+    <Compile Include="Modules\Request_Ais\Group\GroupColumns.cs" />
+    <Compile Include="Modules\Request_Ais\Group\GroupForm.cs" />
+    <Compile Include="Modules\Request_Ais\Group\GroupRepository.cs" />
+    <Compile Include="Modules\Request_Ais\Group\GroupEndpoint.cs" />
+    <Compile Include="Modules\Request_Ais\Group\GroupPage.cs" />
+    <Compile Include="Modules\Request_Ais\AisAddOU\AisAddOURow.cs" />
+    <Compile Include="Modules\Request_Ais\AisAddOU\AisAddOUColumns.cs" />
+    <Compile Include="Modules\Request_Ais\AisAddOU\AisAddOUForm.cs" />
+    <Compile Include="Modules\Request_Ais\AisAddOU\AisAddOURepository.cs" />
+    <Compile Include="Modules\Request_Ais\AisAddOU\AisAddOUEndpoint.cs" />
+    <Compile Include="Modules\Request_Ais\AisAddOU\AisAddOUPage.cs" />
+    <Compile Include="Modules\Request_Ais\AisUser\AisUserRow.cs" />
+    <Compile Include="Modules\Request_Ais\AisUser\AisUserColumns.cs" />
+    <Compile Include="Modules\Request_Ais\AisUser\AisUserForm.cs" />
+    <Compile Include="Modules\Request_Ais\AisUser\AisUserRepository.cs" />
+    <Compile Include="Modules\Request_Ais\AisUser\AisUserEndpoint.cs" />
+    <Compile Include="Modules\Request_Ais\AisUser\AisUserPage.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoRow.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoColumns.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoForm.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoRepository.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoEndpoint.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeInfo\AisUserChangeInfoPage.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOURow.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOUColumns.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOUForm.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOURepository.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOUEndpoint.cs" />
+    <Compile Include="Modules\Request_Ais\AisUserChangeOU\AisUserChangeOUPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

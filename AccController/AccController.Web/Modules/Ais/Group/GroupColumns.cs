@@ -13,10 +13,9 @@ namespace AccController.Ais.Columns
     [BasedOnRow(typeof(Entities.GroupRow))]
     public class GroupColumns
     {
-        [AlignCenter, BooleanEditor]
-        public bool Select { get; set; }
-        [EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
-        public Int32 Id { get; set; }
+        
+        //[EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
+        //public Int32 Id { get; set; }
         [EditLink]
         public String Name { get; set; }
         public String Parent { get; set; }
@@ -25,12 +24,12 @@ namespace AccController.Ais.Columns
         public String Relate { get; set; }
         public Int16 Priority { get; set; }
         
-        public Int16 Result { get; set; }
-        public String Description { get; set; }
+       // public Int16 Result { get; set; }
+      //  public String Description { get; set; }
         
-        public DateTime LastUpdated { get; set; }
-        public String LastUpdatedby { get; set; }
-        public Int16 Status { get; set; }
+       // public DateTime LastUpdated { get; set; }
+       // public String LastUpdatedby { get; set; }
+       // public Int16 Status { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 
+
 namespace AccController.Email
 {
     using Serenity;
@@ -17,7 +18,7 @@ namespace AccController.Email
         [InlineConstant] public const string LocalTextPrefix = "Email.EmailGroupAccount";
     
         public Int32? Id { get; set; }
-        public Int32? GroupId { get; set; }
+        public String Alias { get; set; }
         public String Account { get; set; }
         public Int16? Status { get; set; }
         public Int16? Result { get; set; }
@@ -32,12 +33,14 @@ namespace AccController.Email
         public String GroupLastUpdated { get; set; }
         public String GroupLastUpdatedby { get; set; }
         public String GroupDescription { get; set; }
+        public String By_User { get; set; }
+        public String Submit { get; set; }
     
         [Imported, PreserveMemberCase]
         public static class Fields
         {
             [InlineConstant] public const string Id = "Id";
-            [InlineConstant] public const string GroupId = "GroupId";
+            [InlineConstant] public const string Alias = "Alias";
             [InlineConstant] public const string Account = "Account";
             [InlineConstant] public const string Status = "Status";
             [InlineConstant] public const string Result = "Result";
@@ -52,6 +55,8 @@ namespace AccController.Email
             [InlineConstant] public const string GroupLastUpdated = "GroupLastUpdated";
             [InlineConstant] public const string GroupLastUpdatedby = "GroupLastUpdatedby";
             [InlineConstant] public const string GroupDescription = "GroupDescription";
+            [InlineConstant] public const string By_User = "By_User";
+            [InlineConstant] public const string Submit = "Submit";
         }
     }
     

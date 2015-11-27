@@ -1,4 +1,5 @@
 
+
 namespace AccController.Ais
 {
     using Serenity;
@@ -30,6 +31,8 @@ namespace AccController.Ais
         public String LastUpdatedby { get; set; }
         public String Description { get; set; }
         public String Name { get; set; }
+        public String By_User { get; set; }
+        public String Submit { get; set; }
     
         [Imported, PreserveMemberCase]
         public static class Fields
@@ -48,6 +51,8 @@ namespace AccController.Ais
             [InlineConstant] public const string LastUpdatedby = "LastUpdatedby";
             [InlineConstant] public const string Description = "Description";
             [InlineConstant] public const string Name = "Name";
+            [InlineConstant] public const string By_User = "By_User";
+            [InlineConstant] public const string Submit = "Submit";
         }
     }
     

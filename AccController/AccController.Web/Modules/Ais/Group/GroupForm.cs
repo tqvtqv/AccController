@@ -19,10 +19,15 @@ namespace AccController.Ais.Forms
         public String Shortname { get; set; }
         public String Relate { get; set; }
         public Int16 Priority { get; set; }
+        [ReadOnly(true)]
         public Int16 Status { get; set; }
+        [ReadOnly(true)]
         public Int16 Result { get; set; }
+        [ReadOnly(true)]
         public DateTime LastUpdated { get; set; }
+        [ReadOnly(true)]
         public String LastUpdatedby { get; set; }
+        [ReadOnly(true)]
         public String Description { get; set; }
     }
 }

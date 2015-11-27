@@ -1,4 +1,4 @@
-
+﻿
 namespace AccController.Administration
 {
     using jQueryApi;
@@ -9,10 +9,37 @@ namespace AccController.Administration
     [FormKey("Administration.User"), LocalTextPrefix("Administration.User"), Service("Administration/User")]
     public class UserDialog : EntityDialog<UserRow>
     {
+        static string user_name = "";
+        static int i_refresh = 1;
+        static string admin_lv = "1";
         private UserForm form;
 
         public UserDialog()
         {
+
+            var request = new ServiceRequest();
+
+            Q.ServiceCall(new ServiceCallOptions
+            {
+                Url = Q.ResolveUrl("~/Administration/User/getUser"),
+
+                Request = request.As<ServiceRequest>(),
+                OnSuccess = response =>
+                {
+                    dynamic obj = response;
+                    UserRow t = (UserRow)obj;
+                    user_name = t.Username;
+                    admin_lv = obj.adminlv;
+                    //Q.Log("user_name:  " + user_name + "  admin_lv:" + admin_lv);
+                    if (i_refresh == 1)
+                    {
+                        
+                        i_refresh = 0;
+                        this.ReloadById();
+                    }
+                }
+            });
+
             form = new UserForm(this.IdPrefix);
 
             form.Password.AddValidationRule(this.uniqueName, e =>
@@ -63,6 +90,33 @@ namespace AccController.Administration
                     }).DialogOpen();
                 }
             });
+
+            if (admin_lv == "1")
+                buttons.Add(new ToolButton
+                {
+                    Title = "Super Admin",
+                    CssClass = "users-button",
+                    OnClick = delegate
+                    {
+                        Q.Confirm("Cấp quyền Super Admin?", () =>
+                            {
+                                var request = new SaveRequest<UserRow>();
+                                request.Entity = this.Entity;
+                                UserService.updateuser(request, s =>
+                                {
+
+                                    this.ReloadById();
+
+                                    this.DialogClose();
+                                    //Q.NotifyInfo("ok");
+                                });
+                            });
+                 
+                    }
+                });
+
+          
+
 
             return buttons;
         }

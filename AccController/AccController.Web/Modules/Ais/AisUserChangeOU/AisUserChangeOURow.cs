@@ -30,35 +30,49 @@ namespace AccController.Ais.Entities
             set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("Old Ou"), Column("OldOU"), Size(255), NotNull]
+        [DisplayName("Đơn vị cũ"), Column("OldOU"), Size(255), NotNull]
         public String OldOu
         {
             get { return Fields.OldOu[this]; }
             set { Fields.OldOu[this] = value; }
         }
 
-        [DisplayName("New Ou"), Column("NewOU"), Size(255), NotNull]
+        [DisplayName("Chức danh cũ"), Column("OldJobtitle"), Size(255)]
+        public String OldJobtitle
+        {
+            get { return Fields.OldJobtitle[this]; }
+            set { Fields.OldJobtitle[this] = value; }
+        }
+
+        [DisplayName("Quyền cũ"), Column("OldRole"), Size(255)]
+        public String OldRole
+        {
+            get { return Fields.OldRole[this]; }
+            set { Fields.OldRole[this] = value; }
+        }
+
+        [DisplayName("Đơn vị mới"), Column("NewOU"), Size(255), NotNull]
         public String NewOu
         {
             get { return Fields.NewOu[this]; }
             set { Fields.NewOu[this] = value; }
         }
 
-        [DisplayName("New Jobtitle"), Size(150)]
+        [DisplayName("Chức danh mới"), Size(150)]
         public String NewJobtitle
         {
             get { return Fields.NewJobtitle[this]; }
             set { Fields.NewJobtitle[this] = value; }
         }
 
-        [DisplayName("New Role"), Size(150)]
+        [DisplayName("Quyền mới"), Size(150)]
         public String NewRole
         {
             get { return Fields.NewRole[this]; }
             set { Fields.NewRole[this] = value; }
         }
 
-        [DisplayName("Priority"), NotNull]
+        [DisplayName("Mức ưu tiên"), NotNull]
         public Int32? Priority
         {
             get { return Fields.Priority[this]; }
@@ -100,6 +114,20 @@ namespace AccController.Ais.Entities
             set { Fields.Description[this] = value; }
         }
 
+        [DisplayName("By_User"), Size(50), NotNull]
+        public String By_User
+        {
+            get { return Fields.By_User[this]; }
+            set { Fields.By_User[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(50), NotNull]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
+        }
+
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -131,7 +159,10 @@ namespace AccController.Ais.Entities
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
-
+            public readonly StringField By_User;
+            public readonly StringField Submit;
+            public readonly StringField OldJobtitle;
+            public readonly StringField OldRole;
             public RowFields()
                 : base("[Acc].AisUserChangeOU")
             {

@@ -1,4 +1,4 @@
-<meta charset="utf-8" />
+﻿<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,6 +18,7 @@
 @Html.Stylesheet("~/Content/toastr.css")
 @Html.Stylesheet("~/Content/serenity/serenity.css")
 @Html.Stylesheet("~/Content/site/site.css")
+@Html.Stylesheet("~/Content/css/mycss.css")
 @{var cookie = Request.Cookies["ThemePreference"]; var theme = cookie != null && !cookie.Value.IsEmptyOrNull() ? cookie.Value : "default"; }
 <link id="SiteThemeCss" href="~/Content/site/site.theme.@(theme).css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">window.paceOptions = { minTime: 250, ghostTime: 250, restartOnRequestAfter: 250, ajax: { trackMethods: ['GET', 'POST'], trackWebSockets: true, ignoreURLs: [] } };</script>

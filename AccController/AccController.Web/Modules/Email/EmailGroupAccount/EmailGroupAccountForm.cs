@@ -13,12 +13,17 @@ namespace AccController.Email.Forms
     [BasedOnRow(typeof(Entities.EmailGroupAccountRow))]
     public class EmailGroupAccountForm
     {
-        public Int32 GroupId { get; set; }
+        public String Alias { get; set; }
         public String Account { get; set; }
+        [ReadOnly(true)]
         public Int16 Status { get; set; }
+        [ReadOnly(true)]
         public Int16 Result { get; set; }
+        [ReadOnly(true)]
         public DateTime LastUpdated { get; set; }
+        [ReadOnly(true)]
         public String LastUpdatedby { get; set; }
+        [ReadOnly(true)]
         public String Description { get; set; }
     }
 }

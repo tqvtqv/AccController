@@ -15,7 +15,7 @@ namespace AccController.Email.Forms
     {
         public String Name { get; set; }
         public String Alias { get; set; }
-        public String Password { get; set; }
+        //public String Password { get; set; }
         public String Displayname { get; set; }
         public String Firstname { get; set; }
         public String Lastname { get; set; }
@@ -27,10 +27,15 @@ namespace AccController.Email.Forms
         public DateTime? Birthday { get; set; }
         public String Ou { get; set; }
         public String UserPrincipal { get; set; }
+        [ReadOnly(true)]
         public Int16 Status { get; set; }
+        [ReadOnly(true)]
         public Int16 Result { get; set; }
+        [ReadOnly(true)]
         public DateTime LastUpdated { get; set; }
+        [ReadOnly(true)]
         public String LastUpdatedby { get; set; }
+        [ReadOnly(true)]
         public String Description { get; set; }
     }
 }
