@@ -1,0 +1,103 @@
+﻿.vnpt_header {
+    width: 100%; 
+    background: transparent url("banner.jpg") no-repeat scroll 0% 0%;
+    height: 92px;
+    margin: 0px auto; 
+    margin-top: 0px; 
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    background-color: #0066B3;
+}
+
+.vnpt2010_menu_blank {
+   width: 100%; 
+    height:2px;
+    margin: 0px auto; 
+    margin-top: 0px; 
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    background-color: white;
+}
+.vnpt_menu {
+    width: 100%; 
+    height:23px;
+    margin: 0px auto; 
+    margin-top: 0px; 
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    background-color: #0066B3;
+
+}
+
+.tanhn_wrapper {
+      background-color: #808080;
+}
+
+.tanhn_page-container-common {
+    width: 98%; 
+    margin: 0px auto; 
+    margin-top: 0px; 
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    min-height: 568px;
+    background-color:white;
+    padding-left:21%;
+}
+
+
+.vnpt_bannner{
+    
+
+
+}
+
+
+#vnpt_footer {
+    width: 100%; 
+    height: 92px;
+    margin: 0px auto; 
+    margin-top: 0px; 
+    margin-right: auto;
+    margin-bottom: 0px;
+    margin-left: auto;
+    background-color: #0066B3;
+}
+
+.vnpt_footer_left {
+    font-family: tahoma,Arial,Helvetica,san-serif;
+    background-color:#0066b3;
+    width:62%;
+     height: 92px;
+    color: #FFF;
+    font-size: 11px;
+    text-decoration: none;
+    text-align: center;
+    float:left;
+}
+
+
+.vnpt_footer_right {
+    width:38%;
+    background-color:#0066b3;
+    align="right";
+    float:left;
+    
+
+}
+
+.vnpt2010_footer_blank {
+    background-color: #808080;
+    height: 8px;
+    margin: 0px;
+}
+
+.percent-complete-bar {
+  display: inline-block;
+  height: 6px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}

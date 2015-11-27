@@ -1,0 +1,58 @@
+﻿
+namespace AccController.Request_Ais
+{
+    using AccController.Administration;
+    using jQueryApi;
+    using Serenity;
+    using System;
+    using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
+
+    [ColumnsKey("Request_Ais.Group"), IdProperty(GroupRow.IdProperty), NameProperty(GroupRow.NameProperty)]
+    [DialogType(typeof(GroupDialog)), LocalTextPrefix(GroupRow.LocalTextPrefix), Service(GroupService.BaseUrl)]
+    public class GroupGrid : EntityGrid<GroupRow>
+    {
+        static string user_name = "";
+        static int i_refresh = 1;
+        static string admin_lv = "-1";
+
+        public GroupGrid(jQueryObject container)
+            : base(container)
+        {
+        }
+
+        protected override bool OnViewSubmit()
+        {
+
+
+            var request = new ServiceRequest();
+            Q.ServiceCall(new ServiceCallOptions
+            {
+                Url = Q.ResolveUrl("~/Administration/User/getUser"),
+
+                Request = request.As<ServiceRequest>(),
+                OnSuccess = response =>
+                {
+                    dynamic obj = response;
+                    UserRow t = (UserRow)obj;
+                    user_name = t.Username;
+                    admin_lv = obj.adminlv;
+                    if (i_refresh == 1)
+                    {
+                        i_refresh = 0;
+                        Refresh();
+                    }
+                }
+            });
+
+            var req = (ListRequest)view.Params;
+            req.EqualityFilter = req.EqualityFilter ?? new JsDictionary<string, object>();
+            //if (admin_lv == "1")
+            //    req.EqualityFilter["By_User"] = "";
+            //else
+            //    req.EqualityFilter["By_User"] = user_name;
+            req.EqualityFilter["Submit"] = "1";
+            return true;
+        }
+    }
+}
