@@ -23,12 +23,12 @@ namespace AccController.Email.Entities
             set { Fields.Id[this] = value; }
         }
 
-        [DisplayName("Group Id"), NotNull, ForeignKey("[Acc].EmailGroup", "Id"), LeftJoin("jGroup")]
-        [LookupEditor("Email.EmailGroup")]
-        public Int32? GroupId
+        [DisplayName("Alias"), NotNull, ForeignKey("[Acc].EmailGroup", "Id"), LeftJoin("jGroup")]
+        //[LookupEditor("Email.EmailGroup")]
+        public String Alias
         {
-            get { return Fields.GroupId[this]; }
-            set { Fields.GroupId[this] = value; }
+            get { return Fields.Alias[this]; }
+            set { Fields.Alias[this] = value; }
         }
 
         [DisplayName("Account"), Size(50), NotNull, QuickSearch]
@@ -129,6 +129,20 @@ namespace AccController.Email.Entities
             set { Fields.GroupDescription[this] = value; }
         }
 
+        [DisplayName("By_User"), Size(50), NotNull]
+        public String By_User
+        {
+            get { return Fields.By_User[this]; }
+            set { Fields.By_User[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(50), NotNull]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
+        }
+
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -149,7 +163,7 @@ namespace AccController.Email.Entities
         public class RowFields : RowFieldsBase
         {
             public readonly Int32Field Id;
-            public readonly Int32Field GroupId;
+            public readonly StringField Alias;
             public readonly StringField Account;
             public readonly Int16Field Status;
             public readonly Int16Field Result;
@@ -165,7 +179,8 @@ namespace AccController.Email.Entities
             public readonly DateTimeField GroupLastUpdated;
             public readonly StringField GroupLastUpdatedby;
             public readonly StringField GroupDescription;
-
+            public readonly StringField By_User;
+            public readonly StringField Submit;
             public RowFields()
                 : base("[Acc].EmailGroupAccounts")
             {

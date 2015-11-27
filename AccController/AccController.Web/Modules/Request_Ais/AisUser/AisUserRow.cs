@@ -1,5 +1,5 @@
 ﻿
-namespace AccController.Ais.Entities
+namespace AccController.Request_Ais.Entities
 {
     using Newtonsoft.Json;
     using Serenity;
@@ -10,11 +10,11 @@ namespace AccController.Ais.Entities
     using System.ComponentModel;
     using System.IO;
 
-    [ConnectionKey("Default"), DisplayName("AisGroup"), InstanceName("AisGroup"), TwoLevelCached]
-    [ReadPermission("Ais")]
-    [ModifyPermission("Ais")]
+    [ConnectionKey("Default"), DisplayName("AisUser"), InstanceName("AisUser"), TwoLevelCached]
+    [ReadPermission("Request_Ais")]
+    [ModifyPermission("Request_Ais")]
     [JsonConverter(typeof(JsonRowConverter))]
-    public sealed class GroupRow : Row, IIdRow, INameRow
+    public sealed class AisUserRow : Row, IIdRow, INameRow
     {
         [DisplayName("Id"), Identity]
         public Int32? Id
@@ -30,36 +30,50 @@ namespace AccController.Ais.Entities
             set { Fields.Name[this] = value; }
         }
 
-        [DisplayName("Parent"), Size(150), NotNull]
-        public String Parent
+        [DisplayName("Ou"), Column("OU"), Size(255), NotNull]
+        public String Ou
         {
-            get { return Fields.Parent[this]; }
-            set { Fields.Parent[this] = value; }
+            get { return Fields.Ou[this]; }
+            set { Fields.Ou[this] = value; }
         }
 
-        [DisplayName("Category"), Size(150), NotNull]
-        public String Category
+        [DisplayName("Email"), Size(150), NotNull]
+        public String Email
         {
-            get { return Fields.Category[this]; }
-            set { Fields.Category[this] = value; }
+            get { return Fields.Email[this]; }
+            set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("Shortname"), Size(50), NotNull]
-        public String Shortname
+        [DisplayName("Phone"), Size(50)]
+        public String Phone
         {
-            get { return Fields.Shortname[this]; }
-            set { Fields.Shortname[this] = value; }
+            get { return Fields.Phone[this]; }
+            set { Fields.Phone[this] = value; }
         }
 
-        [DisplayName("Relate"), Size(150), NotNull]
-        public String Relate
+        [DisplayName("Mobile"), Size(50)]
+        public String Mobile
         {
-            get { return Fields.Relate[this]; }
-            set { Fields.Relate[this] = value; }
+            get { return Fields.Mobile[this]; }
+            set { Fields.Mobile[this] = value; }
+        }
+
+        [DisplayName("Jobtitle"), Size(150)]
+        public String Jobtitle
+        {
+            get { return Fields.Jobtitle[this]; }
+            set { Fields.Jobtitle[this] = value; }
+        }
+
+        [DisplayName("Role"), Size(150)]
+        public String Role
+        {
+            get { return Fields.Role[this]; }
+            set { Fields.Role[this] = value; }
         }
 
         [DisplayName("Priority"), NotNull]
-        public Int16? Priority
+        public Int32? Priority
         {
             get { return Fields.Priority[this]; }
             set { Fields.Priority[this] = value; }
@@ -93,11 +107,25 @@ namespace AccController.Ais.Entities
             set { Fields.LastUpdatedby[this] = value; }
         }
 
-        [DisplayName("Description"), Size(255), NotNull]
+        [DisplayName("Description"), Size(255)]
         public String Description
         {
             get { return Fields.Description[this]; }
             set { Fields.Description[this] = value; }
+        }
+
+        [DisplayName("By User"), Column("By_User"), Size(100)]
+        public String ByUser
+        {
+            get { return Fields.ByUser[this]; }
+            set { Fields.ByUser[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(10)]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
         }
 
         IIdField IIdRow.IdField
@@ -112,7 +140,7 @@ namespace AccController.Ais.Entities
 
         public static readonly RowFields Fields = new RowFields().Init();
 
-        public GroupRow()
+        public AisUserRow()
             : base(Fields)
         {
         }
@@ -121,21 +149,25 @@ namespace AccController.Ais.Entities
         {
             public readonly Int32Field Id;
             public readonly StringField Name;
-            public readonly StringField Parent;
-            public readonly StringField Category;
-            public readonly StringField Shortname;
-            public readonly StringField Relate;
-            public readonly Int16Field Priority;
+            public readonly StringField Ou;
+            public readonly StringField Email;
+            public readonly StringField Phone;
+            public readonly StringField Mobile;
+            public readonly StringField Jobtitle;
+            public readonly StringField Role;
+            public readonly Int32Field Priority;
             public readonly Int16Field Status;
             public readonly Int16Field Result;
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
+            public readonly StringField ByUser;
+            public readonly StringField Submit;
 
             public RowFields()
-                : base("[Acc].AisGroup")
+                : base("[Acc].AisUser")
             {
-                LocalTextPrefix = "Ais.Group";
+                LocalTextPrefix = "Request_Ais.AisUser";
             }
         }
     }

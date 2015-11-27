@@ -177,7 +177,7 @@ namespace AccController.Migrations.DefaultDB
                 ;
             Create.Table("EmailGroupAccounts").InSchema(AccSchema)
                .WithColumn("Id").AsInt32().Identity().PrimaryKey().NotNullable()
-               .WithColumn("GroupId").AsInt32().NotNullable()
+               .WithColumn("Alias").AsString(100).NotNullable()
                .WithColumn("Account").AsString(50).NotNullable()
                .WithColumn("Status").AsInt16().NotNullable().WithDefaultValue(0)
                .WithColumn("Result").AsInt16().NotNullable().WithDefaultValue(0)
@@ -185,11 +185,11 @@ namespace AccController.Migrations.DefaultDB
                .WithColumn("LastUpdatedby").AsString(50).NotNullable()
                .WithColumn("Description").AsString(255).Nullable()
                ;
-            Create.ForeignKey("FK_EmailGroupAccounts_GroupId")
-                .FromTable("EmailGroupAccounts").InSchema(AccSchema)
-                .ForeignColumn("GroupId")
-                .ToTable("EmailGroup").InSchema(AccSchema)
-                .PrimaryColumn("Id");
+            //Create.ForeignKey("FK_EmailGroupAccounts_GroupId")
+            //    .FromTable("EmailGroupAccounts").InSchema(AccSchema)
+            //    .ForeignColumn("GroupId")
+            //    .ToTable("EmailGroup").InSchema(AccSchema)
+            //    .PrimaryColumn("Id");
 
             Create.Table("EmailFiles").InSchema(AccSchema)
                 .WithColumn("Id").AsInt32().Identity().PrimaryKey().NotNullable()

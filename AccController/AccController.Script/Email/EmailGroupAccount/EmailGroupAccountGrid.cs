@@ -1,6 +1,7 @@
 ﻿
 namespace AccController.Email
 {
+    using AccController.Administration;
     using jQueryApi;
     using Serenity;
     using System;
@@ -12,11 +13,48 @@ namespace AccController.Email
     public class EmailGroupAccountGrid : EntityGrid<EmailGroupAccountRow>
     {
         private GridRowSelectionMixin rowSelection;
+        static string user_name = "";
+        static int i_refresh = 1;
+        static string admin_lv = "-1";
 
         public EmailGroupAccountGrid(jQueryObject container)
             : base(container)
         {
             rowSelection = new GridRowSelectionMixin(this);
+        }
+
+        protected override bool OnViewSubmit()
+        {
+
+
+            var request = new ServiceRequest();
+            Q.ServiceCall(new ServiceCallOptions
+            {
+                Url = Q.ResolveUrl("~/Administration/User/getUser"),
+
+                Request = request.As<ServiceRequest>(),
+                OnSuccess = response =>
+                {
+                    dynamic obj = response;
+                    UserRow t = (UserRow)obj;
+                    user_name = t.Username;
+                    admin_lv = obj.adminlv;
+                    if (i_refresh == 1)
+                    {
+                        i_refresh = 0;
+                        Refresh();
+                    }
+                }
+            });
+
+            var req = (ListRequest)view.Params;
+            req.EqualityFilter = req.EqualityFilter ?? new JsDictionary<string, object>();
+            if (admin_lv == "1")
+                req.EqualityFilter["By_User"] = "";
+            else
+                req.EqualityFilter["By_User"] = user_name;
+            req.EqualityFilter["Submit"] = "0";
+            return true;
         }
 
         protected override List<SlickColumn> GetColumns()
@@ -71,7 +109,38 @@ namespace AccController.Email
                 }
             });
 
+            buttons.Add(new ToolButton
+            {
+                Title = "Submit",
+                CssClass = "submit-button",
+                OnClick = delegate
+                {
+                    List<string> selectedIDs = rowSelection.GetSelectedKeys();
 
+                    if (admin_lv != "1")
+                        Q.NotifyError("Không có quyền thực hiện chức năng này!");
+                    else
+                    {
+                        if (selectedIDs.Count == 0)
+                            Q.NotifyError("Phải chọn bản ghi muốn duyệt");
+
+                        else
+                        {
+                            List<string> selectedID = rowSelection.GetSelectedKeys();
+                            foreach (var item in selectedID)
+                            {
+                                var request = new SaveRequest<EmailGroupAccountRow>();
+                                request.Entity = this.View.GetItemById(item);
+                                EmailGroupAccountService.updateSubmit(request, s =>
+                                {
+                                    Refresh();
+                                });
+                            }
+                           
+                        }
+                    }
+                }
+            });
 
             return buttons;
         }

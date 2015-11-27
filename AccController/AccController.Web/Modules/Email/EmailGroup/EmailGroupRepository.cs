@@ -7,6 +7,7 @@ namespace AccController.Email.Repositories
     using Serenity.Services;
     using System;
     using System.Data;
+    using System.Threading;
     using MyRow = Entities.EmailGroupRow;
 
     public class EmailGroupRepository
@@ -15,11 +16,19 @@ namespace AccController.Email.Repositories
 
         public SaveResponse Create(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
+            request.Entity.Submit = "0";
+            request.Entity.By_User = Thread.CurrentPrincipal.Identity.Name;
+            request.Entity.Result = 0;
+            request.Entity.LastUpdatedby = Thread.CurrentPrincipal.Identity.Name;
+            request.Entity.LastUpdated = DateTime.Now;
+            request.Entity.Status = 0;
             return new MySaveHandler().Process(uow, request, SaveRequestType.Create);
         }
 
         public SaveResponse Update(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
+            request.Entity.LastUpdatedby = Thread.CurrentPrincipal.Identity.Name;
+            request.Entity.LastUpdated = DateTime.Now;
             return new MySaveHandler().Process(uow, request, SaveRequestType.Update);
         }
 

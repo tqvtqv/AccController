@@ -40,5 +40,26 @@ namespace AccController.Email.Endpoints
         {
             return new MyRepository().List(connection, request);
         }
+
+        [AcceptVerbs("POST"), JsonFilter]
+        public Result<SaveResponse> updateSubmit(SaveRequest<MyRow> para1)
+        {
+            var str = para1;
+            return this.InTransaction("Default", (uow) =>
+            {
+
+                var saveFileResponse = new MyRepository().Update(uow, new SaveRequest<MyRow>
+                {
+                    Entity = new MyRow
+                    {
+                        Id = str.Entity.Id,
+                        Submit = "1"
+
+                    }
+                });
+
+                return saveFileResponse;
+            });
+        }
     }
 }
