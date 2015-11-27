@@ -803,6 +803,56 @@ namespace AccController.Modules.Common.Helpers
             else
                 return null;
         }
+
+        public static MemoryStream ExportXls<T>(IEnumerable<T> listObjs, string template)
+        {
+            if (listObjs != null && listObjs.Any())
+            {
+                var stream = new MemoryStream();
+                using (SpreadsheetDocument workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook, true))
+                {
+                    // create the workbook
+                    var workbookPart = workbook.AddWorkbookPart();
+                    workbook.WorkbookPart.Workbook = new Workbook();     // create the worksheet
+                    workbook.WorkbookPart.Workbook.Sheets = new Sheets();
+
+                    var sheetPart = workbook.WorkbookPart.AddNewPart<WorksheetPart>();
+                    var sheetData = new SheetData();
+                    sheetPart.Worksheet = new Worksheet(sheetData);
+
+                    Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<Sheets>();
+                    string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
+
+                    uint sheetId = 1;
+                    if (sheets.Elements<Sheet>().Count() > 0)
+                    {
+                        sheetId =
+                            sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
+                    }
+
+                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = string.Format("DanhSach{0}", typeof(T).Name) };
+                    sheets.Append(sheet);
+
+
+                    foreach (var item in listObjs)
+                    {
+                        Row newRow = new Row();
+
+                        Cell cell = new Cell();
+                        cell.DataType = CellValues.String;
+                        //cell.CellValue = new CellValue(item.SoDienThoai); //
+                        newRow.AppendChild(cell);
+
+                        sheetData.AppendChild(newRow);
+                    }
+
+                }
+                stream.Seek(0, SeekOrigin.Begin);
+                return stream;
+            }
+            else
+                return null;
+        }
         #endregion
     }
     public class CommonWorkSheet : ICommonSheet

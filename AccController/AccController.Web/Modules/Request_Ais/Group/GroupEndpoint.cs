@@ -1,6 +1,7 @@
 ﻿
 namespace AccController.Request_Ais.Endpoints
 {
+    using Modules.Common.Helpers;
     using Serenity;
     using Serenity.Data;
     using Serenity.Services;
@@ -24,7 +25,7 @@ namespace AccController.Request_Ais.Endpoints
         {
             return new MyRepository().Update(uow, request);
         }
- 
+
         [HttpPost]
         public DeleteResponse Delete(IUnitOfWork uow, DeleteRequest request)
         {
@@ -39,6 +40,15 @@ namespace AccController.Request_Ais.Endpoints
         public ListResponse<MyRow> List(IDbConnection connection, ListRequest request)
         {
             return new MyRepository().List(connection, request);
+        }
+        [HttpPost]
+        public FileContentResult GetFile(IDbConnection connection, ListRequest request)
+        {
+            return File(
+                SpreedSheetHelper.ExportXls<MyRow>(
+                    List(connection, request).Entities, Server.MapPath("~/Content/templates/import/ais/TaoMoiDonVi.xlsx")).GetBuffer(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                );
         }
     }
 }

@@ -1,5 +1,4 @@
 
-
 namespace AccController.Ais.Pages
 {
     using Serenity;

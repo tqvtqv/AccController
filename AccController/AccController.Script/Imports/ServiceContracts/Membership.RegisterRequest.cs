@@ -1,5 +1,4 @@
 
-
 namespace AccController.Membership
 {
     using Serenity;

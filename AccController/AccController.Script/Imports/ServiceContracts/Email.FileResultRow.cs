@@ -1,5 +1,4 @@
 
-
 namespace AccController.Email
 {
     using Serenity;

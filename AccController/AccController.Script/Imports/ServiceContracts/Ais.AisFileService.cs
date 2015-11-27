@@ -1,4 +1,3 @@
-
 namespace AccController.Ais
 {
     using jQueryApi;
