@@ -8,6 +8,7 @@ namespace AccController.Administration
     {
         public string Id { get { return UserId.ToInvariant(); } }
         public string DisplayName { get; set; }
+        public string adminlv { get; set; }
         public string Email { get; set; }
         public short IsActive { get; set; }
         public int UserId { get; set; }

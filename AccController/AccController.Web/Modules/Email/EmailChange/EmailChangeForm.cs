@@ -15,10 +15,15 @@ namespace AccController.Email.Forms
     {
         public String OldName { get; set; }
         public String NewName { get; set; }
+        [ReadOnly(true)]
         public Int16 Status { get; set; }
+          [ReadOnly(true)]
         public Int16 Result { get; set; }
+        [ReadOnly(true)]
         public DateTime LastUpdated { get; set; }
+        [ReadOnly(true)]
         public String LastUpdatedby { get; set; }
+        [ReadOnly(true)]
         public String Description { get; set; }
     }
 }

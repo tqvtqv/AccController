@@ -2,6 +2,8 @@
 
 namespace AccController.Administration.Endpoints
 {
+    using AccController.Administration.Entities;
+    using AccController.Administration.Repositories;
     using Serenity.Services;
     using System.Web.Mvc;
     using MyRepository = Repositories.UserRepository;
@@ -15,6 +17,32 @@ namespace AccController.Administration.Endpoints
         public Result<SaveResponse> Create(SaveRequest<MyRow> request)
         {
             return this.InTransaction("Default", (uow) => new MyRepository().Create(uow, request));
+        }
+
+
+        [AcceptVerbs("POST"), JsonFilter]
+        public Result<SaveResponse> updateuser(SaveRequest<MyRow> para1)
+        {
+            var str = para1;
+            return this.InTransaction("Default", (uow) =>
+            {
+
+                UserRetrieveService RequestUser = new UserRetrieveService();
+                var thisUser = RequestUser.ByUsername(this.User.Identity.Name);
+
+                var saveFileResponse = new UserRepository().Update(uow, new SaveRequest<MyRow>
+                {
+                    Entity = new MyRow
+                    {
+                        UserId = str.Entity.UserId,
+                        AdminLv = "1"
+                        
+                    }
+                });
+
+                return saveFileResponse;
+            });
+
         }
 
         [AcceptVerbs("POST"), JsonFilter]

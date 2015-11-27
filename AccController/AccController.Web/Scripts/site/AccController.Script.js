@@ -7,6 +7,7 @@
 	global.AccController.Common = global.AccController.Common || {};
 	global.AccController.Email = global.AccController.Email || {};
 	global.AccController.Membership = global.AccController.Membership || {};
+	global.AccController.Request_Ais = global.AccController.Request_Ais || {};
 	ss.initAssembly($asm, 'AccController.Script');
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.ScriptInitialization
@@ -35,27 +36,6 @@
 	};
 	$AccController_Administration_LanguageGrid.__typeName = 'AccController.Administration.LanguageGrid';
 	global.AccController.Administration.LanguageGrid = $AccController_Administration_LanguageGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.LanguageService
-	var $AccController_Administration_LanguageService = function() {
-	};
-	$AccController_Administration_LanguageService.__typeName = 'AccController.Administration.LanguageService';
-	$AccController_Administration_LanguageService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Language/Create', request, onSuccess, options);
-	};
-	$AccController_Administration_LanguageService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Language/Update', request, onSuccess, options);
-	};
-	$AccController_Administration_LanguageService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Language/Delete', request, onSuccess, options);
-	};
-	$AccController_Administration_LanguageService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Language/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Administration_LanguageService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Language/List', request, onSuccess, options);
-	};
-	global.AccController.Administration.LanguageService = $AccController_Administration_LanguageService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Administration.PermissionCheckEditor
 	var $AccController_Administration_PermissionCheckEditor = function(div) {
@@ -139,45 +119,12 @@
 		this.$permissions = null;
 		ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]).$ctor1.call(this, opt);
 		this.$permissions = new $AccController_Administration_PermissionCheckEditor(this.byId$1('Permissions'));
-		$AccController_Administration_RolePermissionService.list({ RoleID: this.options.roleID, Module: null, Submodule: null }, ss.mkdel(this, function(response) {
+		Q.serviceRequest('Administration/RolePermission/List', { RoleID: this.options.roleID, Module: null, Submodule: null }, ss.mkdel(this, function(response) {
 			this.$permissions.set_value(response.Entities);
 		}), null);
 	};
 	$AccController_Administration_RolePermissionDialog.__typeName = 'AccController.Administration.RolePermissionDialog';
 	global.AccController.Administration.RolePermissionDialog = $AccController_Administration_RolePermissionDialog;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.RolePermissionService
-	var $AccController_Administration_RolePermissionService = function() {
-	};
-	$AccController_Administration_RolePermissionService.__typeName = 'AccController.Administration.RolePermissionService';
-	$AccController_Administration_RolePermissionService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/RolePermission/Update', request, onSuccess, options);
-	};
-	$AccController_Administration_RolePermissionService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/RolePermission/List', request, onSuccess, options);
-	};
-	global.AccController.Administration.RolePermissionService = $AccController_Administration_RolePermissionService;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.RoleService
-	var $AccController_Administration_RoleService = function() {
-	};
-	$AccController_Administration_RoleService.__typeName = 'AccController.Administration.RoleService';
-	$AccController_Administration_RoleService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Role/Create', request, onSuccess, options);
-	};
-	$AccController_Administration_RoleService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Role/Update', request, onSuccess, options);
-	};
-	$AccController_Administration_RoleService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Role/Delete', request, onSuccess, options);
-	};
-	$AccController_Administration_RoleService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Role/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Administration_RoleService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Role/List', request, onSuccess, options);
-	};
-	global.AccController.Administration.RoleService = $AccController_Administration_RoleService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Administration.TranslationGrid
 	var $AccController_Administration_TranslationGrid = function(container) {
@@ -199,22 +146,22 @@
 	$AccController_Administration_TranslationGrid.__typeName = 'AccController.Administration.TranslationGrid';
 	global.AccController.Administration.TranslationGrid = $AccController_Administration_TranslationGrid;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.TranslationService
-	var $AccController_Administration_TranslationService = function() {
-	};
-	$AccController_Administration_TranslationService.__typeName = 'AccController.Administration.TranslationService';
-	$AccController_Administration_TranslationService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Translation/List', request, onSuccess, options);
-	};
-	$AccController_Administration_TranslationService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/Translation/Update', request, onSuccess, options);
-	};
-	global.AccController.Administration.TranslationService = $AccController_Administration_TranslationService;
-	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Administration.UserDialog
 	var $AccController_Administration_UserDialog = function() {
 		this.$form = null;
 		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		var request = {};
+		Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+			var obj = response;
+			var t = obj;
+			$AccController_Administration_UserDialog.$user_name = t.Username;
+			$AccController_Administration_UserDialog.$admin_lv = ss.cast(obj.adminlv, String);
+			//Q.Log("user_name:  " + user_name + "  admin_lv:" + admin_lv);
+			if ($AccController_Administration_UserDialog.$i_refresh === 1) {
+				$AccController_Administration_UserDialog.$i_refresh = 0;
+				this.reloadById();
+			}
+		}) });
 		this.$form = new $AccController_Administration_UserForm(this.get_idPrefix());
 		Serenity.VX.addValidationRule(this.$form.get_password(), this.uniqueName, ss.mkdel(this, function(e) {
 			if (this.$form.get_password().get_value().length < 7) {
@@ -241,7 +188,9 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Administration.UserGrid
 	var $AccController_Administration_UserGrid = function(container) {
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Administration_UserGrid.__typeName = 'AccController.Administration.UserGrid';
 	global.AccController.Administration.UserGrid = $AccController_Administration_UserGrid;
@@ -251,34 +200,19 @@
 		this.$permissions = null;
 		ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]).$ctor1.call(this, opt);
 		this.$permissions = new $AccController_Administration_PermissionCheckEditor(this.byId$1('Permissions'));
-		$AccController_Administration_UserPermissionService.list({ UserID: this.options.userID, Module: null, Submodule: null }, ss.mkdel(this, function(response) {
+		Q.serviceRequest('Administration/UserPermission/List', { UserID: this.options.userID, Module: null, Submodule: null }, ss.mkdel(this, function(response) {
 			this.$permissions.set_value(response.Entities);
 		}), null);
 	};
 	$AccController_Administration_UserPermissionDialog.__typeName = 'AccController.Administration.UserPermissionDialog';
 	global.AccController.Administration.UserPermissionDialog = $AccController_Administration_UserPermissionDialog;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.UserPermissionService
-	var $AccController_Administration_UserPermissionService = function() {
-	};
-	$AccController_Administration_UserPermissionService.__typeName = 'AccController.Administration.UserPermissionService';
-	$AccController_Administration_UserPermissionService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/UserPermission/Update', request, onSuccess, options);
-	};
-	$AccController_Administration_UserPermissionService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/UserPermission/List', request, onSuccess, options);
-	};
-	$AccController_Administration_UserPermissionService.listPermissionKeys = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/UserPermission/ListPermissionKeys', request, onSuccess, options);
-	};
-	global.AccController.Administration.UserPermissionService = $AccController_Administration_UserPermissionService;
-	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Administration.UserRoleDialog
 	var $AccController_Administration_UserRoleDialog = function(opt) {
 		this.$permissions = null;
 		ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]).$ctor1.call(this, opt);
 		this.$permissions = new $AccController_Administration_RoleCheckEditor(this.byId$1('Roles'));
-		$AccController_Administration_UserRoleService.list({ UserID: this.options.userID }, ss.mkdel(this, function(response) {
+		Q.serviceRequest('Administration/UserRole/List', { UserID: this.options.userID }, ss.mkdel(this, function(response) {
 			this.$permissions.set_value(Enumerable.from(response.Entities).select(function(x) {
 				return x.toString();
 			}).toArray());
@@ -286,42 +220,6 @@
 	};
 	$AccController_Administration_UserRoleDialog.__typeName = 'AccController.Administration.UserRoleDialog';
 	global.AccController.Administration.UserRoleDialog = $AccController_Administration_UserRoleDialog;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.UserRoleService
-	var $AccController_Administration_UserRoleService = function() {
-	};
-	$AccController_Administration_UserRoleService.__typeName = 'AccController.Administration.UserRoleService';
-	$AccController_Administration_UserRoleService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/UserRole/Update', request, onSuccess, options);
-	};
-	$AccController_Administration_UserRoleService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/UserRole/List', request, onSuccess, options);
-	};
-	global.AccController.Administration.UserRoleService = $AccController_Administration_UserRoleService;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Administration.UserService
-	var $AccController_Administration_UserService = function() {
-	};
-	$AccController_Administration_UserService.__typeName = 'AccController.Administration.UserService';
-	$AccController_Administration_UserService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/User/Create', request, onSuccess, options);
-	};
-	$AccController_Administration_UserService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/User/Update', request, onSuccess, options);
-	};
-	$AccController_Administration_UserService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/User/Delete', request, onSuccess, options);
-	};
-	$AccController_Administration_UserService.undelete = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/User/Undelete', request, onSuccess, options);
-	};
-	$AccController_Administration_UserService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/User/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Administration_UserService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Administration/User/List', request, onSuccess, options);
-	};
-	global.AccController.Administration.UserService = $AccController_Administration_UserService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisAddOUDialog
 	var $AccController_Ais_AisAddOUDialog = function() {
@@ -340,31 +238,12 @@
 	// AccController.Ais.AisAddOUGrid
 	var $AccController_Ais_AisAddOUGrid = function(container) {
 		this.$uploader = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Ais_AisAddOUGrid.__typeName = 'AccController.Ais.AisAddOUGrid';
 	global.AccController.Ais.AisAddOUGrid = $AccController_Ais_AisAddOUGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisAddOUService
-	var $AccController_Ais_AisAddOUService = function() {
-	};
-	$AccController_Ais_AisAddOUService.__typeName = 'AccController.Ais.AisAddOUService';
-	$AccController_Ais_AisAddOUService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisAddOU/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisAddOUService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisAddOU/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisAddOUService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisAddOU/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisAddOUService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisAddOU/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisAddOUService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisAddOU/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisAddOUService = $AccController_Ais_AisAddOUService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisFileDialog
 	var $AccController_Ais_AisFileDialog = function() {
@@ -408,48 +287,6 @@
 	$AccController_Ais_AisFileResultsGrid.__typeName = 'AccController.Ais.AisFileResultsGrid';
 	global.AccController.Ais.AisFileResultsGrid = $AccController_Ais_AisFileResultsGrid;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisFileResultsService
-	var $AccController_Ais_AisFileResultsService = function() {
-	};
-	$AccController_Ais_AisFileResultsService.__typeName = 'AccController.Ais.AisFileResultsService';
-	$AccController_Ais_AisFileResultsService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFileResults/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileResultsService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFileResults/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileResultsService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFileResults/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileResultsService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFileResults/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileResultsService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFileResults/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisFileResultsService = $AccController_Ais_AisFileResultsService;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisFileService
-	var $AccController_Ais_AisFileService = function() {
-	};
-	$AccController_Ais_AisFileService.__typeName = 'AccController.Ais.AisFileService';
-	$AccController_Ais_AisFileService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFile/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFile/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFile/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFile/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisFileService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisFile/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisFileService = $AccController_Ais_AisFileService;
-	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisLogDialog
 	var $AccController_Ais_AisLogDialog = function() {
 		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
@@ -471,27 +308,6 @@
 	$AccController_Ais_AisLogGrid.__typeName = 'AccController.Ais.AisLogGrid';
 	global.AccController.Ais.AisLogGrid = $AccController_Ais_AisLogGrid;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisLogService
-	var $AccController_Ais_AisLogService = function() {
-	};
-	$AccController_Ais_AisLogService.__typeName = 'AccController.Ais.AisLogService';
-	$AccController_Ais_AisLogService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisLog/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisLogService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisLog/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisLogService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisLog/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisLogService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisLog/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisLogService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisLog/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisLogService = $AccController_Ais_AisLogService;
-	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisUserChangeInfoDialog
 	var $AccController_Ais_AisUserChangeInfoDialog = function() {
 		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
@@ -509,31 +325,12 @@
 	// AccController.Ais.AisUserChangeInfoGrid
 	var $AccController_Ais_AisUserChangeInfoGrid = function(container) {
 		this.$uploader = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Ais_AisUserChangeInfoGrid.__typeName = 'AccController.Ais.AisUserChangeInfoGrid';
 	global.AccController.Ais.AisUserChangeInfoGrid = $AccController_Ais_AisUserChangeInfoGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisUserChangeInfoService
-	var $AccController_Ais_AisUserChangeInfoService = function() {
-	};
-	$AccController_Ais_AisUserChangeInfoService.__typeName = 'AccController.Ais.AisUserChangeInfoService';
-	$AccController_Ais_AisUserChangeInfoService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeInfo/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeInfoService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeInfo/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeInfoService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeInfo/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeInfoService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeInfo/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeInfoService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeInfo/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisUserChangeInfoService = $AccController_Ais_AisUserChangeInfoService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisUserChangeOUDialog
 	var $AccController_Ais_AisUserChangeOUDialog = function() {
@@ -552,31 +349,12 @@
 	// AccController.Ais.AisUserChangeOUGrid
 	var $AccController_Ais_AisUserChangeOUGrid = function(container) {
 		this.$uploader = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Ais_AisUserChangeOUGrid.__typeName = 'AccController.Ais.AisUserChangeOUGrid';
 	global.AccController.Ais.AisUserChangeOUGrid = $AccController_Ais_AisUserChangeOUGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisUserChangeOUService
-	var $AccController_Ais_AisUserChangeOUService = function() {
-	};
-	$AccController_Ais_AisUserChangeOUService.__typeName = 'AccController.Ais.AisUserChangeOUService';
-	$AccController_Ais_AisUserChangeOUService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeOU/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeOUService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeOU/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeOUService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeOU/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeOUService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeOU/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserChangeOUService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUserChangeOU/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisUserChangeOUService = $AccController_Ais_AisUserChangeOUService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.AisUserDialog
 	var $AccController_Ais_AisUserDialog = function() {
@@ -595,31 +373,12 @@
 	// AccController.Ais.AisUserGrid
 	var $AccController_Ais_AisUserGrid = function(container) {
 		this.$uploader = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Ais_AisUserGrid.__typeName = 'AccController.Ais.AisUserGrid';
 	global.AccController.Ais.AisUserGrid = $AccController_Ais_AisUserGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.AisUserService
-	var $AccController_Ais_AisUserService = function() {
-	};
-	$AccController_Ais_AisUserService.__typeName = 'AccController.Ais.AisUserService';
-	$AccController_Ais_AisUserService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUser/Create', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUser/Update', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUser/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUser/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_AisUserService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/AisUser/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.AisUserService = $AccController_Ais_AisUserService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Ais.GroupDialog
 	var $AccController_Ais_GroupDialog = function() {
@@ -638,32 +397,35 @@
 	// AccController.Ais.GroupGrid
 	var $AccController_Ais_GroupGrid = function(container) {
 		this.$uploader = null;
-		this.$checkAll = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Ais_GroupGrid.__typeName = 'AccController.Ais.GroupGrid';
 	global.AccController.Ais.GroupGrid = $AccController_Ais_GroupGrid;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Ais.GroupService
-	var $AccController_Ais_GroupService = function() {
+	// AccController.Ais.TesttDialog
+	var $AccController_Ais_TesttDialog = function() {
+		this.form = null;
+		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		this.form = new $AccController_Ais_TesttForm(this.get_idPrefix());
 	};
-	$AccController_Ais_GroupService.__typeName = 'AccController.Ais.GroupService';
-	$AccController_Ais_GroupService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/Group/Create', request, onSuccess, options);
+	$AccController_Ais_TesttDialog.__typeName = 'AccController.Ais.TesttDialog';
+	global.AccController.Ais.TesttDialog = $AccController_Ais_TesttDialog;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Ais.TesttForm
+	var $AccController_Ais_TesttForm = function(idPrefix) {
+		Serenity.PrefixedContext.call(this, idPrefix);
 	};
-	$AccController_Ais_GroupService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/Group/Update', request, onSuccess, options);
+	$AccController_Ais_TesttForm.__typeName = 'AccController.Ais.TesttForm';
+	global.AccController.Ais.TesttForm = $AccController_Ais_TesttForm;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Ais.TesttGrid
+	var $AccController_Ais_TesttGrid = function(container) {
+		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
-	$AccController_Ais_GroupService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/Group/Delete', request, onSuccess, options);
-	};
-	$AccController_Ais_GroupService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/Group/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Ais_GroupService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Ais/Group/List', request, onSuccess, options);
-	};
-	global.AccController.Ais.GroupService = $AccController_Ais_GroupService;
+	$AccController_Ais_TesttGrid.__typeName = 'AccController.Ais.TesttGrid';
+	global.AccController.Ais.TesttGrid = $AccController_Ais_TesttGrid;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Common.GridEditorBase
 	var $AccController_Common_GridEditorBase$1 = function(TEntity) {
@@ -882,31 +644,12 @@
 	// AccController.Email.EmailChangeGrid
 	var $AccController_Email_EmailChangeGrid = function(container) {
 		this.$uploader = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Email_EmailChangeGrid.__typeName = 'AccController.Email.EmailChangeGrid';
 	global.AccController.Email.EmailChangeGrid = $AccController_Email_EmailChangeGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailChangeService
-	var $AccController_Email_EmailChangeService = function() {
-	};
-	$AccController_Email_EmailChangeService.__typeName = 'AccController.Email.EmailChangeService';
-	$AccController_Email_EmailChangeService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailChange/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailChangeService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailChange/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailChangeService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailChange/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailChangeService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailChange/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailChangeService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailChange/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailChangeService = $AccController_Email_EmailChangeService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailFileDialog
 	var $AccController_Email_EmailFileDialog = function() {
@@ -929,27 +672,6 @@
 	$AccController_Email_EmailFileGrid.__typeName = 'AccController.Email.EmailFileGrid';
 	global.AccController.Email.EmailFileGrid = $AccController_Email_EmailFileGrid;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailFileService
-	var $AccController_Email_EmailFileService = function() {
-	};
-	$AccController_Email_EmailFileService.__typeName = 'AccController.Email.EmailFileService';
-	$AccController_Email_EmailFileService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailFile/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailFileService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailFile/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailFileService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailFile/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailFileService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailFile/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailFileService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailFile/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailFileService = $AccController_Email_EmailFileService;
-	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailGroupAccountDialog
 	var $AccController_Email_EmailGroupAccountDialog = function() {
 		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
@@ -966,31 +688,12 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailGroupAccountGrid
 	var $AccController_Email_EmailGroupAccountGrid = function(container) {
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Email_EmailGroupAccountGrid.__typeName = 'AccController.Email.EmailGroupAccountGrid';
 	global.AccController.Email.EmailGroupAccountGrid = $AccController_Email_EmailGroupAccountGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailGroupAccountService
-	var $AccController_Email_EmailGroupAccountService = function() {
-	};
-	$AccController_Email_EmailGroupAccountService.__typeName = 'AccController.Email.EmailGroupAccountService';
-	$AccController_Email_EmailGroupAccountService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroupAccount/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupAccountService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroupAccount/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupAccountService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroupAccount/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupAccountService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroupAccount/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupAccountService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroupAccount/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailGroupAccountService = $AccController_Email_EmailGroupAccountService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailGroupDialog
 	var $AccController_Email_EmailGroupDialog = function() {
@@ -1008,31 +711,12 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailGroupGrid
 	var $AccController_Email_EmailGroupGrid = function(container) {
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Email_EmailGroupGrid.__typeName = 'AccController.Email.EmailGroupGrid';
 	global.AccController.Email.EmailGroupGrid = $AccController_Email_EmailGroupGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailGroupService
-	var $AccController_Email_EmailGroupService = function() {
-	};
-	$AccController_Email_EmailGroupService.__typeName = 'AccController.Email.EmailGroupService';
-	$AccController_Email_EmailGroupService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroup/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroup/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroup/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroup/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailGroupService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailGroup/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailGroupService = $AccController_Email_EmailGroupService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailLogDialog
 	var $AccController_Email_EmailLogDialog = function() {
@@ -1055,27 +739,6 @@
 	$AccController_Email_EmailLogGrid.__typeName = 'AccController.Email.EmailLogGrid';
 	global.AccController.Email.EmailLogGrid = $AccController_Email_EmailLogGrid;
 	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailLogService
-	var $AccController_Email_EmailLogService = function() {
-	};
-	$AccController_Email_EmailLogService.__typeName = 'AccController.Email.EmailLogService';
-	$AccController_Email_EmailLogService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailLog/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailLogService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailLog/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailLogService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailLog/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailLogService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailLog/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailLogService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailLog/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailLogService = $AccController_Email_EmailLogService;
-	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailNewDialog
 	var $AccController_Email_EmailNewDialog = function() {
 		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
@@ -1093,31 +756,12 @@
 	// AccController.Email.EmailNewGrid
 	var $AccController_Email_EmailNewGrid = function(container) {
 		this.$uploader = null;
+		this.$rowSelection = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Email_EmailNewGrid.__typeName = 'AccController.Email.EmailNewGrid';
 	global.AccController.Email.EmailNewGrid = $AccController_Email_EmailNewGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailNewService
-	var $AccController_Email_EmailNewService = function() {
-	};
-	$AccController_Email_EmailNewService.__typeName = 'AccController.Email.EmailNewService';
-	$AccController_Email_EmailNewService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailNew/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailNewService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailNew/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailNewService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailNew/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailNewService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailNew/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailNewService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailNew/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailNewService = $AccController_Email_EmailNewService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailUpdateInfoDialog
 	var $AccController_Email_EmailUpdateInfoDialog = function() {
@@ -1135,32 +779,13 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.EmailUpdateInfoGrid
 	var $AccController_Email_EmailUpdateInfoGrid = function(container) {
+		this.$rowSelection = null;
 		this.$uploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+		this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
 	};
 	$AccController_Email_EmailUpdateInfoGrid.__typeName = 'AccController.Email.EmailUpdateInfoGrid';
 	global.AccController.Email.EmailUpdateInfoGrid = $AccController_Email_EmailUpdateInfoGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.EmailUpdateInfoService
-	var $AccController_Email_EmailUpdateInfoService = function() {
-	};
-	$AccController_Email_EmailUpdateInfoService.__typeName = 'AccController.Email.EmailUpdateInfoService';
-	$AccController_Email_EmailUpdateInfoService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailUpdateInfo/Create', request, onSuccess, options);
-	};
-	$AccController_Email_EmailUpdateInfoService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailUpdateInfo/Update', request, onSuccess, options);
-	};
-	$AccController_Email_EmailUpdateInfoService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailUpdateInfo/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_EmailUpdateInfoService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailUpdateInfo/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_EmailUpdateInfoService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/EmailUpdateInfo/List', request, onSuccess, options);
-	};
-	global.AccController.Email.EmailUpdateInfoService = $AccController_Email_EmailUpdateInfoService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Email.FileResultDialog
 	var $AccController_Email_FileResultDialog = function() {
@@ -1182,27 +807,6 @@
 	};
 	$AccController_Email_FileResultGrid.__typeName = 'AccController.Email.FileResultGrid';
 	global.AccController.Email.FileResultGrid = $AccController_Email_FileResultGrid;
-	////////////////////////////////////////////////////////////////////////////////
-	// AccController.Email.FileResultService
-	var $AccController_Email_FileResultService = function() {
-	};
-	$AccController_Email_FileResultService.__typeName = 'AccController.Email.FileResultService';
-	$AccController_Email_FileResultService.create = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/FileResult/Create', request, onSuccess, options);
-	};
-	$AccController_Email_FileResultService.update = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/FileResult/Update', request, onSuccess, options);
-	};
-	$AccController_Email_FileResultService.delete$1 = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/FileResult/Delete', request, onSuccess, options);
-	};
-	$AccController_Email_FileResultService.retrieve = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/FileResult/Retrieve', request, onSuccess, options);
-	};
-	$AccController_Email_FileResultService.list = function(request, onSuccess, options) {
-		return Q.serviceRequest('Email/FileResult/List', request, onSuccess, options);
-	};
-	global.AccController.Email.FileResultService = $AccController_Email_FileResultService;
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Membership.LoginForm
 	var $AccController_Membership_LoginForm = function(idPrefix) {
@@ -1270,6 +874,121 @@
 	};
 	$AccController_Membership_RegisterPanel.__typeName = 'AccController.Membership.RegisterPanel';
 	global.AccController.Membership.RegisterPanel = $AccController_Membership_RegisterPanel;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisAddOUDialog
+	var $AccController_Request_Ais_AisAddOUDialog = function() {
+		this.form = null;
+		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		this.form = new $AccController_Request_Ais_AisAddOUForm(this.get_idPrefix());
+	};
+	$AccController_Request_Ais_AisAddOUDialog.__typeName = 'AccController.Request_Ais.AisAddOUDialog';
+	global.AccController.Request_Ais.AisAddOUDialog = $AccController_Request_Ais_AisAddOUDialog;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisAddOUForm
+	var $AccController_Request_Ais_AisAddOUForm = function(idPrefix) {
+		Serenity.PrefixedContext.call(this, idPrefix);
+	};
+	$AccController_Request_Ais_AisAddOUForm.__typeName = 'AccController.Request_Ais.AisAddOUForm';
+	global.AccController.Request_Ais.AisAddOUForm = $AccController_Request_Ais_AisAddOUForm;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisAddOUGrid
+	var $AccController_Request_Ais_AisAddOUGrid = function(container) {
+		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+	};
+	$AccController_Request_Ais_AisAddOUGrid.__typeName = 'AccController.Request_Ais.AisAddOUGrid';
+	global.AccController.Request_Ais.AisAddOUGrid = $AccController_Request_Ais_AisAddOUGrid;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserChangeInfoDialog
+	var $AccController_Request_Ais_AisUserChangeInfoDialog = function() {
+		this.form = null;
+		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		this.form = new $AccController_Request_Ais_AisUserChangeInfoForm(this.get_idPrefix());
+	};
+	$AccController_Request_Ais_AisUserChangeInfoDialog.__typeName = 'AccController.Request_Ais.AisUserChangeInfoDialog';
+	global.AccController.Request_Ais.AisUserChangeInfoDialog = $AccController_Request_Ais_AisUserChangeInfoDialog;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserChangeInfoForm
+	var $AccController_Request_Ais_AisUserChangeInfoForm = function(idPrefix) {
+		Serenity.PrefixedContext.call(this, idPrefix);
+	};
+	$AccController_Request_Ais_AisUserChangeInfoForm.__typeName = 'AccController.Request_Ais.AisUserChangeInfoForm';
+	global.AccController.Request_Ais.AisUserChangeInfoForm = $AccController_Request_Ais_AisUserChangeInfoForm;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserChangeInfoGrid
+	var $AccController_Request_Ais_AisUserChangeInfoGrid = function(container) {
+		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+	};
+	$AccController_Request_Ais_AisUserChangeInfoGrid.__typeName = 'AccController.Request_Ais.AisUserChangeInfoGrid';
+	global.AccController.Request_Ais.AisUserChangeInfoGrid = $AccController_Request_Ais_AisUserChangeInfoGrid;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserChangeOUDialog
+	var $AccController_Request_Ais_AisUserChangeOUDialog = function() {
+		this.form = null;
+		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		this.form = new $AccController_Request_Ais_AisUserChangeOUForm(this.get_idPrefix());
+	};
+	$AccController_Request_Ais_AisUserChangeOUDialog.__typeName = 'AccController.Request_Ais.AisUserChangeOUDialog';
+	global.AccController.Request_Ais.AisUserChangeOUDialog = $AccController_Request_Ais_AisUserChangeOUDialog;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserChangeOUForm
+	var $AccController_Request_Ais_AisUserChangeOUForm = function(idPrefix) {
+		Serenity.PrefixedContext.call(this, idPrefix);
+	};
+	$AccController_Request_Ais_AisUserChangeOUForm.__typeName = 'AccController.Request_Ais.AisUserChangeOUForm';
+	global.AccController.Request_Ais.AisUserChangeOUForm = $AccController_Request_Ais_AisUserChangeOUForm;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserChangeOUGrid
+	var $AccController_Request_Ais_AisUserChangeOUGrid = function(container) {
+		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+	};
+	$AccController_Request_Ais_AisUserChangeOUGrid.__typeName = 'AccController.Request_Ais.AisUserChangeOUGrid';
+	global.AccController.Request_Ais.AisUserChangeOUGrid = $AccController_Request_Ais_AisUserChangeOUGrid;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserDialog
+	var $AccController_Request_Ais_AisUserDialog = function() {
+		this.form = null;
+		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		this.form = new $AccController_Request_Ais_AisUserForm(this.get_idPrefix());
+	};
+	$AccController_Request_Ais_AisUserDialog.__typeName = 'AccController.Request_Ais.AisUserDialog';
+	global.AccController.Request_Ais.AisUserDialog = $AccController_Request_Ais_AisUserDialog;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserForm
+	var $AccController_Request_Ais_AisUserForm = function(idPrefix) {
+		Serenity.PrefixedContext.call(this, idPrefix);
+	};
+	$AccController_Request_Ais_AisUserForm.__typeName = 'AccController.Request_Ais.AisUserForm';
+	global.AccController.Request_Ais.AisUserForm = $AccController_Request_Ais_AisUserForm;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.AisUserGrid
+	var $AccController_Request_Ais_AisUserGrid = function(container) {
+		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+	};
+	$AccController_Request_Ais_AisUserGrid.__typeName = 'AccController.Request_Ais.AisUserGrid';
+	global.AccController.Request_Ais.AisUserGrid = $AccController_Request_Ais_AisUserGrid;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.GroupDialog
+	var $AccController_Request_Ais_GroupDialog = function() {
+		this.form = null;
+		ss.makeGenericType(Serenity.EntityDialog$1, [Object]).call(this);
+		this.form = new $AccController_Request_Ais_GroupForm(this.get_idPrefix());
+	};
+	$AccController_Request_Ais_GroupDialog.__typeName = 'AccController.Request_Ais.GroupDialog';
+	global.AccController.Request_Ais.GroupDialog = $AccController_Request_Ais_GroupDialog;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.GroupForm
+	var $AccController_Request_Ais_GroupForm = function(idPrefix) {
+		Serenity.PrefixedContext.call(this, idPrefix);
+	};
+	$AccController_Request_Ais_GroupForm.__typeName = 'AccController.Request_Ais.GroupForm';
+	global.AccController.Request_Ais.GroupForm = $AccController_Request_Ais_GroupForm;
+	////////////////////////////////////////////////////////////////////////////////
+	// AccController.Request_Ais.GroupGrid
+	var $AccController_Request_Ais_GroupGrid = function(container) {
+		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
+	};
+	$AccController_Request_Ais_GroupGrid.__typeName = 'AccController.Request_Ais.GroupGrid';
+	global.AccController.Request_Ais.GroupGrid = $AccController_Request_Ais_GroupGrid;
 	ss.initClass($AccController_ScriptInitialization, $asm, {});
 	ss.initClass($AccController_Administration_LanguageDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog, Serenity.IAsyncInit]);
 	ss.initClass($AccController_Administration_LanguageForm, $asm, {
@@ -1281,7 +1000,6 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Administration_LanguageGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid, Serenity.IAsyncInit]);
-	ss.initClass($AccController_Administration_LanguageService, $asm, {});
 	ss.initClass($AccController_Administration_PermissionCheckEditor, $asm, {
 		getButtons: function() {
 			return [];
@@ -1389,7 +1107,7 @@
 			var opt = ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]).prototype.getDialogOptions.call(this);
 			var $t1 = [];
 			$t1.push({ text: Q.text('Dialogs.OkButton'), click: ss.mkdel(this, function() {
-				$AccController_Administration_RolePermissionService.update({ RoleID: this.options.roleID, Permissions: this.$permissions.get_value(), Module: null, Submodule: null }, ss.mkdel(this, function(response) {
+				Q.serviceRequest('Administration/RolePermission/Update', { RoleID: this.options.roleID, Permissions: this.$permissions.get_value(), Module: null, Submodule: null }, ss.mkdel(this, function(response) {
 					this.dialogClose();
 					window.setTimeout(function() {
 						Q.notifySuccess(Q.text('Site.RolePermissionDialog.SaveSuccess'));
@@ -1405,8 +1123,6 @@
 			return "<div id='~_Permissions'></div>";
 		}
 	}, ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]), [Serenity.IDialog]);
-	ss.initClass($AccController_Administration_RolePermissionService, $asm, {});
-	ss.initClass($AccController_Administration_RoleService, $asm, {});
 	ss.initClass($AccController_Administration_TranslationGrid, $asm, {
 		onClick: function(e, row, cell) {
 			ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.onClick.call(this, e, row, cell);
@@ -1509,7 +1225,7 @@
 				var item = $t1[$t2];
 				translations[item.Key] = item.CustomText;
 			}
-			return RSVP.resolve($AccController_Administration_TranslationService.update({ TargetLanguageID: language, Translations: translations }, null, null)).then(ss.mkdel(this, function() {
+			return RSVP.resolve(Q.serviceRequest('Administration/Translation/Update', { TargetLanguageID: language, Translations: translations }, null, null)).then(ss.mkdel(this, function() {
 				this.$hasChanges = false;
 				Q.notifySuccess('User translations in "' + language + '" language are saved to "user.texts.' + language + '.json" ' + 'file under "~/script/site/texts/user/"');
 			}), null);
@@ -1564,7 +1280,6 @@
 			return false;
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid, Serenity.IAsyncInit]);
-	ss.initClass($AccController_Administration_TranslationService, $asm, {});
 	ss.initClass($AccController_Administration_UserDialog, $asm, {
 		getToolbarButtons: function() {
 			var buttons = ss.makeGenericType(Serenity.EntityDialog$2, [Object, Object]).prototype.getToolbarButtons.call(this);
@@ -1574,6 +1289,19 @@
 			buttons.push({ title: Q.text('Site.UserDialog.EditPermissionsButton'), cssClass: 'lock-button', onClick: ss.mkdel(this, function() {
 				(new $AccController_Administration_UserPermissionDialog({ userID: ss.unbox(this.get_entity().UserId), username: this.get_entity().Username })).dialogOpen();
 			}) });
+			if ($AccController_Administration_UserDialog.$admin_lv === '1') {
+				buttons.push({ title: 'Super Admin', cssClass: 'users-button', onClick: ss.mkdel(this, function() {
+					Q.confirm('Cấp quyền Super Admin?', ss.mkdel(this, function() {
+						var request = {};
+						request.Entity = this.get_entity();
+						Q.serviceRequest('Administration/User/updateuser', request, ss.mkdel(this, function(s) {
+							this.reloadById();
+							this.dialogClose();
+							//Q.NotifyInfo("ok");
+						}), null);
+					}));
+				}) });
+			}
 			return buttons;
 		},
 		updateInterface: function() {
@@ -1603,13 +1331,62 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Administration_UserGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Administration_UserGrid.$user_name = t.Username;
+				$AccController_Administration_UserGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				//Q.Log("user_name:  " + user_name + "  admin_lv:" + admin_lv);
+				if ($AccController_Administration_UserGrid.$i_refresh === 1) {
+					$AccController_Administration_UserGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			//req.EqualityFilter["by_admin"] = user_name;
+			if ($AccController_Administration_UserGrid.$admin_lv === '1') {
+				req.EqualityFilter['by_admin'] = '';
+			}
+			else {
+				req.EqualityFilter['by_admin'] = $AccController_Administration_UserGrid.$user_name;
+			}
+			req.EqualityFilter['by_admin'] = '';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			//buttons.Add(new ToolButton
+			//{
+			//    Hint = "this is hint",
+			//    Title = "new btn",
+			//    CssClass = "button",
+			//    OnClick = delegate
+			//    {
+			//        List<UserRow> lst =  this.View.GetItems();
+			//        foreach(var item in lst)
+			//        {
+			//            if (item.Username != "tanhn")
+			//            {
+			//                item.DisplayName = "WWWWWWWWWW";
+			//                this.View.UpdateItem(item.UserId,item);
+			//            }
+			//        }
+			//    }
+			//});
+			return buttons;
+		},
 		getColumns: function() {
 			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
-			columns.push({ field: 'UserId', width: 55, cssClass: 'align-right', name: Q.text('Db.Shared.RecordId') });
+			//columns.Insert(0, GridRowSelectionMixin.CreateSelectColumn(() => rowSelection));
+			//columns.Add(new SlickColumn { Field = "UserId", Width = 55, CssClass = "align-right", Title = Q.Text("Db.Shared.RecordId") });
 			columns.push({ field: 'Username', width: 150, format: this.itemLink(null, null, null, null, true) });
 			columns.push({ field: 'DisplayName', width: 150 });
 			columns.push({ field: 'Email', width: 250 });
 			columns.push({ field: 'Source', width: 100 });
+			columns.push({ field: 'by_admin', width: 100 });
 			return columns;
 		},
 		getDefaultSortBy: function() {
@@ -1623,7 +1400,7 @@
 			var opt = ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]).prototype.getDialogOptions.call(this);
 			var $t1 = [];
 			$t1.push({ text: Q.text('Dialogs.OkButton'), click: ss.mkdel(this, function() {
-				$AccController_Administration_UserPermissionService.update({ UserID: this.options.userID, Permissions: this.$permissions.get_value(), Module: null, Submodule: null }, ss.mkdel(this, function(response) {
+				Q.serviceRequest('Administration/UserPermission/Update', { UserID: this.options.userID, Permissions: this.$permissions.get_value(), Module: null, Submodule: null }, ss.mkdel(this, function(response) {
 					this.dialogClose();
 					window.setTimeout(function() {
 						Q.notifySuccess(Q.text('Site.UserPermissionDialog.SaveSuccess'));
@@ -1639,13 +1416,12 @@
 			return "<div id='~_Permissions'></div>";
 		}
 	}, ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]), [Serenity.IDialog]);
-	ss.initClass($AccController_Administration_UserPermissionService, $asm, {});
 	ss.initClass($AccController_Administration_UserRoleDialog, $asm, {
 		getDialogOptions: function() {
 			var opt = ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]).prototype.getDialogOptions.call(this);
 			var $t1 = [];
 			$t1.push({ text: Q.text('Dialogs.OkButton'), click: ss.mkdel(this, function() {
-				$AccController_Administration_UserRoleService.update({ UserID: this.options.userID, Roles: Enumerable.from(this.$permissions.get_value()).select(function(x) {
+				Q.serviceRequest('Administration/UserRole/Update', { UserID: this.options.userID, Roles: Enumerable.from(this.$permissions.get_value()).select(function(x) {
 					return parseInt(x, 10);
 				}).toArray() }, ss.mkdel(this, function(response) {
 					this.dialogClose();
@@ -1663,8 +1439,6 @@
 			return "<div id='~_Roles'></div>";
 		}
 	}, ss.makeGenericType(Serenity.TemplatedDialog$1, [Object]), [Serenity.IDialog]);
-	ss.initClass($AccController_Administration_UserRoleService, $asm, {});
-	ss.initClass($AccController_Administration_UserService, $asm, {});
 	ss.initClass($AccController_Ais_AisAddOUDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisAddOUForm, $asm, {
 		get_email: function() {
@@ -1699,6 +1473,83 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisAddOUGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Ais_AisAddOUGrid.$user_name = t.Username;
+				$AccController_Ais_AisAddOUGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Ais_AisAddOUGrid.$i_refresh === 1) {
+					$AccController_Ais_AisAddOUGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Ais_AisAddOUGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Ais_AisAddOUGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Ais/AisAddOU/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Ais_AisAddOUGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Ais/AisAddOU/updategroup', request1, function(s) {
+							//Q.NotifyInfo("ok");
+						}, null);
+					}
+					this.refresh();
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -1730,7 +1581,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_AisAddOUService, $asm, {});
 	ss.initClass($AccController_Ais_AisFileDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisFileForm, $asm, {
 		get_fileName: function() {
@@ -1766,8 +1616,6 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisFileResultsGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_AisFileResultsService, $asm, {});
-	ss.initClass($AccController_Ais_AisFileService, $asm, {});
 	ss.initClass($AccController_Ais_AisLogDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisLogForm, $asm, {
 		get_logType: function() {
@@ -1793,7 +1641,6 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisLogGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_AisLogService, $asm, {});
 	ss.initClass($AccController_Ais_AisUserChangeInfoDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisUserChangeInfoForm, $asm, {
 		get_email: function() {
@@ -1825,6 +1672,82 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisUserChangeInfoGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Ais_AisUserChangeInfoGrid.$user_name = t.Username;
+				$AccController_Ais_AisUserChangeInfoGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Ais_AisUserChangeInfoGrid.$i_refresh === 1) {
+					$AccController_Ais_AisUserChangeInfoGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Ais_AisUserChangeInfoGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Ais_AisUserChangeInfoGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Ais/AisUserChangeInfo/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Ais_AisUserChangeInfoGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Ais/AisUserChangeInfo/updateuserchangeinfo', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
+					}
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -1857,7 +1780,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_AisUserChangeInfoService, $asm, {});
 	ss.initClass($AccController_Ais_AisUserChangeOUDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisUserChangeOUForm, $asm, {
 		get_email: function() {
@@ -1895,6 +1817,82 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisUserChangeOUGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Ais_AisUserChangeOUGrid.$user_name = t.Username;
+				$AccController_Ais_AisUserChangeOUGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Ais_AisUserChangeOUGrid.$i_refresh === 1) {
+					$AccController_Ais_AisUserChangeOUGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Ais_AisUserChangeOUGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Ais_AisUserChangeOUGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Ais/AisUserChangeOU/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Ais_AisUserChangeOUGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Ais/AisUserChangeOU/updateuserchangeOU', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
+					}
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -1926,7 +1924,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_AisUserChangeOUService, $asm, {});
 	ss.initClass($AccController_Ais_AisUserDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_AisUserForm, $asm, {
 		get_name: function() {
@@ -1970,6 +1967,82 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_AisUserGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Ais_AisUserGrid.$user_name = t.Username;
+				$AccController_Ais_AisUserGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Ais_AisUserGrid.$i_refresh === 1) {
+					$AccController_Ais_AisUserGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Ais_AisUserGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Ais_AisUserGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Ais/AisUser/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Ais_AisUserGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Ais/AisUser/updateuser', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
+					}
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -2001,7 +2074,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_AisUserService, $asm, {});
 	ss.initClass($AccController_Ais_GroupDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Ais_GroupForm, $asm, {
 		get_name: function() {
@@ -2039,36 +2111,93 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Ais_GroupGrid, $asm, {
-		getSlickOptions: function() {
-			var opt = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getSlickOptions.call(this);
-			opt.editable = true;
-			//opt.EnableCellNavigation = true;
-			//opt.AsyncEditorLoading = true;
-			//opt.AutoEdit = false;
-			return opt;
-		},
 		getColumns: function() {
 			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
-			//columns[0].Formatter = Type.GetType("Slick.Formatters.CheckboxFormatter").As<SlickColumnFormatter>();
-			//columns[0].
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
 			return columns;
+		},
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Ais_GroupGrid.$user_name = t.Username;
+				$AccController_Ais_GroupGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Ais_GroupGrid.$i_refresh === 1) {
+					$AccController_Ais_GroupGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Ais_GroupGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Ais_GroupGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Ais/Group/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Ais_GroupGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Ais/Group/updategroup', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
+					}
+				}
+			}) });
+			return buttons;
 		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
-			this.$checkAll = Serenity.Widget.create(Serenity.BooleanEditor).call(null, ss.mkdel(this, function(e) {
-				e.appendTo($(this.get_slickGrid().getHeaderRow()));
-			}), null, function(e1) {
-				Q.alert('ertertretre');
-			});
-			var $t2 = ss.mkdel(this, function(e2) {
-				e2.appendTo(this.toolbar.get_element());
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
 			});
 			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
 			$t1.allowNonImage = true;
 			$t1.maxSize = 2048;
-			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e3) {
-				$('ul', e3.get_element()).hide();
-				$('.delete-button', e3.get_element()).hide();
+			this.$uploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
 				$('input:file', this.$uploader.get_element()).bind('fileuploadadd', function(ev, data) {
 					data.url = Q.resolveUrl('~/Ais/AisFile/CreateGroupRequest');
 				});
@@ -2089,7 +2218,13 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Ais_GroupService, $asm, {});
+	ss.initClass($AccController_Ais_TesttDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
+	ss.initClass($AccController_Ais_TesttForm, $asm, {
+		get_name: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Name');
+		}
+	}, Serenity.PrefixedContext);
+	ss.initClass($AccController_Ais_TesttGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Common_LanguageSelection, $asm, {
 		getLookupAsync: function() {
 			return ss.makeGenericType(Serenity.LookupEditorBase$2, [Object, Object]).prototype.getLookupAsync.call(this).then(ss.mkdel(this, function(x) {
@@ -2185,6 +2320,83 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Email_EmailChangeGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Email_EmailChangeGrid.$user_name = t.Username;
+				$AccController_Email_EmailChangeGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Email_EmailChangeGrid.$i_refresh === 1) {
+					$AccController_Email_EmailChangeGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Email_EmailChangeGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Email_EmailChangeGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Email/EmailChange/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Email_EmailChangeGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Email/EmailChange/updateSubmit', request1, function(s) {
+							//Q.NotifyInfo("ok");
+						}, null);
+					}
+					this.refresh();
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -2216,7 +2428,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailChangeService, $asm, {});
 	ss.initClass($AccController_Email_EmailFileDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailFileForm, $asm, {
 		get_fileName: function() {
@@ -2239,7 +2450,6 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Email_EmailFileGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailFileService, $asm, {});
 	ss.initClass($AccController_Email_EmailGroupAccountDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailGroupAccountForm, $asm, {
 		get_groupId: function() {
@@ -2264,8 +2474,85 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Email_EmailGroupAccountGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailGroupAccountService, $asm, {});
+	ss.initClass($AccController_Email_EmailGroupAccountGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Email_EmailGroupAccountGrid.$user_name = t.Username;
+				$AccController_Email_EmailGroupAccountGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Email_EmailGroupAccountGrid.$i_refresh === 1) {
+					$AccController_Email_EmailGroupAccountGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Email_EmailGroupAccountGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Email_EmailGroupAccountGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Email/EmailGroupAccount/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Email_EmailGroupAccountGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Email/EmailGroupAccount/updateSubmit', request1, function(s) {
+							//Q.NotifyInfo("ok");
+						}, null);
+					}
+					this.refresh();
+				}
+			}) });
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Email_EmailGroupDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailGroupForm, $asm, {
 		get_alias: function() {
@@ -2293,8 +2580,84 @@
 			return this.byId(Serenity.StringEditor).call(this, 'Description');
 		}
 	}, Serenity.PrefixedContext);
-	ss.initClass($AccController_Email_EmailGroupGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailGroupService, $asm, {});
+	ss.initClass($AccController_Email_EmailGroupGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Email_EmailGroupGrid.$user_name = t.Username;
+				$AccController_Email_EmailGroupGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Email_EmailGroupGrid.$i_refresh === 1) {
+					$AccController_Email_EmailGroupGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Email_EmailGroupGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Email_EmailGroupGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Email/EmailGroup/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Email_EmailGroupGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Email/EmailGroup/updateSubmit', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
+					}
+				}
+			}) });
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.initClass($AccController_Email_EmailLogDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailLogForm, $asm, {
 		get_logType: function() {
@@ -2320,7 +2683,6 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Email_EmailLogGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailLogService, $asm, {});
 	ss.initClass($AccController_Email_EmailNewDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailNewForm, $asm, {
 		get_name: function() {
@@ -2328,9 +2690,6 @@
 		},
 		get_alias: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Alias');
-		},
-		get_password: function() {
-			return this.byId(Serenity.StringEditor).call(this, 'Password');
 		},
 		get_displayname: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Displayname');
@@ -2382,6 +2741,83 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Email_EmailNewGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Email_EmailNewGrid.$user_name = t.Username;
+				$AccController_Email_EmailNewGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Email_EmailNewGrid.$i_refresh === 1) {
+					$AccController_Email_EmailNewGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Email_EmailNewGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Email_EmailNewGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Email/EmailNew/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Email_EmailNewGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Email/EmailNew/updateSubmit', request1, function(s) {
+							//Q.NotifyInfo("ok");
+						}, null);
+					}
+					this.refresh();
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -2413,7 +2849,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailNewService, $asm, {});
 	ss.initClass($AccController_Email_EmailUpdateInfoDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_EmailUpdateInfoForm, $asm, {
 		get_account: function() {
@@ -2460,6 +2895,83 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Email_EmailUpdateInfoGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Email_EmailUpdateInfoGrid.$user_name = t.Username;
+				$AccController_Email_EmailUpdateInfoGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Email_EmailUpdateInfoGrid.$i_refresh === 1) {
+					$AccController_Email_EmailUpdateInfoGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			if ($AccController_Email_EmailUpdateInfoGrid.$admin_lv === '1') {
+				req.EqualityFilter['By_User'] = '';
+			}
+			else {
+				req.EqualityFilter['By_User'] = $AccController_Email_EmailUpdateInfoGrid.$user_name;
+			}
+			req.EqualityFilter['Submit'] = '0';
+			return true;
+		},
+		getColumns: function() {
+			var columns = ss.makeGenericType(Serenity.DataGrid$2, [Object, Object]).prototype.getColumns.call(this);
+			ss.insert(columns, 0, Serenity.GridRowSelectionMixin.createSelectColumn(ss.mkdel(this, function() {
+				return this.$rowSelection;
+			})));
+			return columns;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			// var self = this;
+			buttons.push({ title: 'Delete', cssClass: 'delete-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs = this.$rowSelection.getSelectedKeys();
+				if (selectedIDs.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn xóa');
+				}
+				else {
+					Q.confirm('Bạn có muốn xóa những bản ghi đã chọn?', ss.mkdel(this, function() {
+						for (var $t1 = 0; $t1 < selectedIDs.length; $t1++) {
+							var item = selectedIDs[$t1];
+							//long id = (long)Convert.FromBase64String(item).ConvertToId();
+							var id = parseInt(item);
+							var request = {};
+							request.EntityId = id;
+							Q.serviceCall({ url: Q.resolveUrl('~/Services/Email/EmailUpdateInfo/Delete'), request: request, onSuccess: ss.mkdel(this, function(response) {
+								this.$rowSelection = new Serenity.GridRowSelectionMixin(this);
+								this.refresh();
+							}) });
+						}
+					}));
+				}
+			}) });
+			buttons.push({ title: 'Submit', cssClass: 'submit-button', onClick: ss.mkdel(this, function() {
+				var selectedIDs1 = this.$rowSelection.getSelectedKeys();
+				if ($AccController_Email_EmailUpdateInfoGrid.$admin_lv !== '1') {
+					Q.notifyError('Không có quyền thực hiện chức năng này!');
+				}
+				else if (selectedIDs1.length === 0) {
+					Q.notifyError('Phải chọn bản ghi muốn duyệt');
+				}
+				else {
+					var selectedID = this.$rowSelection.getSelectedKeys();
+					for (var $t2 = 0; $t2 < selectedID.length; $t2++) {
+						var item1 = selectedID[$t2];
+						var request1 = {};
+						request1.Entity = this.get_view().getItemById(item1);
+						Q.serviceRequest('Email/EmailUpdateInfo/updateSubmit', request1, function(s) {
+							//Q.NotifyInfo("ok");
+						}, null);
+					}
+					this.refresh();
+				}
+			}) });
+			return buttons;
+		},
 		createToolbarExtensions: function() {
 			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
 			var $t2 = ss.mkdel(this, function(e) {
@@ -2491,7 +3003,6 @@
 			}));
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_EmailUpdateInfoService, $asm, {});
 	ss.initClass($AccController_Email_FileResultDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
 	ss.initClass($AccController_Email_FileResultForm, $asm, {
 		get_fileId: function() {
@@ -2505,7 +3016,6 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Email_FileResultGrid, $asm, {}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
-	ss.initClass($AccController_Email_FileResultService, $asm, {});
 	ss.initClass($AccController_Membership_LoginForm, $asm, {
 		get_username: function() {
 			return this.byId(Serenity.StringEditor).call(this, 'Username');
@@ -2527,6 +3037,356 @@
 		}
 	}, Serenity.PrefixedContext);
 	ss.initClass($AccController_Membership_RegisterPanel, $asm, {}, ss.makeGenericType(Serenity.PropertyDialog$1, [Object]), [Serenity.IDialog]);
+	ss.initClass($AccController_Request_Ais_AisAddOUDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
+	ss.initClass($AccController_Request_Ais_AisAddOUForm, $asm, {
+		get_email: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Email');
+		},
+		get_newOu: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'NewOu');
+		},
+		get_newJobtitle: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'NewJobtitle');
+		},
+		get_newRole: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'NewRole');
+		},
+		get_priority: function() {
+			return this.byId(Serenity.IntegerEditor).call(this, 'Priority');
+		},
+		get_status: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Status');
+		},
+		get_result: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Result');
+		},
+		get_lastUpdated: function() {
+			return this.byId(Serenity.DateEditor).call(this, 'LastUpdated');
+		},
+		get_lastUpdatedby: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'LastUpdatedby');
+		},
+		get_description: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Description');
+		},
+		get_byUser: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'ByUser');
+		},
+		get_submit: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Submit');
+		}
+	}, Serenity.PrefixedContext);
+	ss.initClass($AccController_Request_Ais_AisAddOUGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Request_Ais_AisAddOUGrid.$user_name = t.Username;
+				$AccController_Request_Ais_AisAddOUGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Request_Ais_AisAddOUGrid.$i_refresh === 1) {
+					$AccController_Request_Ais_AisAddOUGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			//if (admin_lv == "1")
+			//    req.EqualityFilter["By_User"] = "";
+			//else
+			//    req.EqualityFilter["By_User"] = user_name;
+			req.EqualityFilter['Submit'] = '1';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			ss.removeAt(buttons, 0);
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Request_Ais_AisUserChangeInfoDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
+	ss.initClass($AccController_Request_Ais_AisUserChangeInfoForm, $asm, {
+		get_email: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Email');
+		},
+		get_phone: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Phone');
+		},
+		get_mobile: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Mobile');
+		},
+		get_jobtitle: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Jobtitle');
+		},
+		get_status: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Status');
+		},
+		get_result: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Result');
+		},
+		get_lastUpdated: function() {
+			return this.byId(Serenity.DateEditor).call(this, 'LastUpdated');
+		},
+		get_lastUpdatedby: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'LastUpdatedby');
+		},
+		get_description: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Description');
+		},
+		get_byUser: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'ByUser');
+		},
+		get_submit: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Submit');
+		}
+	}, Serenity.PrefixedContext);
+	ss.initClass($AccController_Request_Ais_AisUserChangeInfoGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Request_Ais_AisUserChangeInfoGrid.$user_name = t.Username;
+				$AccController_Request_Ais_AisUserChangeInfoGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Request_Ais_AisUserChangeInfoGrid.$i_refresh === 1) {
+					$AccController_Request_Ais_AisUserChangeInfoGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			//if (admin_lv == "1")
+			//    req.EqualityFilter["By_User"] = "";
+			//else
+			//    req.EqualityFilter["By_User"] = user_name;
+			req.EqualityFilter['Submit'] = '1';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			ss.removeAt(buttons, 0);
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Request_Ais_AisUserChangeOUDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
+	ss.initClass($AccController_Request_Ais_AisUserChangeOUForm, $asm, {
+		get_email: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Email');
+		},
+		get_oldOu: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'OldOu');
+		},
+		get_newOu: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'NewOu');
+		},
+		get_newJobtitle: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'NewJobtitle');
+		},
+		get_newRole: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'NewRole');
+		},
+		get_priority: function() {
+			return this.byId(Serenity.IntegerEditor).call(this, 'Priority');
+		},
+		get_status: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Status');
+		},
+		get_result: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Result');
+		},
+		get_lastUpdated: function() {
+			return this.byId(Serenity.DateEditor).call(this, 'LastUpdated');
+		},
+		get_lastUpdatedby: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'LastUpdatedby');
+		},
+		get_description: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Description');
+		},
+		get_byUser: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'ByUser');
+		},
+		get_submit: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Submit');
+		}
+	}, Serenity.PrefixedContext);
+	ss.initClass($AccController_Request_Ais_AisUserChangeOUGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Request_Ais_AisUserChangeOUGrid.$user_name = t.Username;
+				$AccController_Request_Ais_AisUserChangeOUGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Request_Ais_AisUserChangeOUGrid.$i_refresh === 1) {
+					$AccController_Request_Ais_AisUserChangeOUGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			//if (admin_lv == "1")
+			//    req.EqualityFilter["By_User"] = "";
+			//else
+			//    req.EqualityFilter["By_User"] = user_name;
+			req.EqualityFilter['Submit'] = '1';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			ss.removeAt(buttons, 0);
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Request_Ais_AisUserDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
+	ss.initClass($AccController_Request_Ais_AisUserForm, $asm, {
+		get_name: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Name');
+		},
+		get_ou: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Ou');
+		},
+		get_email: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Email');
+		},
+		get_phone: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Phone');
+		},
+		get_mobile: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Mobile');
+		},
+		get_jobtitle: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Jobtitle');
+		},
+		get_role: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Role');
+		},
+		get_priority: function() {
+			return this.byId(Serenity.IntegerEditor).call(this, 'Priority');
+		},
+		get_status: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Status');
+		},
+		get_result: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Result');
+		},
+		get_lastUpdated: function() {
+			return this.byId(Serenity.DateEditor).call(this, 'LastUpdated');
+		},
+		get_lastUpdatedby: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'LastUpdatedby');
+		},
+		get_description: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Description');
+		},
+		get_byUser: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'ByUser');
+		},
+		get_submit: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Submit');
+		}
+	}, Serenity.PrefixedContext);
+	ss.initClass($AccController_Request_Ais_AisUserGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Request_Ais_AisUserGrid.$user_name = t.Username;
+				$AccController_Request_Ais_AisUserGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Request_Ais_AisUserGrid.$i_refresh === 1) {
+					$AccController_Request_Ais_AisUserGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			//if (admin_lv == "1")
+			//    req.EqualityFilter["By_User"] = "";
+			//else
+			//    req.EqualityFilter["By_User"] = user_name;
+			req.EqualityFilter['Submit'] = '1';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			ss.removeAt(buttons, 0);
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
+	ss.initClass($AccController_Request_Ais_GroupDialog, $asm, {}, ss.makeGenericType(Serenity.EntityDialog$1, [Object]), [Serenity.IDialog, Serenity.IEditDialog]);
+	ss.initClass($AccController_Request_Ais_GroupForm, $asm, {
+		get_name: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Name');
+		},
+		get_parent: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Parent');
+		},
+		get_category: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Category');
+		},
+		get_shortname: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Shortname');
+		},
+		get_relate: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Relate');
+		},
+		get_priority: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Priority');
+		},
+		get_status: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Status');
+		},
+		get_result: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Result');
+		},
+		get_lastUpdated: function() {
+			return this.byId(Serenity.DateEditor).call(this, 'LastUpdated');
+		},
+		get_lastUpdatedby: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'LastUpdatedby');
+		},
+		get_description: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Description');
+		},
+		get_idRequest: function() {
+			return this.byId(Serenity.IntegerEditor).call(this, 'IdRequest');
+		},
+		get_byUser: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'ByUser');
+		},
+		get_submit: function() {
+			return this.byId(Serenity.StringEditor).call(this, 'Submit');
+		}
+	}, Serenity.PrefixedContext);
+	ss.initClass($AccController_Request_Ais_GroupGrid, $asm, {
+		onViewSubmit: function() {
+			var request = {};
+			Q.serviceCall({ url: Q.resolveUrl('~/Administration/User/getUser'), request: request, onSuccess: ss.mkdel(this, function(response) {
+				var obj = response;
+				var t = obj;
+				$AccController_Request_Ais_GroupGrid.$user_name = t.Username;
+				$AccController_Request_Ais_GroupGrid.$admin_lv = ss.cast(obj.adminlv, String);
+				if ($AccController_Request_Ais_GroupGrid.$i_refresh === 1) {
+					$AccController_Request_Ais_GroupGrid.$i_refresh = 0;
+					this.refresh();
+				}
+			}) });
+			var req = this.view.params;
+			req.EqualityFilter = req.EqualityFilter || {};
+			//if (admin_lv == "1")
+			//    req.EqualityFilter["By_User"] = "";
+			//else
+			//    req.EqualityFilter["By_User"] = user_name;
+			req.EqualityFilter['Submit'] = '1';
+			return true;
+		},
+		getButtons: function() {
+			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
+			ss.removeAt(buttons, 0);
+			return buttons;
+		}
+	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
 	ss.setMetadata($AccController_Administration_LanguageDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('LanguageName'), new Serenity.FormKeyAttribute('Administration.Language'), new Serenity.LocalTextPrefixAttribute('Administration.Language'), new Serenity.ServiceAttribute('Administration/Language')] });
 	ss.setMetadata($AccController_Administration_LanguageGrid, { attr: [new Serenity.ColumnsKeyAttribute('Administration.Language'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('LanguageName'), new Serenity.DialogTypeAttribute($AccController_Administration_LanguageDialog), new Serenity.LocalTextPrefixAttribute('Administration.Language'), new Serenity.ServiceAttribute('Administration/Language')] });
 	ss.setMetadata($AccController_Administration_PermissionCheckEditor, { attr: [new Serenity.EditorAttribute()] });
@@ -2553,6 +3413,8 @@
 	ss.setMetadata($AccController_Ais_AisUserGrid, { attr: [new Serenity.ColumnsKeyAttribute('Ais.AisUser'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Ou'), new Serenity.DialogTypeAttribute($AccController_Ais_AisUserDialog), new Serenity.LocalTextPrefixAttribute('Ais.AisUser'), new Serenity.ServiceAttribute('Ais/AisUser')] });
 	ss.setMetadata($AccController_Ais_GroupDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.FormKeyAttribute('Ais.Group'), new Serenity.LocalTextPrefixAttribute('Ais.Group'), new Serenity.ServiceAttribute('Ais/Group')] });
 	ss.setMetadata($AccController_Ais_GroupGrid, { attr: [new Serenity.ColumnsKeyAttribute('Ais.Group'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.DialogTypeAttribute($AccController_Ais_GroupDialog), new Serenity.LocalTextPrefixAttribute('Ais.Group'), new Serenity.ServiceAttribute('Ais/Group')] });
+	ss.setMetadata($AccController_Ais_TesttDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.FormKeyAttribute('Ais.Testt'), new Serenity.LocalTextPrefixAttribute('Ais.Testt'), new Serenity.ServiceAttribute('Ais/Testt')] });
+	ss.setMetadata($AccController_Ais_TesttGrid, { attr: [new Serenity.ColumnsKeyAttribute('Ais.Testt'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.DialogTypeAttribute($AccController_Ais_TesttDialog), new Serenity.LocalTextPrefixAttribute('Ais.Testt'), new Serenity.ServiceAttribute('Ais/Testt')] });
 	ss.setMetadata($AccController_Common_GridEditorBase$1, { attr: [new Serenity.ElementAttribute('<div/>'), new Serenity.EditorAttribute(), new Serenity.IdPropertyAttribute('__id')] });
 	ss.setMetadata($AccController_Common_GridEditorDialog$1, { attr: [new Serenity.IdPropertyAttribute('__id')] });
 	ss.setMetadata($AccController_Email_EmailChangeDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('OldName'), new Serenity.FormKeyAttribute('Email.EmailChange'), new Serenity.LocalTextPrefixAttribute('Email.EmailChange'), new Serenity.ServiceAttribute('Email/EmailChange')] });
@@ -2573,7 +3435,102 @@
 	ss.setMetadata($AccController_Email_FileResultGrid, { attr: [new Serenity.ColumnsKeyAttribute('Email.FileResult'), new Serenity.IdPropertyAttribute('Id'), new Serenity.DialogTypeAttribute($AccController_Email_FileResultDialog), new Serenity.LocalTextPrefixAttribute('Email.FileResult'), new Serenity.ServiceAttribute('Email/FileResult')] });
 	ss.setMetadata($AccController_Membership_LoginPanel, { attr: [new Serenity.PanelAttribute(), new Serenity.FormKeyAttribute('Membership.Login')] });
 	ss.setMetadata($AccController_Membership_RegisterPanel, { attr: [new Serenity.PanelAttribute(), new Serenity.FormKeyAttribute('Membership.Register')] });
+	ss.setMetadata($AccController_Request_Ais_AisAddOUDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Email'), new Serenity.FormKeyAttribute('Request_Ais.AisAddOU'), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisAddOU'), new Serenity.ServiceAttribute('Request_Ais/AisAddOU')] });
+	ss.setMetadata($AccController_Request_Ais_AisAddOUGrid, { attr: [new Serenity.ColumnsKeyAttribute('Request_Ais.AisAddOU'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Email'), new Serenity.DialogTypeAttribute($AccController_Request_Ais_AisAddOUDialog), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisAddOU'), new Serenity.ServiceAttribute('Request_Ais/AisAddOU')] });
+	ss.setMetadata($AccController_Request_Ais_AisUserChangeInfoDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Email'), new Serenity.FormKeyAttribute('Request_Ais.AisUserChangeInfo'), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisUserChangeInfo'), new Serenity.ServiceAttribute('Request_Ais/AisUserChangeInfo')] });
+	ss.setMetadata($AccController_Request_Ais_AisUserChangeInfoGrid, { attr: [new Serenity.ColumnsKeyAttribute('Request_Ais.AisUserChangeInfo'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Email'), new Serenity.DialogTypeAttribute($AccController_Request_Ais_AisUserChangeInfoDialog), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisUserChangeInfo'), new Serenity.ServiceAttribute('Request_Ais/AisUserChangeInfo')] });
+	ss.setMetadata($AccController_Request_Ais_AisUserChangeOUDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Email'), new Serenity.FormKeyAttribute('Request_Ais.AisUserChangeOU'), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisUserChangeOU'), new Serenity.ServiceAttribute('Request_Ais/AisUserChangeOU')] });
+	ss.setMetadata($AccController_Request_Ais_AisUserChangeOUGrid, { attr: [new Serenity.ColumnsKeyAttribute('Request_Ais.AisUserChangeOU'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Email'), new Serenity.DialogTypeAttribute($AccController_Request_Ais_AisUserChangeOUDialog), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisUserChangeOU'), new Serenity.ServiceAttribute('Request_Ais/AisUserChangeOU')] });
+	ss.setMetadata($AccController_Request_Ais_AisUserDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.FormKeyAttribute('Request_Ais.AisUser'), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisUser'), new Serenity.ServiceAttribute('Request_Ais/AisUser')] });
+	ss.setMetadata($AccController_Request_Ais_AisUserGrid, { attr: [new Serenity.ColumnsKeyAttribute('Request_Ais.AisUser'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.DialogTypeAttribute($AccController_Request_Ais_AisUserDialog), new Serenity.LocalTextPrefixAttribute('Request_Ais.AisUser'), new Serenity.ServiceAttribute('Request_Ais/AisUser')] });
+	ss.setMetadata($AccController_Request_Ais_GroupDialog, { attr: [new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.FormKeyAttribute('Request_Ais.Group'), new Serenity.LocalTextPrefixAttribute('Request_Ais.Group'), new Serenity.ServiceAttribute('Request_Ais/Group')] });
+	ss.setMetadata($AccController_Request_Ais_GroupGrid, { attr: [new Serenity.ColumnsKeyAttribute('Request_Ais.Group'), new Serenity.IdPropertyAttribute('Id'), new Serenity.NamePropertyAttribute('Name'), new Serenity.DialogTypeAttribute($AccController_Request_Ais_GroupDialog), new Serenity.LocalTextPrefixAttribute('Request_Ais.Group'), new Serenity.ServiceAttribute('Request_Ais/Group')] });
 	(function() {
 		Q$Config.rootNamespaces.push('AccController');
+	})();
+	(function() {
+		$AccController_Administration_UserDialog.$user_name = '';
+		$AccController_Administration_UserDialog.$i_refresh = 1;
+		$AccController_Administration_UserDialog.$admin_lv = '1';
+	})();
+	(function() {
+		$AccController_Administration_UserGrid.$user_name = '';
+		$AccController_Administration_UserGrid.$i_refresh = 1;
+		$AccController_Administration_UserGrid.$admin_lv = '1';
+	})();
+	(function() {
+		$AccController_Ais_AisAddOUGrid.$user_name = '';
+		$AccController_Ais_AisAddOUGrid.$i_refresh = 1;
+		$AccController_Ais_AisAddOUGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Ais_AisUserChangeInfoGrid.$user_name = '';
+		$AccController_Ais_AisUserChangeInfoGrid.$i_refresh = 1;
+		$AccController_Ais_AisUserChangeInfoGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Ais_AisUserChangeOUGrid.$user_name = '';
+		$AccController_Ais_AisUserChangeOUGrid.$i_refresh = 1;
+		$AccController_Ais_AisUserChangeOUGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Ais_AisUserGrid.$user_name = '';
+		$AccController_Ais_AisUserGrid.$i_refresh = 1;
+		$AccController_Ais_AisUserGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Ais_GroupGrid.$user_name = '';
+		$AccController_Ais_GroupGrid.$i_refresh = 1;
+		$AccController_Ais_GroupGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Email_EmailChangeGrid.$user_name = '';
+		$AccController_Email_EmailChangeGrid.$i_refresh = 1;
+		$AccController_Email_EmailChangeGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Email_EmailGroupAccountGrid.$user_name = '';
+		$AccController_Email_EmailGroupAccountGrid.$i_refresh = 1;
+		$AccController_Email_EmailGroupAccountGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Email_EmailGroupGrid.$user_name = '';
+		$AccController_Email_EmailGroupGrid.$i_refresh = 1;
+		$AccController_Email_EmailGroupGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Email_EmailNewGrid.$user_name = '';
+		$AccController_Email_EmailNewGrid.$i_refresh = 1;
+		$AccController_Email_EmailNewGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Email_EmailUpdateInfoGrid.$user_name = '';
+		$AccController_Email_EmailUpdateInfoGrid.$i_refresh = 1;
+		$AccController_Email_EmailUpdateInfoGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Request_Ais_AisAddOUGrid.$user_name = '';
+		$AccController_Request_Ais_AisAddOUGrid.$i_refresh = 1;
+		$AccController_Request_Ais_AisAddOUGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Request_Ais_AisUserChangeInfoGrid.$user_name = '';
+		$AccController_Request_Ais_AisUserChangeInfoGrid.$i_refresh = 1;
+		$AccController_Request_Ais_AisUserChangeInfoGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Request_Ais_AisUserChangeOUGrid.$user_name = '';
+		$AccController_Request_Ais_AisUserChangeOUGrid.$i_refresh = 1;
+		$AccController_Request_Ais_AisUserChangeOUGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Request_Ais_AisUserGrid.$user_name = '';
+		$AccController_Request_Ais_AisUserGrid.$i_refresh = 1;
+		$AccController_Request_Ais_AisUserGrid.$admin_lv = '-1';
+	})();
+	(function() {
+		$AccController_Request_Ais_GroupGrid.$user_name = '';
+		$AccController_Request_Ais_GroupGrid.$i_refresh = 1;
+		$AccController_Request_Ais_GroupGrid.$admin_lv = '-1';
 	})();
 })();

@@ -1,4 +1,5 @@
 
+
 namespace AccController.Email
 {
     using Serenity;
@@ -17,7 +18,6 @@ namespace AccController.Email
     
         public StringEditor Name { get { return ById<StringEditor>("Name"); } }
         public StringEditor Alias { get { return ById<StringEditor>("Alias"); } }
-        public StringEditor Password { get { return ById<StringEditor>("Password"); } }
         public StringEditor Displayname { get { return ById<StringEditor>("Displayname"); } }
         public StringEditor Firstname { get { return ById<StringEditor>("Firstname"); } }
         public StringEditor Lastname { get { return ById<StringEditor>("Lastname"); } }

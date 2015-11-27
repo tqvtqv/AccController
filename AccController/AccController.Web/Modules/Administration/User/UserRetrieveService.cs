@@ -25,7 +25,11 @@ namespace AccController.Administration
                     Source = user.Source,
                     PasswordHash = user.PasswordHash,
                     PasswordSalt = user.PasswordSalt,
+                    
+                    adminlv = user.AdminLv,
+                    
                     UpdateDate = user.UpdateDate
+
                 };
 
             return null;

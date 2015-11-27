@@ -25,49 +25,49 @@ namespace AccController.Ais.Entities
             set { Fields.Id[this] = value; }
         }
 
-        [DisplayName("Name"), Size(150), NotNull, QuickSearch]
+        [DisplayName("Tên phòng ban"), Size(150), NotNull, QuickSearch]
         public String Name
         {
             get { return Fields.Name[this]; }
             set { Fields.Name[this] = value; }
         }
 
-        [DisplayName("Parent"), Size(150), NotNull]
+        [DisplayName("Trực thuộc phòng ban"), Size(150), NotNull]
         public String Parent
         {
             get { return Fields.Parent[this]; }
             set { Fields.Parent[this] = value; }
         }
 
-        [DisplayName("Category"), Size(150)]
+        [DisplayName("Nhóm cơ quan"), Size(150)]
         public String Category
         {
             get { return Fields.Category[this]; }
             set { Fields.Category[this] = value; }
         }
 
-        [DisplayName("Shortname"), Size(50), NotNull]
+        [DisplayName("Tên viết tắt"), Size(50), NotNull]
         public String Shortname
         {
             get { return Fields.Shortname[this]; }
             set { Fields.Shortname[this] = value; }
         }
 
-        [DisplayName("Relate"), Size(150)]
+        [DisplayName("Đơn vị đồng nhận văn bản"), Size(150)]
         public String Relate
         {
             get { return Fields.Relate[this]; }
             set { Fields.Relate[this] = value; }
         }
 
-        [DisplayName("Priority"), NotNull]
+        [DisplayName("Mức ưu tiên"),Size(150), NotNull]
         public Int16? Priority
         {
             get { return Fields.Priority[this]; }
             set { Fields.Priority[this] = value; }
         }
 
-        [DisplayName("Status"), NotNull]
+        [DisplayName("Status") ]
         public Int16? Status
         {
             get { return Fields.Status[this]; }
@@ -81,7 +81,7 @@ namespace AccController.Ais.Entities
             set { Fields.Result[this] = value; }
         }
 
-        [DisplayName("Last Updated"), NotNull]
+        [DisplayName("Last Updated")]
         public DateTime? LastUpdated
         {
             get { return Fields.LastUpdated[this]; }
@@ -101,6 +101,20 @@ namespace AccController.Ais.Entities
         {
             get { return Fields.Description[this]; }
             set { Fields.Description[this] = value; }
+        }
+
+        [DisplayName("By_User"), Size(50), NotNull]
+        public String By_User
+        {
+            get { return Fields.By_User[this]; }
+            set { Fields.By_User[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(50), NotNull]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
         }
 
         IIdField IIdRow.IdField
@@ -134,6 +148,8 @@ namespace AccController.Ais.Entities
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
+            public readonly StringField By_User;
+            public readonly StringField Submit;
 
             public RowFields()
                 : base("[Acc].AisGroup")

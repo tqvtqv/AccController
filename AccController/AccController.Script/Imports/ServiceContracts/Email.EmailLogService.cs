@@ -1,3 +1,4 @@
+
 namespace AccController.Email
 {
     using jQueryApi;
@@ -7,33 +8,39 @@ namespace AccController.Email
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
+    [Imported, PreserveMemberCase]
     public partial class EmailLogService
     {
         [InlineConstant] public const string BaseUrl = "Email/EmailLog";
     
+        [InlineCode("Q.serviceRequest('Email/EmailLog/Create', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Create(SaveRequest<EmailLogRow> request, Action<SaveResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Create, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Email/EmailLog/Update', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Update(SaveRequest<EmailLogRow> request, Action<SaveResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Update, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Email/EmailLog/Delete', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Delete(DeleteRequest request, Action<DeleteResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Delete, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Email/EmailLog/Retrieve', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Retrieve(RetrieveRequest request, Action<RetrieveResponse<EmailLogRow>> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Retrieve, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Email/EmailLog/List', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest List(ListRequest request, Action<ListResponse<EmailLogRow>> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.List, request, onSuccess, options);
+            return null;
         }
     
         [Imported, PreserveMemberCase]

@@ -5454,6 +5454,170 @@
 	};
 	global.Serenity.PropertyItemSlickConverter = $Serenity_PropertyItemSlickConverter;
 	////////////////////////////////////////////////////////////////////////////////
+	// Serenity.PropertyPanel
+	var $Serenity_PropertyPanel$1 = function(TEntity) {
+		var $type = function(container) {
+			ss.makeGenericType($Serenity_PropertyPanel$2, [TEntity, Object]).$ctor1.call(this, container, null);
+		};
+		ss.registerGenericClassInstance($type, $Serenity_PropertyPanel$1, [TEntity], {}, function() {
+			return ss.makeGenericType($Serenity_PropertyPanel$2, [TEntity, Object]);
+		}, function() {
+			return [];
+		});
+		return $type;
+	};
+	$Serenity_PropertyPanel$1.__typeName = 'Serenity.PropertyPanel$1';
+	ss.initGenericClass($Serenity_PropertyPanel$1, $asm, 1);
+	global.Serenity.PropertyPanel$1 = $Serenity_PropertyPanel$1;
+	////////////////////////////////////////////////////////////////////////////////
+	// Serenity.PropertyPanel
+	var $Serenity_PropertyPanel$2 = function(TEntity, TOptions) {
+		var $type = function(container) {
+			this.$entity = null;
+			this.$entityId = null;
+			this.propertyGrid = null;
+			ss.makeGenericType($Serenity_TemplatedPanel$1, [TOptions]).call(this, container);
+		};
+		$type.$ctor1 = function(div, opt) {
+			this.$entity = null;
+			this.$entityId = null;
+			this.propertyGrid = null;
+			ss.makeGenericType($Serenity_TemplatedPanel$1, [TOptions]).$ctor1.call(this, div, opt);
+			if (!this.isAsyncWidget()) {
+				this.$initPropertyGrid();
+				this.loadInitialEntity();
+			}
+		};
+		ss.registerGenericClassInstance($type, $Serenity_PropertyPanel$2, [TEntity, TOptions], {
+			initializeAsync: function() {
+				return $Serenity_Widget.prototype.initializeAsync.call(this).then(ss.mkdel(this, this.$initPropertyGridAsync), null).then(ss.mkdel(this, function() {
+					this.loadInitialEntity();
+				}), null);
+			},
+			loadInitialEntity: function() {
+				if (ss.isValue(this.propertyGrid)) {
+					this.propertyGrid.load(new Object());
+				}
+			},
+			destroy: function() {
+				if (ss.isValue(this.propertyGrid)) {
+					this.propertyGrid.destroy();
+					this.propertyGrid = null;
+				}
+				if (ss.isValue(this.validator)) {
+					this.byId$1('Form').remove();
+					this.validator = null;
+				}
+				ss.makeGenericType($Serenity_TemplatedPanel$1, [TOptions]).prototype.destroy.call(this);
+			},
+			get_entity: function() {
+				return this.$entity;
+			},
+			set_entity: function(value) {
+				this.$entity = value || ss.createInstance(TEntity);
+			},
+			get_entityId: function() {
+				return this.$entityId;
+			},
+			set_entityId: function(value) {
+				this.$entityId = value;
+			},
+			$initPropertyGrid: function() {
+				var pgDiv = this.byId$1('PropertyGrid');
+				if (pgDiv.length <= 0) {
+					return;
+				}
+				var pgOptions = this.getPropertyGridOptions();
+				this.propertyGrid = (new $Serenity_PropertyGrid(pgDiv, pgOptions)).init(null);
+				if (this.element.closest('.ui-Panel').hasClass('s-Flexify')) {
+					$Serenity_FLX.flexHeightOnly(this.propertyGrid.get_element().children('.categories'), 1);
+				}
+			},
+			$initPropertyGridAsync: function() {
+				return RSVP.resolve().then(ss.mkdel(this, function() {
+					var pgDiv = this.byId$1('PropertyGrid');
+					if (pgDiv.length <= 0) {
+						return RSVP.resolve();
+					}
+					return this.getPropertyGridOptionsAsync().then(ss.mkdel(this, function(pgOptions) {
+						this.propertyGrid = new $Serenity_PropertyGrid(pgDiv, pgOptions);
+						if (this.element.closest('.ui-Panel').hasClass('s-Flexify')) {
+							$Serenity_FLX.flexHeightOnly(this.propertyGrid.get_element().children('.categories'), 1);
+						}
+						return this.propertyGrid.initialize();
+					}), null);
+				}), null);
+			},
+			getFormKey: function() {
+				var attributes = ss.getAttributes(ss.getInstanceType(this), Serenity.FormKeyAttribute, true);
+				if (attributes.length >= 1) {
+					return attributes[0].get_value();
+				}
+				var name = ss.getTypeFullName(ss.getInstanceType(this));
+				var px = name.indexOf('.');
+				if (px >= 0) {
+					name = name.substring(px + 1);
+				}
+				if (ss.endsWithString(name, 'Panel')) {
+					name = name.substr(0, name.length - 6);
+				}
+				else if (ss.endsWithString(name, 'Panel')) {
+					name = name.substr(0, name.length - 5);
+				}
+				return name;
+			},
+			getPropertyItems: function() {
+				var formKey = this.getFormKey();
+				return Q.getForm(formKey);
+			},
+			getPropertyItemsAsync: function() {
+				return RSVP.resolve().then(ss.mkdel(this, function() {
+					var formKey = this.getFormKey();
+					return Q.getFormAsync(formKey);
+				}), null);
+			},
+			getPropertyGridOptions: function() {
+				var $t1 = $Serenity_PropertyGridOptions.$ctor();
+				$t1.idPrefix = this.idPrefix;
+				$t1.items = this.getPropertyItems();
+				$t1.mode = 0;
+				$t1.useCategories = false;
+				$t1.localTextPrefix = 'Forms.' + this.getFormKey() + '.';
+				return $t1;
+			},
+			getPropertyGridOptionsAsync: function() {
+				return this.getPropertyItemsAsync().then(ss.mkdel(this, function(propertyItems) {
+					var $t1 = $Serenity_PropertyGridOptions.$ctor();
+					$t1.idPrefix = this.idPrefix;
+					$t1.items = propertyItems;
+					$t1.mode = 0;
+					$t1.useCategories = false;
+					$t1.localTextPrefix = 'Forms.' + this.getFormKey() + '.';
+					return $t1;
+				}), null);
+			},
+			validateBeforeSave: function() {
+				return this.validator.form();
+			},
+			getSaveEntity: function() {
+				var entity = ss.createInstance(TEntity);
+				if (ss.isValue(this.propertyGrid)) {
+					this.propertyGrid.save(entity);
+				}
+				return entity;
+			}
+		}, function() {
+			return ss.makeGenericType($Serenity_TemplatedPanel$1, [TOptions]);
+		}, function() {
+			return [];
+		});
+		$type.$ctor1.prototype = $type.prototype;
+		return $type;
+	};
+	$Serenity_PropertyPanel$2.__typeName = 'Serenity.PropertyPanel$2';
+	ss.initGenericClass($Serenity_PropertyPanel$2, $asm, 2);
+	global.Serenity.PropertyPanel$2 = $Serenity_PropertyPanel$2;
+	////////////////////////////////////////////////////////////////////////////////
 	// Serenity.PublicEditorTypes
 	var $Serenity_PublicEditorTypes = function() {
 	};
@@ -6366,6 +6530,100 @@
 	$Serenity_TemplatedDialog$1.__typeName = 'Serenity.TemplatedDialog$1';
 	ss.initGenericClass($Serenity_TemplatedDialog$1, $asm, 1);
 	global.Serenity.TemplatedDialog$1 = $Serenity_TemplatedDialog$1;
+	////////////////////////////////////////////////////////////////////////////////
+	// Serenity.TemplatedPanel
+	var $Serenity_TemplatedPanel = function(container) {
+		ss.makeGenericType($Serenity_TemplatedPanel$1, [Object]).call(this, container);
+	};
+	$Serenity_TemplatedPanel.__typeName = 'Serenity.TemplatedPanel';
+	global.Serenity.TemplatedPanel = $Serenity_TemplatedPanel;
+	////////////////////////////////////////////////////////////////////////////////
+	// Serenity.TemplatedPanel
+	var $Serenity_TemplatedPanel$1 = function(TOptions) {
+		var $type = function(div) {
+			$type.$ctor1.call(this, div, null);
+		};
+		$type.$ctor1 = function(div, opt) {
+			this.isPanel = false;
+			this.validator = null;
+			this.tabs = null;
+			this.toolbar = null;
+			ss.makeGenericType($Serenity_TemplatedWidget$1, [TOptions]).call(this, div, opt);
+			this.initValidator();
+			this.initTabs();
+			this.initToolbar();
+		};
+		ss.registerGenericClassInstance($type, $Serenity_TemplatedPanel$1, [TOptions], {
+			destroy: function() {
+				if (ss.isValue(this.tabs)) {
+					this.tabs.tabs('destroy');
+				}
+				if (ss.isValue(this.toolbar)) {
+					this.toolbar.destroy();
+					this.toolbar = null;
+				}
+				if (ss.isValue(this.validator)) {
+					this.byId$1('Form').remove();
+					this.validator = null;
+				}
+				$Serenity_Widget.prototype.destroy.call(this);
+			},
+			initToolbar: function() {
+				var toolbarDiv = this.byId$1('Toolbar');
+				if (toolbarDiv.length === 0) {
+					return;
+				}
+				var opt = { buttons: this.getToolbarButtons() };
+				this.toolbar = new $Serenity_Toolbar(toolbarDiv, opt);
+			},
+			getToolbarButtons: function() {
+				return [];
+			},
+			getValidatorOptions: function() {
+				return {};
+			},
+			initValidator: function() {
+				var form = this.byId$1('Form');
+				if (form.length > 0) {
+					var valOptions = this.getValidatorOptions();
+					this.validator = form.validate(Q$Externals.validateOptions(valOptions));
+				}
+			},
+			resetValidation: function() {
+				if (ss.isValue(this.validator)) {
+					this.validator.resetAll();
+				}
+			},
+			validateForm: function() {
+				return ss.isNullOrUndefined(this.validator) || !!this.validator.form();
+			},
+			arrange: function() {
+				this.element.find('.require-layout').filter(':visible').each(function(i, e) {
+					$(e).triggerHandler('layout');
+				});
+			},
+			initTabs: function() {
+				var tabsDiv = this.byId$1('Tabs');
+				if (tabsDiv.length === 0) {
+					return;
+				}
+				this.tabs = tabsDiv.tabs({});
+			},
+			get_idPrefix: function() {
+				return this.idPrefix;
+			}
+		}, function() {
+			return ss.makeGenericType($Serenity_TemplatedWidget$1, [TOptions]);
+		}, function() {
+			return [];
+		});
+		$type.$ctor1.prototype = $type.prototype;
+		ss.setMetadata($type, { attr: [new Serenity.ElementAttribute('<div/>')] });
+		return $type;
+	};
+	$Serenity_TemplatedPanel$1.__typeName = 'Serenity.TemplatedPanel$1';
+	ss.initGenericClass($Serenity_TemplatedPanel$1, $asm, 1);
+	global.Serenity.TemplatedPanel$1 = $Serenity_TemplatedPanel$1;
 	////////////////////////////////////////////////////////////////////////////////
 	// Serenity.TemplatedWidget
 	var $Serenity_TemplatedWidget = function(element) {
@@ -9326,6 +9584,7 @@
 	}, $Serenity_BaseFiltering, [$Serenity_IFiltering]);
 	ss.initClass($Serenity_StringInflector, $asm, {});
 	ss.initClass($Serenity_SubDialogHelper, $asm, {});
+	ss.initClass($Serenity_TemplatedPanel, $asm, {}, ss.makeGenericType($Serenity_TemplatedPanel$1, [Object]));
 	ss.initClass($Serenity_TemplatedWidget, $asm, {}, ss.makeGenericType($Serenity_TemplatedWidget$1, [Object]));
 	ss.initClass($Serenity_TextAreaEditor, $asm, {
 		get_value: function() {
@@ -9718,6 +9977,7 @@
 	ss.setMetadata($Serenity_SelectEditor, { attr: [new Serenity.EditorAttribute(), new $System_ComponentModel_DisplayNameAttribute('Açılır Liste'), new Serenity.OptionsTypeAttribute($Serenity_SelectEditorOptions), new Serenity.ElementAttribute('<input type="hidden"/>')] });
 	ss.setMetadata($Serenity_SelectEditorOptions, { members: [{ attr: [new $System_ComponentModel_DisplayNameAttribute('Boş Eleman Metni')], name: 'EmptyOptionText', type: 16, returnType: String, getter: { name: 'get_EmptyOptionText', type: 8, params: [], returnType: String, fget: 'emptyOptionText' }, setter: { name: 'set_EmptyOptionText', type: 8, params: [String], returnType: Object, fset: 'emptyOptionText' }, fname: 'emptyOptionText' }, { attr: [new $Serenity_ComponentModel_HiddenAttribute()], name: 'Items', type: 16, returnType: Array, getter: { name: 'get_Items', type: 8, params: [], returnType: Array, fget: 'items' }, setter: { name: 'set_Items', type: 8, params: [Array], returnType: Object, fset: 'items' }, fname: 'items' }] });
 	ss.setMetadata($Serenity_StringEditor, { attr: [new Serenity.EditorAttribute(), new $System_ComponentModel_DisplayNameAttribute('Metin'), new Serenity.ElementAttribute('<input type="text"/>')] });
+	ss.setMetadata($Serenity_TemplatedPanel$1, { attr: [new Serenity.ElementAttribute('<div/>')] });
 	ss.setMetadata($Serenity_TextAreaEditor, { attr: [new Serenity.EditorAttribute(), new $System_ComponentModel_DisplayNameAttribute('Çok Satırlı Metin'), new Serenity.OptionsTypeAttribute($Serenity_TextAreaEditorOptions), new Serenity.ElementAttribute('<textarea />')] });
 	ss.setMetadata($Serenity_TextAreaEditorOptions, { members: [{ attr: [new $Serenity_ComponentModel_HiddenAttribute()], name: 'Cols', type: 16, returnType: ss.Int32, getter: { name: 'get_Cols', type: 8, params: [], returnType: ss.Int32, fget: 'cols' }, setter: { name: 'set_Cols', type: 8, params: [ss.Int32], returnType: Object, fset: 'cols' }, fname: 'cols' }, { attr: [new $Serenity_ComponentModel_HiddenAttribute()], name: 'Rows', type: 16, returnType: ss.Int32, getter: { name: 'get_Rows', type: 8, params: [], returnType: ss.Int32, fget: 'rows' }, setter: { name: 'set_Rows', type: 8, params: [ss.Int32], returnType: Object, fset: 'rows' }, fname: 'rows' }] });
 	ss.setMetadata($Serenity_TimeEditor, { attr: [new Serenity.EditorAttribute(), new $System_ComponentModel_DisplayNameAttribute('Zaman'), new Serenity.OptionsTypeAttribute(Object), new Serenity.ElementAttribute('<select/>')] });

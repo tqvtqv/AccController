@@ -1,4 +1,5 @@
 ﻿
+[assembly: Serenity.Navigation.NavigationLink(3005, "Email/Cập nhật thông tin", typeof(AccController.Email.Pages.EmailUpdateInfoController))]
 
 
 

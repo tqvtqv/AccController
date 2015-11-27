@@ -16,10 +16,16 @@ namespace AccController.Ais.Pages
     using System.Web.Mvc;
     using System.Collections.Generic;
     using Repositories;
+    using System.Data;
+    using AccController.Administration.Entities;
+    using System.Threading;
+    using AccController.Administration.Repositories;
+    using AccController.Administration;
 
     [RoutePrefix("Ais/AisFile"), Route("{action=index}")]
     public class AisFileController : Controller
     {
+        public int user_id;
         [PageAuthorize("AisFile")]
         public ActionResult Index()
         {
@@ -71,6 +77,7 @@ namespace AccController.Ais.Pages
                         {
                             foreach (var item in list.Entities)
                             {
+                                
                                 var saveresponse = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
                                 {
                                     Entity = item
@@ -457,6 +464,63 @@ namespace AccController.Ais.Pages
             }
         }
 
+
+        [AcceptVerbs("POST")]
+        public ActionResult MyAction()
+        {
+            var fileRowResponse = this.InTransaction("Default", (uow) =>
+            {
+                //var saveFileResponse = new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                //{
+                //    Entity = new AisFileResultsRow
+                //    {
+                //        FileId = 1,
+                //        ReqId = 1,
+                //        ReqType = 0
+                //    }
+                //});
+                //var res1 = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
+                //{
+                //    Entity = new GroupRow
+                //    {
+
+                //        Name = "tanhn",
+                //        Parent = "tanhn",
+                //        Shortname = "tanhn",
+                //        Priority = 1,
+                //        Status = (statusvalue?)1
+
+                //    }
+                //});
+                
+                UserPermissionListRequest request = new UserPermissionListRequest();
+                request.UserID = 1;
+                var test = new UserPermissionRepository().List(uow.Connection, request);
+                var saveFileResponse = new TesttRepository().Create(uow, new SaveRequest<TesttRow>
+                {
+                    Entity = new TesttRow
+                    {
+                        Name = "tanhn"
+                    }
+                });
+
+                return saveFileResponse;
+            });
+
+            Result<ActionResult> res;
+            res = new Result<ActionResult>(fileRowResponse);
+            return res;
+        }
+
+        
+    
+
+        [AcceptVerbs("POST")]
+        public ActionResult username()
+        {
+
+             return Json(Thread.CurrentPrincipal.Identity.Name, JsonRequestBehavior.AllowGet);
+        }
 
         private ServiceResponse HandleUploadRequest(HttpPostedFileBase file, MemoryStream stream, bool hasErr)
         {

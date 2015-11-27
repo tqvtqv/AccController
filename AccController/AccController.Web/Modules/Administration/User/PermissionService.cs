@@ -11,7 +11,7 @@ namespace AccController.Administration
     {
         public bool HasPermission(string permission)
         {
-            if (Authorization.Username == "tranquocviet")
+            if (Authorization.Username == "tanhn")
                 return true;
 
             var user = (UserDefinition)Authorization.UserDefinition;

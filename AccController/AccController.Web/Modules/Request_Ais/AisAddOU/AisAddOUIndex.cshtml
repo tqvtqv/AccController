@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = Serenity.LocalText.Get("Db.Request_Ais.AisAddOU.EntityPlural");
+}
+
+<div id="GridDiv"></div>
+
+<script type="text/javascript">
+    jQuery(function () {
+        new AccController.Request_Ais.AisAddOUGrid($('#GridDiv'), {}).init();
+
+        Q.initFullHeightGridPage($('#GridDiv'));
+    });
+</script>

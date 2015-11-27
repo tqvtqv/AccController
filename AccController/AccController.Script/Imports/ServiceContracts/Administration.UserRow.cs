@@ -1,4 +1,5 @@
 
+
 namespace AccController.Administration
 {
     using Serenity;
@@ -24,6 +25,8 @@ namespace AccController.Administration
         public String PasswordSalt { get; set; }
         public String DisplayName { get; set; }
         public String Email { get; set; }
+        public String by_admin { get; set; }
+        public String AdminLv { get; set; }
         public String Password { get; set; }
         public String PasswordConfirm { get; set; }
         public Int32? InsertUserId { get; set; }
@@ -42,6 +45,8 @@ namespace AccController.Administration
             [InlineConstant] public const string PasswordSalt = "PasswordSalt";
             [InlineConstant] public const string DisplayName = "DisplayName";
             [InlineConstant] public const string Email = "Email";
+            [InlineConstant] public const string by_admin = "by_admin";
+            [InlineConstant] public const string AdminLv = "AdminLv";
             [InlineConstant] public const string Password = "Password";
             [InlineConstant] public const string PasswordConfirm = "PasswordConfirm";
             [InlineConstant] public const string InsertUserId = "InsertUserId";

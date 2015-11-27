@@ -16,6 +16,9 @@ namespace AccController.Ais.Repositories
 
         public SaveResponse Create(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
+            request.Entity.Submit = "0";
+            request.Entity.By_User = Thread.CurrentPrincipal.Identity.Name;
+            request.Entity.Result = 0;
             request.Entity.LastUpdatedby = Thread.CurrentPrincipal.Identity.Name;
             request.Entity.LastUpdated = DateTime.Now;
             request.Entity.Status = 0;

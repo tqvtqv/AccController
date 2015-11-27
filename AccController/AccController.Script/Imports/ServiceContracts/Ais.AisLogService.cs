@@ -1,3 +1,4 @@
+
 namespace AccController.Ais
 {
     using jQueryApi;
@@ -7,33 +8,39 @@ namespace AccController.Ais
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
 
+    [Imported, PreserveMemberCase]
     public partial class AisLogService
     {
         [InlineConstant] public const string BaseUrl = "Ais/AisLog";
     
+        [InlineCode("Q.serviceRequest('Ais/AisLog/Create', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Create(SaveRequest<AisLogRow> request, Action<SaveResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Create, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisLog/Update', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Update(SaveRequest<AisLogRow> request, Action<SaveResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Update, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisLog/Delete', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Delete(DeleteRequest request, Action<DeleteResponse> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Delete, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisLog/Retrieve', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest Retrieve(RetrieveRequest request, Action<RetrieveResponse<AisLogRow>> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.Retrieve, request, onSuccess, options);
+            return null;
         }
     
+        [InlineCode("Q.serviceRequest('Ais/AisLog/List', {request}, {onSuccess}, {options})")]
         public static jQueryXmlHttpRequest List(ListRequest request, Action<ListResponse<AisLogRow>> onSuccess, ServiceCallOptions options = null)
         {
-            return Q.ServiceRequest(Methods.List, request, onSuccess, options);
+            return null;
         }
     
         [Imported, PreserveMemberCase]

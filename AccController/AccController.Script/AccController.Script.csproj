@@ -288,10 +288,40 @@
     <Compile Include="Imports\ServiceContracts\Email.FileResultService.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
+    <Compile Include="Imports\ServiceContracts\Email.Pages.EmailFileController.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Email.Pages.UploadResponse.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
     <Compile Include="Imports\ServiceContracts\Membership.LoginRequest.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
     <Compile Include="Imports\ServiceContracts\Membership.RegisterRequest.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisAddOURow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisAddOUService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserChangeInfoRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserChangeInfoService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserChangeOURow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserChangeOUService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.GroupRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.GroupService.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
     <Compile Include="Membership\RegisterPanel.cs" />
@@ -339,6 +369,36 @@
     <Compile Include="Email\EmailUpdateInfo\EmailUpdateInfoDialog.cs" />
     <Compile Include="Ais\AisUser\AisUserGrid.cs" />
     <Compile Include="Ais\AisUser\AisUserDialog.cs" />
+    <Compile Include="Imports\FormContexts\Ais.TesttForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ais\Testt\TesttGrid.cs" />
+    <Compile Include="Ais\Testt\TesttDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Ais.GroupForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Ais\Group\GroupGrid.cs" />
+    <Compile Include="Request_Ais\Group\GroupDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Ais.AisAddOUForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Ais\AisAddOU\AisAddOUGrid.cs" />
+    <Compile Include="Request_Ais\AisAddOU\AisAddOUDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Ais.AisUserForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Ais\AisUser\AisUserGrid.cs" />
+    <Compile Include="Request_Ais\AisUser\AisUserDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Ais.AisUserChangeInfoForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Ais\AisUserChangeInfo\AisUserChangeInfoGrid.cs" />
+    <Compile Include="Request_Ais\AisUserChangeInfo\AisUserChangeInfoDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Ais.AisUserChangeOUForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Ais\AisUserChangeOU\AisUserChangeOUGrid.cs" />
+    <Compile Include="Request_Ais\AisUserChangeOU\AisUserChangeOUDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Imports\FormContexts\FormContexts.log">
@@ -361,6 +421,18 @@
       <LastGenOutput>ServiceContracts.log</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <Compile Include="Imports\ServiceContracts\Ais.TesttRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Ais.TesttService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -381,16 +453,16 @@
     <Reference Include="Saltarelle.Web">
       <HintPath>..\..\packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Serenity.Script.Core, Version=1.6.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Serenity.Script.1.6.8\lib\net2\Serenity.Script.Core.dll</HintPath>
+    <Reference Include="Serenity.Script.Core, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Serenity.Script.1.7.0\lib\net2\Serenity.Script.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Serenity.Script.Imports, Version=1.6.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Serenity.Script.1.6.8\lib\net2\Serenity.Script.Imports.dll</HintPath>
+    <Reference Include="Serenity.Script.Imports, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Serenity.Script.1.7.0\lib\net2\Serenity.Script.Imports.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Serenity.Script.UI, Version=1.6.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Serenity.Script.1.6.8\lib\net2\Serenity.Script.UI.dll</HintPath>
+    <Reference Include="Serenity.Script.UI, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Serenity.Script.1.7.0\lib\net2\Serenity.Script.UI.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

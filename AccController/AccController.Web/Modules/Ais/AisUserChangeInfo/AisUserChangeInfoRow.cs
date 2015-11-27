@@ -30,21 +30,21 @@ namespace AccController.Ais.Entities
             set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("Phone"), Size(50)]
+        [DisplayName("Số cố định"), Size(50)]
         public String Phone
         {
             get { return Fields.Phone[this]; }
             set { Fields.Phone[this] = value; }
         }
 
-        [DisplayName("Mobile"), Size(50)]
+        [DisplayName("Số di động"), Size(50)]
         public String Mobile
         {
             get { return Fields.Mobile[this]; }
             set { Fields.Mobile[this] = value; }
         }
 
-        [DisplayName("Jobtitle"), Size(150)]
+        [DisplayName("Chức danh"), Size(150)]
         public String Jobtitle
         {
             get { return Fields.Jobtitle[this]; }
@@ -86,6 +86,20 @@ namespace AccController.Ais.Entities
             set { Fields.Description[this] = value; }
         }
 
+        [DisplayName("By_User"), Size(50), NotNull]
+        public String By_User
+        {
+            get { return Fields.By_User[this]; }
+            set { Fields.By_User[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(50), NotNull]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
+        }
+
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -115,6 +129,8 @@ namespace AccController.Ais.Entities
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
+            public readonly StringField By_User;
+            public readonly StringField Submit;
 
             public RowFields()
                 : base("[Acc].AisUserChangeInfo")
