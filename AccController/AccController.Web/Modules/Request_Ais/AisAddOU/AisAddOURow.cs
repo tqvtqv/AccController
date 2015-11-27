@@ -1,5 +1,5 @@
 ﻿
-namespace AccController.Ais.Entities
+namespace AccController.Request_Ais.Entities
 {
     using Newtonsoft.Json;
     using Serenity;
@@ -10,11 +10,11 @@ namespace AccController.Ais.Entities
     using System.ComponentModel;
     using System.IO;
 
-    [ConnectionKey("Default"), DisplayName("AisGroup"), InstanceName("AisGroup"), TwoLevelCached]
-    [ReadPermission("AisGroup")]
-    [ModifyPermission("AisGroup")]
+    [ConnectionKey("Default"), DisplayName("AisUserAddOU"), InstanceName("AisUserAddOU"), TwoLevelCached]
+    [ReadPermission("Request_Ais")]
+    [ModifyPermission("Request_Ais")]
     [JsonConverter(typeof(JsonRowConverter))]
-    public sealed class GroupRow : Row, IIdRow, INameRow
+    public sealed class AisAddOURow : Row, IIdRow, INameRow
     {
         [DisplayName("Id"), Identity]
         public Int32? Id
@@ -23,43 +23,36 @@ namespace AccController.Ais.Entities
             set { Fields.Id[this] = value; }
         }
 
-        [DisplayName("Name"), Size(150), NotNull, QuickSearch]
-        public String Name
+        [DisplayName("Email"), Size(150), NotNull, QuickSearch]
+        public String Email
         {
-            get { return Fields.Name[this]; }
-            set { Fields.Name[this] = value; }
+            get { return Fields.Email[this]; }
+            set { Fields.Email[this] = value; }
         }
 
-        [DisplayName("Parent"), Size(150), NotNull]
-        public String Parent
+        [DisplayName("New Ou"), Column("NewOU"), Size(255)]
+        public String NewOu
         {
-            get { return Fields.Parent[this]; }
-            set { Fields.Parent[this] = value; }
+            get { return Fields.NewOu[this]; }
+            set { Fields.NewOu[this] = value; }
         }
 
-        [DisplayName("Category"), Size(150)]
-        public String Category
+        [DisplayName("New Jobtitle"), Size(150)]
+        public String NewJobtitle
         {
-            get { return Fields.Category[this]; }
-            set { Fields.Category[this] = value; }
+            get { return Fields.NewJobtitle[this]; }
+            set { Fields.NewJobtitle[this] = value; }
         }
 
-        [DisplayName("Shortname"), Size(50), NotNull]
-        public String Shortname
+        [DisplayName("New Role"), Size(150)]
+        public String NewRole
         {
-            get { return Fields.Shortname[this]; }
-            set { Fields.Shortname[this] = value; }
-        }
-
-        [DisplayName("Relate"), Size(150)]
-        public String Relate
-        {
-            get { return Fields.Relate[this]; }
-            set { Fields.Relate[this] = value; }
+            get { return Fields.NewRole[this]; }
+            set { Fields.NewRole[this] = value; }
         }
 
         [DisplayName("Priority"), NotNull]
-        public Int16? Priority
+        public Int32? Priority
         {
             get { return Fields.Priority[this]; }
             set { Fields.Priority[this] = value; }
@@ -100,6 +93,20 @@ namespace AccController.Ais.Entities
             set { Fields.Description[this] = value; }
         }
 
+        [DisplayName("By User"), Column("By_User"), Size(100)]
+        public String ByUser
+        {
+            get { return Fields.ByUser[this]; }
+            set { Fields.ByUser[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(10)]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
+        }
+
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -107,12 +114,12 @@ namespace AccController.Ais.Entities
 
         StringField INameRow.NameField
         {
-            get { return Fields.Name; }
+            get { return Fields.Email; }
         }
 
         public static readonly RowFields Fields = new RowFields().Init();
 
-        public GroupRow()
+        public AisAddOURow()
             : base(Fields)
         {
         }
@@ -120,22 +127,23 @@ namespace AccController.Ais.Entities
         public class RowFields : RowFieldsBase
         {
             public readonly Int32Field Id;
-            public readonly StringField Name;
-            public readonly StringField Parent;
-            public readonly StringField Category;
-            public readonly StringField Shortname;
-            public readonly StringField Relate;
-            public readonly Int16Field Priority;
+            public readonly StringField Email;
+            public readonly StringField NewOu;
+            public readonly StringField NewJobtitle;
+            public readonly StringField NewRole;
+            public readonly Int32Field Priority;
             public readonly Int16Field Status;
             public readonly Int16Field Result;
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
+            public readonly StringField ByUser;
+            public readonly StringField Submit;
 
             public RowFields()
-                : base("[Acc].AisGroup")
+                : base("[Acc].AisUserAddOU")
             {
-                LocalTextPrefix = "Ais.Group";
+                LocalTextPrefix = "Request_Ais.AisAddOU";
             }
         }
     }

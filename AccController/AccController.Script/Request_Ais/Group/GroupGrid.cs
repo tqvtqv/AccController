@@ -54,5 +54,12 @@ namespace AccController.Request_Ais
             req.EqualityFilter["Submit"] = "1";
             return true;
         }
+
+        protected override List<ToolButton> GetButtons()
+        {
+            var buttons = base.GetButtons();
+            buttons.RemoveAt(0);
+            return buttons;
+        }
     }
 }

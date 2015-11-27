@@ -72,6 +72,20 @@ namespace AccController.Email.Entities
             set { Fields.Description[this] = value; }
         }
 
+        [DisplayName("By_User"), Size(50), NotNull]
+        public String By_User
+        {
+            get { return Fields.By_User[this]; }
+            set { Fields.By_User[this] = value; }
+        }
+
+        [DisplayName("Submit"), Size(50), NotNull]
+        public String Submit
+        {
+            get { return Fields.Submit[this]; }
+            set { Fields.Submit[this] = value; }
+        }
+
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -99,7 +113,8 @@ namespace AccController.Email.Entities
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
-
+            public readonly StringField By_User;
+            public readonly StringField Submit;
             public RowFields()
                 : base("[Acc].EmailChange")
             {
