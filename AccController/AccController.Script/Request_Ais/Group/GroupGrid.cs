@@ -6,6 +6,7 @@ namespace AccController.Request_Ais
     using Serenity;
     using System;
     using System.Collections.Generic;
+    using System.Html;
     using System.Runtime.CompilerServices;
 
     [ColumnsKey("Request_Ais.Group"), IdProperty(GroupRow.IdProperty), NameProperty(GroupRow.NameProperty)]
@@ -93,18 +94,12 @@ namespace AccController.Request_Ais
             buttons.RemoveAt(0);
             buttons.Add(new ToolButton
             {
-                
-            Title = "Delete",
+
+                Title = "Download",
                 CssClass = "delete-button",
                 OnClick = delegate
                 {
-                    var req = new ListRequest();
-                    req.EqualityFilter = new JsDictionary<string, object>();
-                    req.EqualityFilter.Add("By_User", "1");
-                    
-                    Q.ServiceRequest<ServiceResponse>(Q.ResolveUrl("~/Request_Ais/Group/GetFile"), req,
-                        (response) => {
-                    });
+                    Window.Open(Q.ResolveUrl("~/Request_Ais/Group/GetRequestFile?status=1"), "_blank");
                 }
             });
             return buttons;

@@ -985,6 +985,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Request_Ais.GroupGrid
 	var $AccController_Request_Ais_GroupGrid = function(container) {
+		this.$resultUploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Request_Ais_GroupGrid.__typeName = 'AccController.Request_Ais.GroupGrid';
@@ -2388,11 +2389,10 @@
 						var item1 = selectedID[$t2];
 						var request1 = {};
 						request1.Entity = this.get_view().getItemById(item1);
-						Q.serviceRequest('Email/EmailChange/updateSubmit', request1, function(s) {
-							//Q.NotifyInfo("ok");
-						}, null);
+						Q.serviceRequest('Email/EmailChange/updateSubmit', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
 					}
-					this.refresh();
 				}
 			}) });
 			return buttons;
@@ -2543,11 +2543,10 @@
 						var item1 = selectedID[$t2];
 						var request1 = {};
 						request1.Entity = this.get_view().getItemById(item1);
-						Q.serviceRequest('Email/EmailGroupAccount/updateSubmit', request1, function(s) {
-							//Q.NotifyInfo("ok");
-						}, null);
+						Q.serviceRequest('Email/EmailGroupAccount/updateSubmit', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
 					}
-					this.refresh();
 				}
 			}) });
 			return buttons;
@@ -2809,11 +2808,10 @@
 						var item1 = selectedID[$t2];
 						var request1 = {};
 						request1.Entity = this.get_view().getItemById(item1);
-						Q.serviceRequest('Email/EmailNew/updateSubmit', request1, function(s) {
-							//Q.NotifyInfo("ok");
-						}, null);
+						Q.serviceRequest('Email/EmailNew/updateSubmit', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
 					}
-					this.refresh();
 				}
 			}) });
 			return buttons;
@@ -2963,11 +2961,10 @@
 						var item1 = selectedID[$t2];
 						var request1 = {};
 						request1.Entity = this.get_view().getItemById(item1);
-						Q.serviceRequest('Email/EmailUpdateInfo/updateSubmit', request1, function(s) {
-							//Q.NotifyInfo("ok");
-						}, null);
+						Q.serviceRequest('Email/EmailUpdateInfo/updateSubmit', request1, ss.mkdel(this, function(s) {
+							this.refresh();
+						}), null);
 					}
-					this.refresh();
 				}
 			}) });
 			return buttons;
@@ -3381,9 +3378,46 @@
 			req.EqualityFilter['Submit'] = '1';
 			return true;
 		},
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$resultUploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserRequest');
+				});
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
+				}));
+			}));
+		},
 		getButtons: function() {
 			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
 			ss.removeAt(buttons, 0);
+			buttons.push({
+				title: 'Download',
+				cssClass: 'delete-button',
+				onClick: function() {
+					window.open(Q.resolveUrl('~/Request_Ais/Group/GetRequestFile?status=1'), '_blank');
+				}
+			});
 			return buttons;
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
