@@ -30,8 +30,8 @@ namespace AccController.Request_Ais.Pages
             req.EqualityFilter.Add("Submit", status);
             using (var connection = SqlConnections.NewByKey("Default"))
             {
-                var stream = SpreedSheetHelper.ExportXls<MyRow>(
-                    new MyController().List(connection, req).Entities, Server.MapPath("~/Content/templates/import/ais/TaoMoiDonVi.xlsx"));
+                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/TaoMoiDonVi.xlsx"));
+                var stream = spsHelper.ExportXls<MyRow>(new MyController().List(connection, req).Entities);
                 return ExcelContentResult.Create(stream.GetBuffer());
             }
 

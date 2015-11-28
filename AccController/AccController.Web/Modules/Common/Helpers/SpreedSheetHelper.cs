@@ -32,7 +32,7 @@ namespace AccController.Modules.Common.Helpers
             HasError = false;
             cultureInfo = new CultureInfo("vi");
             cultureInfo.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy";
-            
+
 
         }
         //public SpreedSheetHelper(DbContext ctx, string templatePath)
@@ -53,12 +53,12 @@ namespace AccController.Modules.Common.Helpers
             else
                 return null;
         }
-        public CommonWorkSheet GetTemplateSheet()
+        public CommonWorkSheet GetTemplateSheet(MemoryStream templateFile)
         {
             try
             {
                 var sheet = new CommonWorkSheet();
-                var templateWorkPart = SpreadsheetDocument.Open(OpenTemplate(), false).WorkbookPart;
+                var templateWorkPart = SpreadsheetDocument.Open(templateFile, false).WorkbookPart;
                 sheet.Sheet = templateWorkPart.WorksheetParts.First().Worksheet;
                 #region build defined names
                 sheet.DefinedNames = BuildDefinedNamesTable(templateWorkPart, 0);
@@ -103,13 +103,13 @@ namespace AccController.Modules.Common.Helpers
 
             // cell format references style format 0, font 0, border 0, fill 2 and applies the fill
             styleSheet.CellFormats.AppendChild(new CellFormat { FormatId = 0, FontId = 0, BorderId = 0, FillId = 2, ApplyFill = true });
-            
+
             styleSheet.Save();
 
             errCellStyleIndex = styleSheet.CellFormats.Count - 1;
             #endregion
 
-            FillObject(container, workbookPart, GetTemplateSheet());
+            FillObject(container, workbookPart, GetTemplateSheet(OpenTemplate()));
             return container;
         }
 
@@ -162,7 +162,7 @@ namespace AccController.Modules.Common.Helpers
             else
                 data.SheetName = sheets.FirstOrDefault().Name;
             var defNames = workbookPart.Workbook.DefinedNames;
-            var x = GetTemplateSheet();
+            var x = GetTemplateSheet(OpenTemplate());
             return data;
 
         }
@@ -754,48 +754,42 @@ namespace AccController.Modules.Common.Helpers
 
 
         #region export Xls
-        public static MemoryStream ExportXls<T>(IEnumerable<T> listObjs)
+        public MemoryStream ExportXls<T>(IEnumerable<T> listObjs)
         {
             if (listObjs != null && listObjs.Any())
             {
-                var stream = new MemoryStream();
-                using (SpreadsheetDocument workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook, true))
+                var stream = OpenTemplate();
+                var templateSheet = GetTemplateSheet(stream);
+                stream.Seek(0, SeekOrigin.Begin);
+                using (SpreadsheetDocument workbook = SpreadsheetDocument.Open(stream, true))
                 {
-                    // create the workbook
-                    var workbookPart = workbook.AddWorkbookPart();
-                    workbook.WorkbookPart.Workbook = new Workbook();     // create the worksheet
-                    workbook.WorkbookPart.Workbook.Sheets = new Sheets();
+                    var sheet = workbook.WorkbookPart.WorksheetParts.First().Worksheet;
+                    #region Fill Range cells
+                    var defRange = templateSheet.DefinedNames.FirstOrDefault(n => n.IsRange);
 
-                    var sheetPart = workbook.WorkbookPart.AddNewPart<WorksheetPart>();
-                    var sheetData = new SheetData();
-                    sheetPart.Worksheet = new Worksheet(sheetData);
+                    var startRow = Convert.ToUInt32(defRange.StartRow);
 
-                    Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<Sheets>();
-                    string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
-
-                    uint sheetId = 1;
-                    if (sheets.Elements<Sheet>().Count() > 0)
-                    {
-                        sheetId =
-                            sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1; 
-                    }
-
-                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = string.Format("DanhSach{0}", typeof(T).Name) };
-                    sheets.Append(sheet);
-
-
+                    SheetData sheetData = sheet.GetFirstChild<SheetData>();
+                    sheetData.Elements<Row>().FirstOrDefault(r => r.RowIndex == startRow).Remove();
+                    //Row lastRow = sheetData.Elements<Row>().LastOrDefault();
                     foreach (var item in listObjs)
                     {
-                        Row newRow = new Row();
-
-                        Cell cell = new Cell();
-                        cell.DataType = CellValues.String;
-                        //cell.CellValue = new CellValue(item.SoDienThoai); //
-                        newRow.AppendChild(cell);
-
+                        //startRow++;
+                        Row newRow = new Row ();
+                        foreach (var col in defRange.Columns)
+                        {
+                            PropertyInfo propInfo = item.GetType().GetProperty(col.Parameter.Field);
+                            Cell cell = new Cell();
+                            cell.DataType = CellValues.String;
+                            var value = propInfo.GetValue(item, null);
+                            cell.CellValue = new CellValue((value != null) ? value.ToString() : string.Empty); //
+                            newRow.AppendChild(cell);
+                        }
                         sheetData.AppendChild(newRow);
                     }
+                    #endregion
 
+                    workbook.WorkbookPart.Workbook.Save();
                 }
                 stream.Seek(0, SeekOrigin.Begin);
                 return stream;
@@ -804,55 +798,6 @@ namespace AccController.Modules.Common.Helpers
                 return null;
         }
 
-        public static MemoryStream ExportXls<T>(IEnumerable<T> listObjs, string template)
-        {
-            if (listObjs != null && listObjs.Any())
-            {
-                var stream = new MemoryStream();
-                using (SpreadsheetDocument workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook, true))
-                {
-                    // create the workbook
-                    var workbookPart = workbook.AddWorkbookPart();
-                    workbook.WorkbookPart.Workbook = new Workbook();     // create the worksheet
-                    workbook.WorkbookPart.Workbook.Sheets = new Sheets();
-
-                    var sheetPart = workbook.WorkbookPart.AddNewPart<WorksheetPart>();
-                    var sheetData = new SheetData();
-                    sheetPart.Worksheet = new Worksheet(sheetData);
-
-                    Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<Sheets>();
-                    string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
-
-                    uint sheetId = 1;
-                    if (sheets.Elements<Sheet>().Count() > 0)
-                    {
-                        sheetId =
-                            sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1;
-                    }
-
-                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = string.Format("DanhSach{0}", typeof(T).Name) };
-                    sheets.Append(sheet);
-
-
-                    foreach (var item in listObjs)
-                    {
-                        Row newRow = new Row();
-
-                        Cell cell = new Cell();
-                        cell.DataType = CellValues.String;
-                        //cell.CellValue = new CellValue(item.SoDienThoai); //
-                        newRow.AppendChild(cell);
-
-                        sheetData.AppendChild(newRow);
-                    }
-
-                }
-                stream.Seek(0, SeekOrigin.Begin);
-                return stream;
-            }
-            else
-                return null;
-        }
         #endregion
     }
     public class CommonWorkSheet : ICommonSheet

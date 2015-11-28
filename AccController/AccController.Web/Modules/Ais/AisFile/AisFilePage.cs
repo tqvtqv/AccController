@@ -45,7 +45,7 @@ namespace AccController.Ais.Pages
             try
             {
                 ListContainer<GroupRow> list = new ListContainer<GroupRow>();
-                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/TaoMoiDonVi.xlsx"));
+                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/Ta oMoiDonVi.xlsx"));
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
