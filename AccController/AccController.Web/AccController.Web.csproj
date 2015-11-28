@@ -580,15 +580,24 @@
     <Content Include="fonts\Simple-Line-Icons.woff" />
     <Content Include="fonts\Simple-Line-Icons.ttf" />
     <Content Include="fonts\Simple-Line-Icons.eot" />
-    <Content Include="Content\templates\result\ais\CapNhatPhongBanUser.xlsx" />
-    <Content Include="Content\templates\result\ais\CapNhatTTUser.xlsx" />
-    <Content Include="Content\templates\result\ais\TaoMoiDonVi.xlsx" />
-    <Content Include="Content\templates\result\ais\TaoMoiNguoiDung.xlsx" />
-    <Content Include="Content\templates\result\ais\ThemDonViUser.xlsx" />
-    <Content Include="Content\templates\result\email\CapNhatTT.xlsx" />
-    <Content Include="Content\templates\result\email\DoiTenTK.xlsx" />
-    <Content Include="Content\templates\result\email\TaoMoi.xlsx" />
-    <Content Include="Content\templates\result\email\TaoNhom.xls" />
+    <Content Include="Content\templates\export\result\ais\CapNhatPhongBanUser.xlsx" />
+    <Content Include="Content\templates\export\result\ais\CapNhatTTUser.xlsx" />
+    <Content Include="Content\templates\export\result\ais\TaoMoiDonVi.xlsx" />
+    <Content Include="Content\templates\export\result\ais\TaoMoiNguoiDung.xlsx" />
+    <Content Include="Content\templates\export\result\ais\ThemDonViUser.xlsx" />
+    <Content Include="Content\templates\export\result\email\CapNhatTT.xlsx" />
+    <Content Include="Content\templates\export\result\email\DoiTenTK.xlsx" />
+    <Content Include="Content\templates\export\result\email\TaoMoi.xlsx" />
+    <Content Include="Content\templates\export\result\email\TaoNhom.xls" />
+    <Content Include="Content\templates\import\result\ais\CapNhatPhongBanUser.xlsx" />
+    <Content Include="Content\templates\import\result\ais\CapNhatTTUser.xlsx" />
+    <Content Include="Content\templates\import\result\ais\TaoMoiDonVi.xlsx" />
+    <Content Include="Content\templates\import\result\ais\TaoMoiNguoiDung.xlsx" />
+    <Content Include="Content\templates\import\result\ais\ThemDonViUser.xlsx" />
+    <Content Include="Content\templates\import\result\email\CapNhatTT.xlsx" />
+    <Content Include="Content\templates\import\result\email\DoiTenTK.xlsx" />
+    <Content Include="Content\templates\import\result\email\TaoMoi.xlsx" />
+    <Content Include="Content\templates\import\result\email\TaoNhom.xls" />
     <None Include="Properties\PublishProfiles\AccController.pubxml" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jlayout.border.js" />
@@ -1061,7 +1070,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\templates\export\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
