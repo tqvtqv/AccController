@@ -94,9 +94,8 @@ namespace AccController.Request_Ais
             buttons.RemoveAt(0);
             buttons.Add(new ToolButton
             {
-
                 Title = "Download",
-                CssClass = "import-button",
+                CssClass = "export-xlsx-button",
                 OnClick = delegate
                 {
                     Window.Open(Q.ResolveUrl("~/Request_Ais/Group/GetRequestFile?status=1"), "_blank");

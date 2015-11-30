@@ -893,6 +893,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Request_Ais.AisAddOUGrid
 	var $AccController_Request_Ais_AisAddOUGrid = function(container) {
+		this.$resultUploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Request_Ais_AisAddOUGrid.__typeName = 'AccController.Request_Ais.AisAddOUGrid';
@@ -916,6 +917,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Request_Ais.AisUserChangeInfoGrid
 	var $AccController_Request_Ais_AisUserChangeInfoGrid = function(container) {
+		this.$resultUploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Request_Ais_AisUserChangeInfoGrid.__typeName = 'AccController.Request_Ais.AisUserChangeInfoGrid';
@@ -939,6 +941,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Request_Ais.AisUserChangeOUGrid
 	var $AccController_Request_Ais_AisUserChangeOUGrid = function(container) {
+		this.$resultUploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Request_Ais_AisUserChangeOUGrid.__typeName = 'AccController.Request_Ais.AisUserChangeOUGrid';
@@ -962,6 +965,7 @@
 	////////////////////////////////////////////////////////////////////////////////
 	// AccController.Request_Ais.AisUserGrid
 	var $AccController_Request_Ais_AisUserGrid = function(container) {
+		this.$resultUploader = null;
 		ss.makeGenericType(Serenity.EntityGrid$1, [Object]).call(this, container);
 	};
 	$AccController_Request_Ais_AisUserGrid.__typeName = 'AccController.Request_Ais.AisUserGrid';
@@ -3095,9 +3099,47 @@
 			req.EqualityFilter['Submit'] = '1';
 			return true;
 		},
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$resultUploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Request_Ais/AisAddOU/GetResultFromFile');
+				});
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
+				}));
+			}));
+		},
 		getButtons: function() {
 			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
 			ss.removeAt(buttons, 0);
+			ss.removeAt(buttons, 0);
+			buttons.push({
+				title: 'Download',
+				cssClass: 'export-xlsx-button',
+				onClick: function() {
+					window.open(Q.resolveUrl('~/Request_Ais/AisAddOU/GetRequestFile?status=1'), '_blank');
+				}
+			});
 			return buttons;
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
@@ -3159,9 +3201,47 @@
 			req.EqualityFilter['Submit'] = '1';
 			return true;
 		},
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$resultUploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Request_Ais/AisUserChangeInfo/GetResultFromFile');
+				});
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
+				}));
+			}));
+		},
 		getButtons: function() {
 			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
 			ss.removeAt(buttons, 0);
+			ss.removeAt(buttons, 0);
+			buttons.push({
+				title: 'Download',
+				cssClass: 'export-xlsx-button',
+				onClick: function() {
+					window.open(Q.resolveUrl('~/Request_Ais/AisUserChangeInfo/GetRequestFile?status=1'), '_blank');
+				}
+			});
 			return buttons;
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
@@ -3229,9 +3309,47 @@
 			req.EqualityFilter['Submit'] = '1';
 			return true;
 		},
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$resultUploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Request_Ais/AisUserChangeOU/GetResultFromFile');
+				});
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
+				}));
+			}));
+		},
 		getButtons: function() {
 			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
 			ss.removeAt(buttons, 0);
+			ss.removeAt(buttons, 0);
+			buttons.push({
+				title: 'Download',
+				cssClass: 'export-xlsx-button',
+				onClick: function() {
+					window.open(Q.resolveUrl('~/Request_Ais/AisUserChangeOU/GetRequestFile?status=1'), '_blank');
+				}
+			});
 			return buttons;
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
@@ -3305,9 +3423,47 @@
 			req.EqualityFilter['Submit'] = '1';
 			return true;
 		},
+		createToolbarExtensions: function() {
+			ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.createToolbarExtensions.call(this);
+			var $t2 = ss.mkdel(this, function(e) {
+				e.appendTo(this.toolbar.get_element());
+			});
+			var $t1 = Serenity.ImageUploadEditorOptions.$ctor();
+			$t1.allowNonImage = true;
+			$t1.maxSize = 2048;
+			this.$resultUploader = Serenity.Widget.create(Serenity.ImageUploadEditor).call(null, $t2, $t1, ss.mkdel(this, function(e1) {
+				$('ul', e1.get_element()).hide();
+				$('.delete-button', e1.get_element()).hide();
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploadadd', function(ev, data) {
+					data.url = Q.resolveUrl('~/Request_Ais/AisUser/GetResultFromFile');
+				});
+				$('input:file', this.$resultUploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
+					if (!!ss.isValue(data1.Error)) {
+						//Q.
+						if (!!(data1.Error.Code === 'FileErr')) {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+						else {
+							Q.notifyError(ss.cast(data1.Error.Message, String));
+						}
+					}
+					else {
+						this.refresh();
+					}
+				}));
+			}));
+		},
 		getButtons: function() {
 			var buttons = ss.makeGenericType(Serenity.EntityGrid$2, [Object, Object]).prototype.getButtons.call(this);
 			ss.removeAt(buttons, 0);
+			ss.removeAt(buttons, 0);
+			buttons.push({
+				title: 'Download',
+				cssClass: 'export-xlsx-button',
+				onClick: function() {
+					window.open(Q.resolveUrl('~/Request_Ais/AisUser/GetRequestFile?status=1'), '_blank');
+				}
+			});
 			return buttons;
 		}
 	}, ss.makeGenericType(Serenity.EntityGrid$1, [Object]), [Serenity.IDataGrid]);
@@ -3413,7 +3569,7 @@
 			ss.removeAt(buttons, 0);
 			buttons.push({
 				title: 'Download',
-				cssClass: 'import-button',
+				cssClass: 'export-xlsx-button',
 				onClick: function() {
 					window.open(Q.resolveUrl('~/Request_Ais/Group/GetRequestFile?status=1'), '_blank');
 				}
