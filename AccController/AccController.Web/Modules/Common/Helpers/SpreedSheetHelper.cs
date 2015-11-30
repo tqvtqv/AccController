@@ -11,7 +11,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace AccController.Modules.Common.Helpers
 {
@@ -42,9 +41,9 @@ namespace AccController.Modules.Common.Helpers
         //}
         public MemoryStream OpenTemplate()
         {
-            if (File.Exists(TemplatePath))
+            if (System.IO.File.Exists(TemplatePath))
             {
-                var f = File.OpenRead(TemplatePath);
+                var f = System.IO.File.OpenRead(TemplatePath);
                 var stream = new MemoryStream();
                 f.CopyTo(stream);
                 f.Close();
@@ -135,14 +134,14 @@ namespace AccController.Modules.Common.Helpers
 
         public T GetTemplate<T>() where T : ICommonSheet, new()
         {
-            var f = File.OpenRead(TemplatePath);
+            var f = System.IO.File.OpenRead(TemplatePath);
             using (MemoryStream stream = new MemoryStream())
             {
                 f.CopyTo(stream);
 
             }
-            if (File.Exists(TemplatePath))
-                return GetSheet<T>(File.OpenRead(TemplatePath), 0);
+            if (System.IO.File.Exists(TemplatePath))
+                return GetSheet<T>(System.IO.File.OpenRead(TemplatePath), 0);
 
             return new T();
         }

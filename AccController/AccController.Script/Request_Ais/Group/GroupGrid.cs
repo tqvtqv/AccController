@@ -68,7 +68,7 @@ namespace AccController.Request_Ais
                        J("input:file", resultUploader.Element).Bind2("fileuploadadd",
                            new Action<jQueryEvent, dynamic>((ev, data) =>
                            {
-                               data.url = Q.ResolveUrl("~/Ais/AisFile/CreateUserRequest");
+                               data.url = Q.ResolveUrl("~/Request_Ais/Group/GetResultFromFile");
                            }));
                        J("input:file", resultUploader.Element).Bind2("fileuploaddone",
                            new Action<jQueryEvent, dynamic>((ev, data) =>
@@ -96,7 +96,7 @@ namespace AccController.Request_Ais
             {
 
                 Title = "Download",
-                CssClass = "delete-button",
+                //CssClass = "delete-button",
                 OnClick = delegate
                 {
                     Window.Open(Q.ResolveUrl("~/Request_Ais/Group/GetRequestFile?status=1"), "_blank");

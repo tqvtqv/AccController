@@ -3390,7 +3390,7 @@
 				$('ul', e1.get_element()).hide();
 				$('.delete-button', e1.get_element()).hide();
 				$('input:file', this.$resultUploader.get_element()).bind('fileuploadadd', function(ev, data) {
-					data.url = Q.resolveUrl('~/Ais/AisFile/CreateUserRequest');
+					data.url = Q.resolveUrl('~/Request_Ais/Group/GetResultFromFile');
 				});
 				$('input:file', this.$resultUploader.get_element()).bind('fileuploaddone', ss.mkdel(this, function(ev1, data1) {
 					if (!!ss.isValue(data1.Error)) {
@@ -3413,7 +3413,6 @@
 			ss.removeAt(buttons, 0);
 			buttons.push({
 				title: 'Download',
-				cssClass: 'delete-button',
 				onClick: function() {
 					window.open(Q.resolveUrl('~/Request_Ais/Group/GetRequestFile?status=1'), '_blank');
 				}

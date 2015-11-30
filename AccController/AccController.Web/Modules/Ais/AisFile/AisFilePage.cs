@@ -21,6 +21,7 @@ namespace AccController.Ais.Pages
     using System.Threading;
     using AccController.Administration.Repositories;
     using AccController.Administration;
+    using Modules.Common.File;
 
     [RoutePrefix("Ais/AisFile"), Route("{action=index}")]
     public class AisFileController : Controller
@@ -52,7 +53,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -102,7 +103,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -138,7 +139,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -187,7 +188,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -224,7 +225,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -273,7 +274,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -309,7 +310,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -363,7 +364,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -399,7 +400,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -448,7 +449,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -542,7 +543,7 @@ namespace AccController.Ais.Pages
             {
                 stream.WriteTo(fs);
             }
-            return new UploadResponse()
+            return new UploadResponse<AisFileRow>()
             {
                 TemporaryFile = fileRow.FilePath,
                 IsImage = false,
@@ -550,18 +551,6 @@ namespace AccController.Ais.Pages
             };
         }
 
-        private class UploadResponse : ServiceResponse
-        {
-            public string TemporaryFile { get; set; }
-            public long Size { get; set; }
-            public bool IsImage { get; set; }
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public string ContenType { get; set; }
-            public AisFileRow UploadedFile { get; set; }
-        }
-        private class ListContainer<T> {
-            public List<T> Entities { get; set; }
-        }
+        
     }
 }
