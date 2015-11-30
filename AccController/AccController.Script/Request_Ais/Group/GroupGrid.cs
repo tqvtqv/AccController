@@ -96,7 +96,7 @@ namespace AccController.Request_Ais
             {
 
                 Title = "Download",
-                //CssClass = "delete-button",
+                CssClass = "import-button",
                 OnClick = delegate
                 {
                     Window.Open(Q.ResolveUrl("~/Request_Ais/Group/GetRequestFile?status=1"), "_blank");

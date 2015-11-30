@@ -3413,6 +3413,7 @@
 			ss.removeAt(buttons, 0);
 			buttons.push({
 				title: 'Download',
+				cssClass: 'import-button',
 				onClick: function() {
 					window.open(Q.resolveUrl('~/Request_Ais/Group/GetRequestFile?status=1'), '_blank');
 				}
