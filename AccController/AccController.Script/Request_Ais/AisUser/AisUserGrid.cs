@@ -94,7 +94,6 @@ namespace AccController.Request_Ais
         {
             var buttons = base.GetButtons();
             buttons.RemoveAt(0);
-            buttons.RemoveAt(0);
             buttons.Add(new ToolButton
             {
                 Title = "Download",
