@@ -1,5 +1,5 @@
 ﻿
-namespace AccController.Email.Entities
+namespace AccController.Request_Email.Entities
 {
     using Newtonsoft.Json;
     using Serenity;
@@ -10,11 +10,11 @@ namespace AccController.Email.Entities
     using System.ComponentModel;
     using System.IO;
 
-    [ConnectionKey("Default"), DisplayName("EmailChange"), InstanceName("EmailChange"), TwoLevelCached]
-    [ReadPermission("Email")]
-    [ModifyPermission("Email")]
+    [ConnectionKey("Default"), DisplayName("EmailGroupAccounts"), InstanceName("EmailGroupAccounts"), TwoLevelCached]
+    [ReadPermission("Request_GroupAccount")]
+    [ModifyPermission("Request_GroupAccount")]
     [JsonConverter(typeof(JsonRowConverter))]
-    public sealed class EmailChangeRow : Row, IIdRow, INameRow
+    public sealed class EmailGroupAccountRow : Row, IIdRow, INameRow
     {
         [DisplayName("Id"), Identity]
         public Int32? Id
@@ -23,18 +23,11 @@ namespace AccController.Email.Entities
             set { Fields.Id[this] = value; }
         }
 
-        [DisplayName("Old Name"), Size(50), NotNull, QuickSearch]
-        public String OldName
+        [DisplayName("Account"), Size(50), NotNull, QuickSearch]
+        public String Account
         {
-            get { return Fields.OldName[this]; }
-            set { Fields.OldName[this] = value; }
-        }
-
-        [DisplayName("New Name"), Size(50), NotNull]
-        public String NewName
-        {
-            get { return Fields.NewName[this]; }
-            set { Fields.NewName[this] = value; }
+            get { return Fields.Account[this]; }
+            set { Fields.Account[this] = value; }
         }
 
         [DisplayName("Status"), NotNull]
@@ -44,7 +37,7 @@ namespace AccController.Email.Entities
             set { Fields.Status[this] = value; }
         }
 
-        [DisplayName("Result")]
+        [DisplayName("Result"), NotNull]
         public Int16? Result
         {
             get { return Fields.Result[this]; }
@@ -72,23 +65,32 @@ namespace AccController.Email.Entities
             set { Fields.Description[this] = value; }
         }
 
-        [DisplayName("By_User"), Size(50), NotNull]
-        public String By_User
+        [DisplayName("Alias"), Size(100), NotNull]
+        public String Alias
         {
-            get { return Fields.By_User[this]; }
-            set { Fields.By_User[this] = value; }
+            get { return Fields.Alias[this]; }
+            set { Fields.Alias[this] = value; }
         }
-        [DisplayName("By_SubAdmin"), Size(50), NotNull]
-        public Int32? By_SubAdmin
+
+        [DisplayName("By User"), Column("By_User"), Size(100), NotNull]
+        public String ByUser
         {
-            get { return Fields.By_SubAdmin[this]; }
-            set { Fields.By_SubAdmin[this] = value; }
+            get { return Fields.ByUser[this]; }
+            set { Fields.ByUser[this] = value; }
         }
-        [DisplayName("Submit"), Size(50), NotNull]
+
+        [DisplayName("Submit"), Size(10)]
         public String Submit
         {
             get { return Fields.Submit[this]; }
             set { Fields.Submit[this] = value; }
+        }
+
+        [DisplayName("By Sub Admin"), Column("By_SubAdmin")]
+        public Int32? BySubAdmin
+        {
+            get { return Fields.BySubAdmin[this]; }
+            set { Fields.BySubAdmin[this] = value; }
         }
 
         IIdField IIdRow.IdField
@@ -98,12 +100,12 @@ namespace AccController.Email.Entities
 
         StringField INameRow.NameField
         {
-            get { return Fields.OldName; }
+            get { return Fields.Account; }
         }
 
         public static readonly RowFields Fields = new RowFields().Init();
 
-        public EmailChangeRow()
+        public EmailGroupAccountRow()
             : base(Fields)
         {
         }
@@ -111,20 +113,21 @@ namespace AccController.Email.Entities
         public class RowFields : RowFieldsBase
         {
             public readonly Int32Field Id;
-            public readonly StringField OldName;
-            public readonly StringField NewName;
+            public readonly StringField Account;
             public readonly Int16Field Status;
             public readonly Int16Field Result;
             public readonly DateTimeField LastUpdated;
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
-            public readonly StringField By_User;
+            public readonly StringField Alias;
+            public readonly StringField ByUser;
             public readonly StringField Submit;
-            public readonly Int32Field By_SubAdmin;
+            public readonly Int32Field BySubAdmin;
+
             public RowFields()
-                : base("[Acc].EmailChange")
+                : base("[Acc].EmailGroupAccounts")
             {
-                LocalTextPrefix = "Email.EmailChange";
+                LocalTextPrefix = "Request_Email.EmailGroupAccount";
             }
         }
     }

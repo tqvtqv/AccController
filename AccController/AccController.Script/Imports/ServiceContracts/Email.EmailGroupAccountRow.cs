@@ -35,6 +35,7 @@ namespace AccController.Email
         public String GroupDescription { get; set; }
         public String By_User { get; set; }
         public String Submit { get; set; }
+        public Int32? By_SubAdmin { get; set; }
     
         [Imported, PreserveMemberCase]
         public static class Fields
@@ -57,6 +58,7 @@ namespace AccController.Email
             [InlineConstant] public const string GroupDescription = "GroupDescription";
             [InlineConstant] public const string By_User = "By_User";
             [InlineConstant] public const string Submit = "Submit";
+            [InlineConstant] public const string By_SubAdmin = "By_SubAdmin";
         }
     }
     

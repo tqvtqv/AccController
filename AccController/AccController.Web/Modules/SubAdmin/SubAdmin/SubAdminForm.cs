@@ -1,5 +1,5 @@
 ﻿
-namespace AccController.Ais.Forms
+namespace AccController.SubAdmin.Forms
 {
     using Serenity;
     using Serenity.ComponentModel;
@@ -9,9 +9,9 @@ namespace AccController.Ais.Forms
     using System.Collections.Generic;
     using System.IO;
 
-    [FormScript("Ais.Testt")]
-    [BasedOnRow(typeof(Entities.TesttRow))]
-    public class TesttForm
+    [FormScript("SubAdmin.SubAdmin")]
+    [BasedOnRow(typeof(Entities.SubAdminRow))]
+    public class SubAdminForm
     {
         public String Name { get; set; }
     }

@@ -1,5 +1,5 @@
 ﻿
-namespace AccController.Ais.Columns
+namespace AccController.SubAdmin.Columns
 {
     using Serenity;
     using Serenity.ComponentModel;
@@ -9,12 +9,12 @@ namespace AccController.Ais.Columns
     using System.Collections.Generic;
     using System.IO;
 
-    [ColumnsScript("Ais.Testt")]
-    [BasedOnRow(typeof(Entities.TesttRow))]
-    public class TesttColumns
+    [ColumnsScript("SubAdmin.SubAdmin")]
+    [BasedOnRow(typeof(Entities.SubAdminRow))]
+    public class SubAdminColumns
     {
         [EditLink, DisplayName("Db.Shared.RecordId"), AlignRight]
-        public Int32 Id { get; set; }
+        public Int32 AdminLv { get; set; }
         [EditLink]
         public String Name { get; set; }
     }

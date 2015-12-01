@@ -1,5 +1,4 @@
-
-
+﻿
 namespace AccController.Ais
 {
     using Serenity;
@@ -10,13 +9,13 @@ namespace AccController.Ais
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
-    public partial class TesttForm : PrefixedContext
+    public partial class SubAdminForm : PrefixedContext
     {
-        [InlineConstant] public const string FormKey = "Ais.Testt";
-    
-        public TesttForm(string idPrefix) : base(idPrefix) {}
-    
+        [InlineConstant] public const string FormKey = "Ais.SubAdmin";
+
+        public SubAdminForm(string idPrefix) : base(idPrefix) {}
+
+
         public StringEditor Name { get { return ById<StringEditor>("Name"); } }
     }
 }
-

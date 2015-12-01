@@ -1,17 +1,17 @@
 ﻿
-namespace AccController.Ais.Endpoints
+namespace AccController.Request_Email.Endpoints
 {
     using Serenity;
     using Serenity.Data;
     using Serenity.Services;
     using System.Data;
     using System.Web.Mvc;
-    using MyRepository = Repositories.TesttRepository;
-    using MyRow = Entities.TesttRow;
+    using MyRepository = Repositories.EmailChangeRepository;
+    using MyRow = Entities.EmailChangeRow;
 
-    [RoutePrefix("Services/Ais/Testt"), Route("{action}")]
-    [ConnectionKey("Default"), ServiceAuthorize("Administration")]
-    public class TesttController : ServiceEndpoint
+    [RoutePrefix("Services/Request_Email/EmailChange"), Route("{action}")]
+    [ConnectionKey("Default"), ServiceAuthorize("Request_Email")]
+    public class EmailChangeController : ServiceEndpoint
     {
         [HttpPost]
         public SaveResponse Create(IUnitOfWork uow, SaveRequest<MyRow> request)

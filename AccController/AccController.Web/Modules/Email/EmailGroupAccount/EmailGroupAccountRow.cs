@@ -23,8 +23,9 @@ namespace AccController.Email.Entities
             set { Fields.Id[this] = value; }
         }
 
-        [DisplayName("Alias"), NotNull, ForeignKey("[Acc].EmailGroup", "Id"), LeftJoin("jGroup")]
+        //[DisplayName("Alias"), NotNull, ForeignKey("[Acc].EmailGroup", "Id"), LeftJoin("jGroup")]
         //[LookupEditor("Email.EmailGroup")]
+        [DisplayName("Alias"), NotNull]
         public String Alias
         {
             get { return Fields.Alias[this]; }
@@ -73,61 +74,61 @@ namespace AccController.Email.Entities
             set { Fields.Description[this] = value; }
         }
 
-        [DisplayName("Group Alias"), Expression("jGroup.Alias")]
-        public String GroupAlias
-        {
-            get { return Fields.GroupAlias[this]; }
-            set { Fields.GroupAlias[this] = value; }
-        }
+        //[DisplayName("Group Alias"), Expression("jGroup.Alias")]
+        //public String GroupAlias
+        //{
+        //    get { return Fields.GroupAlias[this]; }
+        //    set { Fields.GroupAlias[this] = value; }
+        //}
 
-        [DisplayName("Group Displayname"), Expression("jGroup.Displayname")]
-        public String GroupDisplayname
-        {
-            get { return Fields.GroupDisplayname[this]; }
-            set { Fields.GroupDisplayname[this] = value; }
-        }
+        //[DisplayName("Group Displayname"), Expression("jGroup.Displayname")]
+        //public String GroupDisplayname
+        //{
+        //    get { return Fields.GroupDisplayname[this]; }
+        //    set { Fields.GroupDisplayname[this] = value; }
+        //}
 
-        [DisplayName("Group Ou"), Expression("jGroup.OU")]
-        public String GroupOu
-        {
-            get { return Fields.GroupOu[this]; }
-            set { Fields.GroupOu[this] = value; }
-        }
+        //[DisplayName("Group Ou"), Expression("jGroup.OU")]
+        //public String GroupOu
+        //{
+        //    get { return Fields.GroupOu[this]; }
+        //    set { Fields.GroupOu[this] = value; }
+        //}
 
-        [DisplayName("Group Status"), Expression("jGroup.Status")]
-        public Int16? GroupStatus
-        {
-            get { return Fields.GroupStatus[this]; }
-            set { Fields.GroupStatus[this] = value; }
-        }
+        //[DisplayName("Group Status"), Expression("jGroup.Status")]
+        //public Int16? GroupStatus
+        //{
+        //    get { return Fields.GroupStatus[this]; }
+        //    set { Fields.GroupStatus[this] = value; }
+        //}
 
-        [DisplayName("Group Result"), Expression("jGroup.Result")]
-        public Int16? GroupResult
-        {
-            get { return Fields.GroupResult[this]; }
-            set { Fields.GroupResult[this] = value; }
-        }
+        //[DisplayName("Group Result"), Expression("jGroup.Result")]
+        //public Int16? GroupResult
+        //{
+        //    get { return Fields.GroupResult[this]; }
+        //    set { Fields.GroupResult[this] = value; }
+        //}
 
-        [DisplayName("Group Last Updated"), Expression("jGroup.LastUpdated")]
-        public DateTime? GroupLastUpdated
-        {
-            get { return Fields.GroupLastUpdated[this]; }
-            set { Fields.GroupLastUpdated[this] = value; }
-        }
+        //[DisplayName("Group Last Updated"), Expression("jGroup.LastUpdated")]
+        //public DateTime? GroupLastUpdated
+        //{
+        //    get { return Fields.GroupLastUpdated[this]; }
+        //    set { Fields.GroupLastUpdated[this] = value; }
+        //}
 
-        [DisplayName("Group Last Updatedby"), Expression("jGroup.LastUpdatedby")]
-        public String GroupLastUpdatedby
-        {
-            get { return Fields.GroupLastUpdatedby[this]; }
-            set { Fields.GroupLastUpdatedby[this] = value; }
-        }
+        //[DisplayName("Group Last Updatedby"), Expression("jGroup.LastUpdatedby")]
+        //public String GroupLastUpdatedby
+        //{
+        //    get { return Fields.GroupLastUpdatedby[this]; }
+        //    set { Fields.GroupLastUpdatedby[this] = value; }
+        //}
 
-        [DisplayName("Group Description"), Expression("jGroup.Description")]
-        public String GroupDescription
-        {
-            get { return Fields.GroupDescription[this]; }
-            set { Fields.GroupDescription[this] = value; }
-        }
+        //[DisplayName("Group Description"), Expression("jGroup.Description")]
+        //public String GroupDescription
+        //{
+        //    get { return Fields.GroupDescription[this]; }
+        //    set { Fields.GroupDescription[this] = value; }
+        //}
 
         [DisplayName("By_User"), Size(50), NotNull]
         public String By_User
@@ -142,7 +143,12 @@ namespace AccController.Email.Entities
             get { return Fields.Submit[this]; }
             set { Fields.Submit[this] = value; }
         }
-
+        [DisplayName("By_SubAdmin"), Size(50), NotNull]
+        public Int32? By_SubAdmin
+        {
+            get { return Fields.By_SubAdmin[this]; }
+            set { Fields.By_SubAdmin[this] = value; }
+        }
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -171,16 +177,18 @@ namespace AccController.Email.Entities
             public readonly StringField LastUpdatedby;
             public readonly StringField Description;
 
-            public readonly StringField GroupAlias;
-            public readonly StringField GroupDisplayname;
-            public readonly StringField GroupOu;
-            public readonly Int16Field GroupStatus;
-            public readonly Int16Field GroupResult;
-            public readonly DateTimeField GroupLastUpdated;
-            public readonly StringField GroupLastUpdatedby;
-            public readonly StringField GroupDescription;
+            //public readonly StringField GroupAlias;
+            //public readonly StringField GroupDisplayname;
+            //public readonly StringField GroupOu;
+            //public readonly Int16Field GroupStatus;
+            //public readonly Int16Field GroupResult;
+            //public readonly DateTimeField GroupLastUpdated;
+            //public readonly StringField GroupLastUpdatedby;
+            //public readonly StringField GroupDescription;
+
             public readonly StringField By_User;
             public readonly StringField Submit;
+            public readonly Int32Field By_SubAdmin;
             public RowFields()
                 : base("[Acc].EmailGroupAccounts")
             {

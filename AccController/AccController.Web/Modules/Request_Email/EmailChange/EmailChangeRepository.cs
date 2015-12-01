@@ -1,15 +1,15 @@
 ﻿
 
-namespace AccController.Ais.Repositories
+namespace AccController.Request_Email.Repositories
 {
     using Serenity;
     using Serenity.Data;
     using Serenity.Services;
     using System;
     using System.Data;
-    using MyRow = Entities.TesttRow;
+    using MyRow = Entities.EmailChangeRow;
 
-    public class TesttRepository
+    public class EmailChangeRepository
     {
         private static MyRow.RowFields fld { get { return MyRow.Fields; } }
 

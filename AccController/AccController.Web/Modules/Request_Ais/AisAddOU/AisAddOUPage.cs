@@ -1,6 +1,6 @@
 ﻿
 
-[assembly:Serenity.Navigation.NavigationLink(int.MaxValue, "Request_Ais/AisAddOU", typeof(AccController.Request_Ais.Pages.AisAddOUController))]
+//[assembly:Serenity.Navigation.NavigationLink(int.MaxValue, "Request_Ais/AisAddOU", typeof(AccController.Request_Ais.Pages.AisAddOUController))]
 
 namespace AccController.Request_Ais.Pages
 {

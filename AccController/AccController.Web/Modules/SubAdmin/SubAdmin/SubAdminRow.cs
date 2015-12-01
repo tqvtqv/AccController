@@ -1,5 +1,5 @@
 ﻿
-namespace AccController.Ais.Entities
+namespace AccController.SubAdmin.Entities
 {
     using Newtonsoft.Json;
     using Serenity;
@@ -10,17 +10,18 @@ namespace AccController.Ais.Entities
     using System.ComponentModel;
     using System.IO;
 
-    [ConnectionKey("Default"), DisplayName("testt"), InstanceName("testt"), TwoLevelCached]
-    [ReadPermission("Administration")]
-    [ModifyPermission("Administration")]
+    [ConnectionKey("Default"), DisplayName("SubAdmin"), InstanceName("SubAdmin"), TwoLevelCached]
+    [ReadPermission("SubAdministration")]
+    [ModifyPermission("SubAdministration")]
     [JsonConverter(typeof(JsonRowConverter))]
-    public sealed class TesttRow : Row, IIdRow, INameRow
+    [LookupScript("SubAdmin.SubAdmin")]
+    public sealed class SubAdminRow : Row, IIdRow, INameRow
     {
-        [DisplayName("Id"), Identity]
-        public Int32? Id
+        [DisplayName("Admin Lv"), Column("Admin_lv"), Identity]
+        public Int32? AdminLv
         {
-            get { return Fields.Id[this]; }
-            set { Fields.Id[this] = value; }
+            get { return Fields.AdminLv[this]; }
+            set { Fields.AdminLv[this] = value; }
         }
 
         [DisplayName("Name"), Size(150), NotNull, QuickSearch]
@@ -32,7 +33,7 @@ namespace AccController.Ais.Entities
 
         IIdField IIdRow.IdField
         {
-            get { return Fields.Id; }
+            get { return Fields.AdminLv; }
         }
 
         StringField INameRow.NameField
@@ -42,20 +43,20 @@ namespace AccController.Ais.Entities
 
         public static readonly RowFields Fields = new RowFields().Init();
 
-        public TesttRow()
+        public SubAdminRow()
             : base(Fields)
         {
         }
 
         public class RowFields : RowFieldsBase
         {
-            public readonly Int32Field Id;
+            public readonly Int32Field AdminLv;
             public readonly StringField Name;
 
             public RowFields()
-                : base("[dbo].testt")
+                : base("[Acc].SubAdmin")
             {
-                LocalTextPrefix = "Ais.Testt";
+                LocalTextPrefix = "SubAdmin.SubAdmin";
             }
         }
     }

@@ -35,7 +35,7 @@ namespace AccController.Administration.Endpoints
                     Entity = new MyRow
                     {
                         UserId = str.Entity.UserId,
-                        AdminLv = "1"
+                        AdminLv = 1
                         
                     }
                 });

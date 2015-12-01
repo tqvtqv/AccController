@@ -1,13 +1,13 @@
 ﻿
 @{
-    ViewBag.Title = Serenity.LocalText.Get("Db.Ais.Testt.EntityPlural");
+    ViewBag.Title = Serenity.LocalText.Get("Db.SubAdmin.SubAdmin.EntityPlural");
 }
 
 <div id="GridDiv"></div>
 
 <script type="text/javascript">
     jQuery(function () {
-        new AccController.Ais.TesttGrid($('#GridDiv'), {}).init();
+        new AccController.SubAdmin.SubAdminGrid($('#GridDiv'), {}).init();
 
         Q.initFullHeightGridPage($('#GridDiv'));
     });
