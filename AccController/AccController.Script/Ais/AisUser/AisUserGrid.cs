@@ -17,9 +17,8 @@ namespace AccController.Ais
 
         static string user_name = "";
         static int i_refresh = 1;
-        //static string admin_lv = "-1";
-        static int admin_lv = -1;
-        static string sub_admin = "";
+        static string admin_lv = "-1";
+
 
         public AisUserGrid(jQueryObject container)
             : base(container)
@@ -38,46 +37,24 @@ namespace AccController.Ais
                 Request = request.As<ServiceRequest>(),
                 OnSuccess = response =>
                 {
-
                     dynamic obj = response;
                     UserRow t = (UserRow)obj;
                     user_name = t.Username;
-
-                    if (obj.adminlv != null)
-                        admin_lv = (int)obj.adminlv;
-
-
-                    sub_admin = t.by_admin;
+                    admin_lv = obj.adminlv;
                     if (i_refresh == 1)
                     {
                         i_refresh = 0;
                         Refresh();
                     }
-
                 }
-
             });
 
-            //Q.Log(admin_lv);
             var req = (ListRequest)view.Params;
             req.EqualityFilter = req.EqualityFilter ?? new JsDictionary<string, object>();
-
-            req.EqualityFilter["By_User"] = "";
-            req.EqualityFilter["By_SubAdmin"] = "";
-
-            if (admin_lv == 1)
-            {
+            if (admin_lv == "1")
                 req.EqualityFilter["By_User"] = "";
-                //  Q.Log("if");
-            }
-            else if (admin_lv > 1)
-            {
-                req.EqualityFilter["By_SubAdmin"] = admin_lv;
-                //Q.Log("else");
-            }
             else
                 req.EqualityFilter["By_User"] = user_name;
-
             req.EqualityFilter["Submit"] = "0";
             return true;
         }
@@ -93,9 +70,6 @@ namespace AccController.Ais
         {
             var buttons = base.GetButtons();
             // var self = this;
-
-            buttons[0].Title = "New";
-
             buttons.Add(new ToolButton
             {
 
@@ -146,7 +120,7 @@ namespace AccController.Ais
                 {
                     List<string> selectedIDs = rowSelection.GetSelectedKeys();
 
-                    if (admin_lv <1)
+                    if (admin_lv != "1")
                         Q.NotifyError("Không có quyền thực hiện chức năng này!");
                     else
                     {
@@ -202,8 +176,6 @@ namespace AccController.Ais
                                    else
                                        Q.NotifyError(data.Error.Message);
                                }
-                               else if (data.result.Error != null)
-                                   Q.NotifyError(data.result.Error.Message);
                                else
                                    Refresh();
                            }));

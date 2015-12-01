@@ -15,10 +15,7 @@ namespace AccController.Administration
         private GridRowSelectionMixin rowSelection;
         static string user_name = "";
         static int i_refresh = 1;
-        //static string admin_lv = "-1";
-        static int admin_lv = -1;
-        static string sub_admin = "";
-
+        static string admin_lv = "1";
         public UserGrid(jQueryObject container)
             : base(container)
         {
@@ -31,45 +28,10 @@ namespace AccController.Administration
         protected override bool OnViewSubmit()
         {
 
-            //var request = new ServiceRequest();
 
-            //Q.ServiceCall(new ServiceCallOptions
-            //{
-            //    Url = Q.ResolveUrl("~/Administration/User/getUser"),
-
-            //    Request = request.As<ServiceRequest>(),
-            //    OnSuccess = response =>
-            //    {
-            //        dynamic obj = response;
-            //        UserRow t = (UserRow)obj;
-            //        user_name = t.Username;
-            //        admin_lv = obj.adminlv;
-            //        //Q.Log("user_name:  " + user_name + "  admin_lv:" + admin_lv);
-            //        if (i_refresh == 1)
-            //        {
-            //            i_refresh = 0;
-            //            Refresh();
-            //        }
-            //    }
-            //});
-
-
-            //var req = (ListRequest)view.Params;
-            //req.EqualityFilter = req.EqualityFilter ?? new JsDictionary<string, object>();
-            ////req.EqualityFilter["by_admin"] = user_name;
-          
-            //if (admin_lv == "1")
-
-            //    req.EqualityFilter["by_admin"] = "";
-            //else
-            //    req.EqualityFilter["by_admin"] = user_name;
-
-
-
-            //req.EqualityFilter["by_admin"] = "";
-            //return true;
 
             var request = new ServiceRequest();
+
             Q.ServiceCall(new ServiceCallOptions
             {
                 Url = Q.ResolveUrl("~/Administration/User/getUser"),
@@ -77,42 +39,33 @@ namespace AccController.Administration
                 Request = request.As<ServiceRequest>(),
                 OnSuccess = response =>
                 {
-
                     dynamic obj = response;
                     UserRow t = (UserRow)obj;
                     user_name = t.Username;
-
-                    if (obj.adminlv != null)
-                        admin_lv = (int)obj.adminlv;
-
-                    sub_admin = t.by_admin;
+                    admin_lv = obj.adminlv;
+                    //Q.Log("user_name:  " + user_name + "  admin_lv:" + admin_lv);
                     if (i_refresh == 1)
                     {
                         i_refresh = 0;
                         Refresh();
                     }
-
                 }
-
             });
 
-            //Q.Log(admin_lv);
+
             var req = (ListRequest)view.Params;
             req.EqualityFilter = req.EqualityFilter ?? new JsDictionary<string, object>();
+            //req.EqualityFilter["by_admin"] = user_name;
+          
+            if (admin_lv == "1")
+
+                req.EqualityFilter["by_admin"] = "";
+            else
+                req.EqualityFilter["by_admin"] = user_name;
+
+
 
             req.EqualityFilter["by_admin"] = "";
-            req.EqualityFilter["Username"] = "";
-
-            if (admin_lv == 1)
-                req.EqualityFilter["by_admin"] = "";
-
-            else if (admin_lv > 1)
-                req.EqualityFilter["by_admin"] = admin_lv;
-
-            else
-                req.EqualityFilter["Username"] = user_name;
-
-
             return true;
         }
 
@@ -159,7 +112,7 @@ namespace AccController.Administration
             columns.Add(new SlickColumn { Field = "DisplayName", Width = 150 });
             columns.Add(new SlickColumn { Field = "Email", Width = 250 });
             columns.Add(new SlickColumn { Field = "Source", Width = 100 });
-           // columns.Add(new SlickColumn { Field = "by_admin", Width = 100 });
+            columns.Add(new SlickColumn { Field = "by_admin", Width = 100 });
             return columns;
         }
 

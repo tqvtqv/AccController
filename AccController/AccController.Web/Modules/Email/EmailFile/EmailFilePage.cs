@@ -29,9 +29,6 @@ namespace AccController.Email.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateNewRequest()
         {
-
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -45,19 +42,6 @@ namespace AccController.Email.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -86,27 +70,21 @@ namespace AccController.Email.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
+                                var saveresponse = new EmailNewRepository().Create(uow, new SaveRequest<EmailNewRow>
                                 {
-                                    var saveresponse = new EmailNewRepository().Create(uow, new SaveRequest<EmailNewRow>
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
+                                        Entity = new FileResultRow
                                         {
-                                            Entity = new FileResultRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
-                                }
-                                catch (Exception ex)
-                                {
-                                    excep = 1;
-                                }
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
+                                
                             }
                         }
                         return saveFileResponse;
@@ -114,17 +92,9 @@ namespace AccController.Email.Pages
 
 
                 }
-
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
                 ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error =  new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
                 return response;
             }
             catch (Exception ex)
@@ -143,8 +113,6 @@ namespace AccController.Email.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateUpdateInfoRequest()
         {
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -158,19 +126,6 @@ namespace AccController.Email.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -199,28 +154,20 @@ namespace AccController.Email.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
+                                var saveresponse = new EmailUpdateInfoRepository().Create(uow, new SaveRequest<EmailUpdateInfoRow>
                                 {
-                                    var saveresponse = new EmailUpdateInfoRepository().Create(uow, new SaveRequest<EmailUpdateInfoRow>
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
+                                        Entity = new FileResultRow
                                         {
-                                            Entity = new FileResultRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
-                                }
-                                catch(Exception e)
-                                {
-                                    excep = 1;
-                                }
-                               
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
                                 
                             }
                         }
@@ -232,14 +179,6 @@ namespace AccController.Email.Pages
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
                 ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
                 return response;
             }
             catch (Exception ex)
@@ -258,8 +197,6 @@ namespace AccController.Email.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateEmailChangeRequest()
         {
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -274,18 +211,6 @@ namespace AccController.Email.Pages
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
                 stream.Seek(0, SeekOrigin.Begin);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
                 EmailFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
@@ -313,28 +238,20 @@ namespace AccController.Email.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
+                                var saveresponse = new EmailChangeRepository().Create(uow, new SaveRequest<EmailChangeRow>
                                 {
-                                    var saveresponse = new EmailChangeRepository().Create(uow, new SaveRequest<EmailChangeRow>
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new FileResultRepository().Create(uow, new SaveRequest<FileResultRow>
+                                        Entity = new FileResultRow
                                         {
-                                            Entity = new FileResultRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
-                                }
-                                catch (Exception e)
-                                {
-                                    excep = 1;
-                                }
-                                
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
                                 
                             }
                         }
@@ -346,14 +263,6 @@ namespace AccController.Email.Pages
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
                 ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
                 return response;
             }
             catch (Exception ex)

@@ -20,6 +20,6 @@ namespace AccController.Administration.Forms
         [OneWay]
         public string Source { get; set; }
           
-        public string by_admin { get; set; }
+        //public string by_admin { get; set; }
     }
 }

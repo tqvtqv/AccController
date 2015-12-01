@@ -16,7 +16,7 @@ namespace AccController.Email
     
         public EmailGroupAccountForm(string idPrefix) : base(idPrefix) {}
     
-        public StringEditor Alias { get { return ById<StringEditor>("Alias"); } }
+        public LookupEditor GroupId { get { return ById<LookupEditor>("GroupId"); } }
         public StringEditor Account { get { return ById<StringEditor>("Account"); } }
         public StringEditor Status { get { return ById<StringEditor>("Status"); } }
         public StringEditor Result { get { return ById<StringEditor>("Result"); } }

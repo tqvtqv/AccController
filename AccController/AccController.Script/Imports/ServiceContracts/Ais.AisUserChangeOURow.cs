@@ -1,5 +1,4 @@
 
-
 namespace AccController.Ais
 {
     using Serenity;
@@ -33,7 +32,6 @@ namespace AccController.Ais
         public String Submit { get; set; }
         public String OldJobtitle { get; set; }
         public String OldRole { get; set; }
-        public Int32? By_SubAdmin { get; set; }
     
         [Imported, PreserveMemberCase]
         public static class Fields
@@ -54,7 +52,6 @@ namespace AccController.Ais
             [InlineConstant] public const string Submit = "Submit";
             [InlineConstant] public const string OldJobtitle = "OldJobtitle";
             [InlineConstant] public const string OldRole = "OldRole";
-            [InlineConstant] public const string By_SubAdmin = "By_SubAdmin";
         }
     }
     

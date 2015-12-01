@@ -18,12 +18,7 @@ namespace AccController.Administration.Repositories
 
         public SaveResponse Create(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
-            UserRetrieveService user_service = new UserRetrieveService();
-
-            UserDefinition admin = (UserDefinition)user_service.ByUsername(Thread.CurrentPrincipal.Identity.Name);
-            
-            request.Entity.by_admin = admin.adminlv.ToString();
-            //request.Entity.by_admin = admin.adminlv;
+            request.Entity.by_admin = Thread.CurrentPrincipal.Identity.Name;
             return new MySaveHandler().Process(uow, request, SaveRequestType.Create);
         }
 

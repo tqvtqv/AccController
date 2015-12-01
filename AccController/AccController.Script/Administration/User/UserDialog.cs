@@ -91,29 +91,29 @@ namespace AccController.Administration
                 }
             });
 
-            //if (admin_lv == "1")
-            //    buttons.Add(new ToolButton
-            //    {
-            //        Title = "Super Admin",
-            //        CssClass = "users-button",
-            //        OnClick = delegate
-            //        {
-            //            Q.Confirm("Cấp quyền Super Admin?", () =>
-            //                {
-            //                    var request = new SaveRequest<UserRow>();
-            //                    request.Entity = this.Entity;
-            //                    UserService.updateuser(request, s =>
-            //                    {
+            if (admin_lv == "1")
+                buttons.Add(new ToolButton
+                {
+                    Title = "Super Admin",
+                    CssClass = "users-button",
+                    OnClick = delegate
+                    {
+                        Q.Confirm("Cấp quyền Super Admin?", () =>
+                            {
+                                var request = new SaveRequest<UserRow>();
+                                request.Entity = this.Entity;
+                                UserService.updateuser(request, s =>
+                                {
 
-            //                        this.ReloadById();
+                                    this.ReloadById();
 
-            //                        this.DialogClose();
-            //                        //Q.NotifyInfo("ok");
-            //                    });
-            //                });
+                                    this.DialogClose();
+                                    //Q.NotifyInfo("ok");
+                                });
+                            });
                  
-            //        }
-            //    });
+                    }
+                });
 
           
 

@@ -1,7 +1,6 @@
 
 namespace AccController.Administration.Entities
 {
-    using AccController.SubAdmin.Entities;
     using Newtonsoft.Json;
     using Serenity;
     using Serenity.ComponentModel;
@@ -79,23 +78,14 @@ namespace AccController.Administration.Entities
             set { Fields.PasswordConfirm[this] = value; }
         }
 
-        [DisplayName("By Sub Admin"), Size(50)]
-        [LookupEditor(typeof(SubAdminRow), InplaceAdd = true)]
+        [DisplayName("By Admin"), Size(50)]
         public String by_admin
         {
             get { return Fields.by_admin[this]; }
             set { Fields.by_admin[this] = value; }
         }
-
-        //[DisplayName("By Admin"), Size(50)]
-        //public String by_admin
-        //{
-        //    get { return Fields.by_admin[this]; }
-        //    set { Fields.by_admin[this] = value; }
-        //}
-
         [DisplayName("AdminLv"), Size(50)]
-        public Int16? AdminLv
+        public String AdminLv
         {
             get { return Fields.AdminLv[this]; }
             set { Fields.AdminLv[this] = value; }
@@ -129,7 +119,7 @@ namespace AccController.Administration.Entities
             public readonly StringField DisplayName;
             public readonly StringField Email;
             public readonly StringField by_admin;
-            public readonly Int16Field AdminLv;
+            public readonly StringField AdminLv;
 
             public readonly StringField Password;
             public readonly StringField PasswordConfirm;

@@ -117,13 +117,6 @@ namespace AccController.Ais.Entities
             set { Fields.Submit[this] = value; }
         }
 
-        [DisplayName("By_SubAdmin"), Size(50), NotNull]
-        public Int32? By_SubAdmin
-        {
-            get { return Fields.By_SubAdmin[this]; }
-            set { Fields.By_SubAdmin[this] = value; }
-        }
-
         IIdField IIdRow.IdField
         {
             get { return Fields.Id; }
@@ -157,7 +150,7 @@ namespace AccController.Ais.Entities
             public readonly StringField Description;
             public readonly StringField By_User;
             public readonly StringField Submit;
-            public readonly Int32Field By_SubAdmin;
+
             public RowFields()
                 : base("[Acc].AisGroup")
             {

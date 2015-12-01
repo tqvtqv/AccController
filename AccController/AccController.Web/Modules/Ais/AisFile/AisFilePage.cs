@@ -36,9 +36,6 @@ namespace AccController.Ais.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateGroupRequest()
         {
-
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -53,19 +50,6 @@ namespace AccController.Ais.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -94,8 +78,7 @@ namespace AccController.Ais.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
-                                {
+                                
                                 var saveresponse = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
                                 {
                                     Entity = item
@@ -110,11 +93,6 @@ namespace AccController.Ais.Pages
                                             ReqType = 3
                                         }
                                     });
-                                }
-                                catch (Exception ex)
-                                {
-                                    excep = 1;
-                                }
                                 
                             }
                         }
@@ -125,15 +103,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -152,9 +122,6 @@ namespace AccController.Ais.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateUserRequest()
         {
-
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -169,19 +136,6 @@ namespace AccController.Ais.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -210,8 +164,6 @@ namespace AccController.Ais.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
-                                {
                                 var saveresponse = new AisUserRepository().Create(uow, new SaveRequest<AisUserRow>
                                 {
                                     Entity = item
@@ -226,11 +178,6 @@ namespace AccController.Ais.Pages
                                             ReqType = 3
                                         }
                                     });
-                                }
-                                catch (Exception ex)
-                                {
-                                    excep = 1;
-                                }
                                 
                             }
                         }
@@ -241,15 +188,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -269,8 +208,6 @@ namespace AccController.Ais.Pages
         public ActionResult CreateUserChangeOURequest()
         {
 
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -285,19 +222,6 @@ namespace AccController.Ais.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -326,8 +250,6 @@ namespace AccController.Ais.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
-                                {
                                 var saveresponse = new AisUserChangeOURepository().Create(uow, new SaveRequest<AisUserChangeOURow>
                                 {
                                     Entity = item
@@ -342,12 +264,6 @@ namespace AccController.Ais.Pages
                                             ReqType = 3
                                         }
                                     });
-                                }
-                                catch (Exception ex)
-                                {
-                                    excep = 1;
-                                }
-                               
                                
                             }
                         }
@@ -358,15 +274,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -385,9 +293,6 @@ namespace AccController.Ais.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateUserChangeInfoRequest()
         {
-
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -402,19 +307,6 @@ namespace AccController.Ais.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -445,8 +337,6 @@ namespace AccController.Ais.Pages
                             {
                                 foreach (var item in list.Entities)
                                 {
-                                    try
-                                    {
                                     var saveresponse = new AisUserChangeInfoRepository().Create(uow, new SaveRequest<AisUserChangeInfoRow>
                                     {
                                         Entity = item
@@ -461,11 +351,7 @@ namespace AccController.Ais.Pages
                                                 ReqType = 3
                                             }
                                         });
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        excep = 1;
-                                    }
+                                    
                                 }
                             }
 
@@ -478,15 +364,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -505,9 +383,6 @@ namespace AccController.Ais.Pages
         [AcceptVerbs("POST")]
         public ActionResult CreateAddUserOURequest()
         {
-
-            var excep = 0;
-
             HttpPostedFileBase file = this.HttpContext.Request.Files[0];
             if (file == null)
                 throw new ArgumentNullException("file");
@@ -522,19 +397,6 @@ namespace AccController.Ais.Pages
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
-
-                if (list.Entities.Count == 0)
-                {
-                    return new Result<ServiceResponse>(new ServiceResponse
-                    {
-                        Error = new ServiceError()
-                        {
-                            Code = "Exception",
-                            Message = "Kiểm tra lại file"
-                        }
-                    });
-                }
-
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
@@ -563,8 +425,6 @@ namespace AccController.Ais.Pages
                         {
                             foreach (var item in list.Entities)
                             {
-                                try
-                                {
                                 var saveresponse = new AisAddOURepository().Create(uow, new SaveRequest<AisAddOURow>
                                 {
                                     Entity = item
@@ -579,11 +439,7 @@ namespace AccController.Ais.Pages
                                             ReqType = 3
                                         }
                                     });
-                                }
-                                catch (Exception ex)
-                                {
-                                    excep = 1;
-                                }
+                               
                             }
                         }
                         return saveFileResponse;
@@ -593,15 +449,7 @@ namespace AccController.Ais.Pages
                 }
                 if (!(Request.Headers["Accept"] ?? "").Contains("json"))
                     response.ContentType = "text/plain";
-                ((UploadResponse)response.Data).UploadedFile = null;
-
-                if (excep == 1)
-                    response.Data.Error = new ServiceError()
-                    {
-                        Code = "Exception",
-                        Message = "Kiểm tra lại file"
-                    };
-
+                ((UploadResponse<AisFileRow>)response.Data).UploadedFile = null;
                 return response;
             }
             catch (Exception ex)
@@ -623,30 +471,39 @@ namespace AccController.Ais.Pages
         {
             var fileRowResponse = this.InTransaction("Default", (uow) =>
             {
-                var saveFileResponse = new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
-                {
-                    Entity = new AisFileResultsRow
-                    {
-                        FileId = 1,
-                        ReqId = 1,
-                        ReqType = 0
-                    }
-                });
-                var res1 = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
-                {
-                    Entity = new GroupRow
-                    {
+                //var saveFileResponse = new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                //{
+                //    Entity = new AisFileResultsRow
+                //    {
+                //        FileId = 1,
+                //        ReqId = 1,
+                //        ReqType = 0
+                //    }
+                //});
+                //var res1 = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
+                //{
+                //    Entity = new GroupRow
+                //    {
 
-                        Name = "tanhn",
-                        Parent = "tanhn",
-                        Shortname = "tanhn",
-                        Priority = 1,
-                        Status =  1
+                //        Name = "tanhn",
+                //        Parent = "tanhn",
+                //        Shortname = "tanhn",
+                //        Priority = 1,
+                //        Status = (statusvalue?)1
+
+                //    }
+                //});
                 
+                UserPermissionListRequest request = new UserPermissionListRequest();
+                request.UserID = 1;
+                var test = new UserPermissionRepository().List(uow.Connection, request);
+                var saveFileResponse = new TesttRepository().Create(uow, new SaveRequest<TesttRow>
+                {
+                    Entity = new TesttRow
+                    {
+                        Name = "tanhn"
                     }
                 });
-
-               
 
                 return saveFileResponse;
             });
