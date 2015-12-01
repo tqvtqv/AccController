@@ -21,6 +21,7 @@ namespace AccController.Ais.Pages
     using System.Threading;
     using AccController.Administration.Repositories;
     using AccController.Administration;
+    using Modules.Common.File;
 
     [RoutePrefix("Ais/AisFile"), Route("{action=index}")]
     public class AisFileController : Controller
@@ -48,7 +49,7 @@ namespace AccController.Ais.Pages
             try
             {
                 ListContainer<GroupRow> list = new ListContainer<GroupRow>();
-                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/TaoMoiDonVi.xlsx"));
+                var spsHelper = new SpreedSheetHelper(Server.MapPath("~/Content/templates/import/ais/Ta oMoiDonVi.xlsx"));
                 var stream = new MemoryStream();
                 file.InputStream.CopyTo(stream);
                 list = spsHelper.ReadFromFile(list, stream);
@@ -68,7 +69,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -95,20 +96,20 @@ namespace AccController.Ais.Pages
                             {
                                 try
                                 {
-                                    var saveresponse = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
+                                var saveresponse = new GroupRepository().Create(uow, new SaveRequest<GroupRow>
+                                {
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        Entity = new AisFileResultsRow
                                         {
-                                            Entity = new AisFileResultsRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
                                 }
                                 catch (Exception ex)
                                 {
@@ -184,7 +185,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -211,20 +212,20 @@ namespace AccController.Ais.Pages
                             {
                                 try
                                 {
-                                    var saveresponse = new AisUserRepository().Create(uow, new SaveRequest<AisUserRow>
+                                var saveresponse = new AisUserRepository().Create(uow, new SaveRequest<AisUserRow>
+                                {
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        Entity = new AisFileResultsRow
                                         {
-                                            Entity = new AisFileResultsRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
                                 }
                                 catch (Exception ex)
                                 {
@@ -300,7 +301,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -327,26 +328,26 @@ namespace AccController.Ais.Pages
                             {
                                 try
                                 {
-                                    var saveresponse = new AisUserChangeOURepository().Create(uow, new SaveRequest<AisUserChangeOURow>
+                                var saveresponse = new AisUserChangeOURepository().Create(uow, new SaveRequest<AisUserChangeOURow>
+                                {
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        Entity = new AisFileResultsRow
                                         {
-                                            Entity = new AisFileResultsRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
                                 }
                                 catch (Exception ex)
                                 {
                                     excep = 1;
                                 }
-
+                               
                                
                             }
                         }
@@ -417,7 +418,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -446,20 +447,20 @@ namespace AccController.Ais.Pages
                                 {
                                     try
                                     {
-                                        var saveresponse = new AisUserChangeInfoRepository().Create(uow, new SaveRequest<AisUserChangeInfoRow>
+                                    var saveresponse = new AisUserChangeInfoRepository().Create(uow, new SaveRequest<AisUserChangeInfoRow>
+                                    {
+                                        Entity = item
+                                    });
+                                    if (saveresponse.EntityId.HasValue)
+                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
                                         {
-                                            Entity = item
-                                        });
-                                        if (saveresponse.EntityId.HasValue)
-                                            new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                            Entity = new AisFileResultsRow
                                             {
-                                                Entity = new AisFileResultsRow
-                                                {
-                                                    FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                    ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                    ReqType = 3
-                                                }
-                                            });
+                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                                ReqType = 3
+                                            }
+                                        });
                                     }
                                     catch (Exception ex)
                                     {
@@ -537,7 +538,7 @@ namespace AccController.Ais.Pages
                 stream.Seek(0, SeekOrigin.Begin);
 
                 var response = this.ExecuteMethod(() => HandleUploadRequest(file, stream, spsHelper.HasError));
-                AisFileRow fileRow = ((UploadResponse)response.Data).UploadedFile;
+                AisFileRow fileRow = ((UploadResponse<AisFileRow>)response.Data).UploadedFile;
 
                 if (fileRow != null)
                 {
@@ -564,20 +565,20 @@ namespace AccController.Ais.Pages
                             {
                                 try
                                 {
-                                    var saveresponse = new AisAddOURepository().Create(uow, new SaveRequest<AisAddOURow>
+                                var saveresponse = new AisAddOURepository().Create(uow, new SaveRequest<AisAddOURow>
+                                {
+                                    Entity = item
+                                });
+                                if (saveresponse.EntityId.HasValue)
+                                    new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
                                     {
-                                        Entity = item
-                                    });
-                                    if (saveresponse.EntityId.HasValue)
-                                        new AisFileResultsRepository().Create(uow, new SaveRequest<AisFileResultsRow>
+                                        Entity = new AisFileResultsRow
                                         {
-                                            Entity = new AisFileResultsRow
-                                            {
-                                                FileId = Convert.ToInt32(saveFileResponse.EntityId),
-                                                ReqId = Convert.ToInt32(saveresponse.EntityId),
-                                                ReqType = 3
-                                            }
-                                        });
+                                            FileId = Convert.ToInt32(saveFileResponse.EntityId),
+                                            ReqId = Convert.ToInt32(saveresponse.EntityId),
+                                            ReqType = 3
+                                        }
+                                    });
                                 }
                                 catch (Exception ex)
                                 {
@@ -641,10 +642,10 @@ namespace AccController.Ais.Pages
                         Shortname = "tanhn",
                         Priority = 1,
                         Status =  1
-
+                
                     }
                 });
-                
+
                
 
                 return saveFileResponse;
@@ -685,7 +686,7 @@ namespace AccController.Ais.Pages
             {
                 stream.WriteTo(fs);
             }
-            return new UploadResponse()
+            return new UploadResponse<AisFileRow>()
             {
                 TemporaryFile = fileRow.FilePath,
                 IsImage = false,
@@ -693,18 +694,6 @@ namespace AccController.Ais.Pages
             };
         }
 
-        private class UploadResponse : ServiceResponse
-        {
-            public string TemporaryFile { get; set; }
-            public long Size { get; set; }
-            public bool IsImage { get; set; }
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public string ContenType { get; set; }
-            public AisFileRow UploadedFile { get; set; }
-        }
-        private class ListContainer<T> {
-            public List<T> Entities { get; set; }
-        }
+        
     }
 }

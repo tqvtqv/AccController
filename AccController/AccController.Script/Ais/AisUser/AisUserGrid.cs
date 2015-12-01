@@ -202,6 +202,8 @@ namespace AccController.Ais
                                    else
                                        Q.NotifyError(data.Error.Message);
                                }
+                               else if (data.result.Error != null)
+                                   Q.NotifyError(data.result.Error.Message);
                                else
                                    Refresh();
                            }));

@@ -1773,6 +1773,9 @@
 							Q.notifyError(ss.cast(data1.Error.Message, String));
 						}
 					}
+					else if (!!ss.isValue(data1.result.Error)) {
+						Q.notifyError(ss.cast(data1.result.Error.Message, String));
+					}
 					else {
 						this.refresh();
 					}
@@ -1984,6 +1987,9 @@
 							Q.notifyError(ss.cast(data1.Error.Message, String));
 						}
 					}
+					else if (!!ss.isValue(data1.result.Error)) {
+						Q.notifyError(ss.cast(data1.result.Error.Message, String));
+					}
 					else {
 						this.refresh();
 					}
@@ -2145,6 +2151,9 @@
 						else {
 							Q.notifyError(ss.cast(data1.Error.Message, String));
 						}
+					}
+					else if (!!ss.isValue(data1.result.Error)) {
+						Q.notifyError(ss.cast(data1.result.Error.Message, String));
 					}
 					else {
 						this.refresh();
@@ -2308,6 +2317,9 @@
 							Q.notifyError(ss.cast(data1.Error.Message, String));
 						}
 					}
+					else if (!!ss.isValue(data1.result.Error)) {
+						Q.notifyError(ss.cast(data1.result.Error.Message, String));
+					}
 					else {
 						this.refresh();
 					}
@@ -2463,6 +2475,9 @@
 						else {
 							Q.notifyError(ss.cast(data1.Error.Message, String));
 						}
+					}
+					else if (!!ss.isValue(data1.result.Error)) {
+						Q.notifyError(ss.cast(data1.result.Error.Message, String));
 					}
 					else {
 						this.refresh();
