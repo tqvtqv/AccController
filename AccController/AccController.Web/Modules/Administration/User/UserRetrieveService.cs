@@ -27,7 +27,7 @@ namespace AccController.Administration
                     PasswordSalt = user.PasswordSalt,
                     
                     adminlv = user.AdminLv,
-                    
+                    by_admin = user.by_admin,
                     UpdateDate = user.UpdateDate
 
                 };
@@ -42,6 +42,8 @@ namespace AccController.Administration
                 using (var connection = SqlConnections.NewByKey("Default"))
                     return GetFirst(connection, new Criteria(fld.UserId) == Int32.Parse(id));
             });
+            //using (var connection = SqlConnections.NewByKey("Default"))
+            //    return GetFirst(connection, new Criteria(fld.UserId) == Int32.Parse(id));
         }
 
         public IUserDefinition ByUsername(string username)
@@ -54,6 +56,8 @@ namespace AccController.Administration
                 using (var connection = SqlConnections.NewByKey("Default"))
                     return GetFirst(connection, new Criteria(fld.Username) == username);
             });
+            //using (var connection = SqlConnections.NewByKey("Default"))
+            //    return GetFirst(connection, new Criteria(fld.Username) == username);
         }
     }
 }

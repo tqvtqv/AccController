@@ -78,7 +78,12 @@ namespace AccController.Email.Entities
             get { return Fields.By_User[this]; }
             set { Fields.By_User[this] = value; }
         }
-
+        [DisplayName("By_SubAdmin"), Size(50), NotNull]
+        public Int32? By_SubAdmin
+        {
+            get { return Fields.By_SubAdmin[this]; }
+            set { Fields.By_SubAdmin[this] = value; }
+        }
         [DisplayName("Submit"), Size(50), NotNull]
         public String Submit
         {
@@ -115,6 +120,7 @@ namespace AccController.Email.Entities
             public readonly StringField Description;
             public readonly StringField By_User;
             public readonly StringField Submit;
+            public readonly Int32Field By_SubAdmin;
             public RowFields()
                 : base("[Acc].EmailChange")
             {

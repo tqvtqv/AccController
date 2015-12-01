@@ -52,7 +52,7 @@
 
                 <li id="LeftNavigationLink_@(i)_@(l)">
                     <a href="@(link.Url ?? "javascript:;")"@target>
-                        <span class="sidebar-nav-item-icon @(link.IconClass ?? (link.Children.Count > 0 ? "fa icon-layers" : "fa icon-none"))"></span>
+                       @* <span class="sidebar-nav-item-icon @(link.IconClass ?? (link.Children.Count > 0 ? "fa icon-layers" : "fa icon-none"))"></span>*@
                         @(LocalText.TryGet("Navigation." + section.Title + "/" + link.Title) ?? link.Title)
                     </a>
                 </li>

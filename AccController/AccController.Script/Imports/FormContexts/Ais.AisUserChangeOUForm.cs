@@ -18,6 +18,8 @@ namespace AccController.Ais
     
         public StringEditor Email { get { return ById<StringEditor>("Email"); } }
         public StringEditor OldOu { get { return ById<StringEditor>("OldOu"); } }
+        public StringEditor OldJobtitle { get { return ById<StringEditor>("OldJobtitle"); } }
+        public StringEditor OldRole { get { return ById<StringEditor>("OldRole"); } }
         public StringEditor NewOu { get { return ById<StringEditor>("NewOu"); } }
         public StringEditor NewJobtitle { get { return ById<StringEditor>("NewJobtitle"); } }
         public StringEditor NewRole { get { return ById<StringEditor>("NewRole"); } }

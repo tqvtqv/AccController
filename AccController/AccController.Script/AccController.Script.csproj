@@ -39,9 +39,9 @@
     <Compile Include="Administration\UserPermission\PermissionModuleEditor.cs" />
     <Compile Include="Administration\UserPermission\PermissionCheckEditor.cs" />
     <Compile Include="Administration\UserRole\UserRoleDialog.cs" />
-    <Compile Include="Common\Helper\GridEditorDialog.cs" />
-    <Compile Include="Common\Navigation\LanguageSelection.cs" />
-    <Compile Include="Common\Navigation\SidebarSearch.cs" />
+    <Compile Include="Email\Common\Helper\GridEditorDialog.cs" />
+    <Compile Include="Email\Common\Navigation\LanguageSelection.cs" />
+    <Compile Include="Email\Common\Navigation\SidebarSearch.cs" />
     <Compile Include="Imports\FormContexts\Administration.LanguageForm.cs">
       <DependentUpon>FormContexts.tt</DependentUpon>
     </Compile>
@@ -324,9 +324,39 @@
     <Compile Include="Imports\ServiceContracts\Request_Ais.GroupService.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailChangeRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailChangeService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailGroupAccountRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailGroupAccountService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailGroupRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailGroupService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailNewRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailNewService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailUpdateInfoRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\Request_Email.EmailUpdateInfoService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
     <Compile Include="Membership\RegisterPanel.cs" />
     <Compile Include="Membership\LoginPanel.cs" />
-    <Compile Include="Common\Helper\GridEditorBase.cs" />
+    <Compile Include="Email\Common\Helper\GridEditorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScriptInitialization.cs" />
     <Compile Include="Administration\User\UserGrid.cs" />
@@ -369,11 +399,6 @@
     <Compile Include="Email\EmailUpdateInfo\EmailUpdateInfoDialog.cs" />
     <Compile Include="Ais\AisUser\AisUserGrid.cs" />
     <Compile Include="Ais\AisUser\AisUserDialog.cs" />
-    <Compile Include="Imports\FormContexts\Ais.TesttForm.cs">
-      <DependentUpon>FormContexts.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Ais\Testt\TesttGrid.cs" />
-    <Compile Include="Ais\Testt\TesttDialog.cs" />
     <Compile Include="Imports\FormContexts\Request_Ais.GroupForm.cs">
       <DependentUpon>FormContexts.tt</DependentUpon>
     </Compile>
@@ -399,6 +424,40 @@
     </Compile>
     <Compile Include="Request_Ais\AisUserChangeOU\AisUserChangeOUGrid.cs" />
     <Compile Include="Request_Ais\AisUserChangeOU\AisUserChangeOUDialog.cs" />
+    <Compile Include="Imports\FormContexts\Ais.SubAdminForm.cs" />
+    <Compile Include="Imports\FormContexts\SubAdmin.SubAdminForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubAdmin\SubAdmin\SubAdminGrid.cs" />
+    <Compile Include="SubAdmin\SubAdmin\SubAdminDialog.cs" />
+    <Compile Include="Imports\FormContexts\SubAdmin.UsersForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubAdmin\Users\UsersGrid.cs" />
+    <Compile Include="SubAdmin\Users\UsersDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Email.EmailChangeForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Email\EmailChange\EmailChangeGrid.cs" />
+    <Compile Include="Request_Email\EmailChange\EmailChangeDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Email.EmailGroupForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Email\EmailGroup\EmailGroupGrid.cs" />
+    <Compile Include="Request_Email\EmailGroup\EmailGroupDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Email.EmailGroupAccountForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Email\EmailGroupAccount\EmailGroupAccountGrid.cs" />
+    <Compile Include="Request_Email\EmailGroupAccount\EmailGroupAccountDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Email.EmailNewForm.cs">
+      <DependentUpon>FormContexts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Request_Email\EmailNew\EmailNewGrid.cs" />
+    <Compile Include="Request_Email\EmailNew\EmailNewDialog.cs" />
+    <Compile Include="Imports\FormContexts\Request_Email.EmailUpdateInfoForm.cs" />
+    <Compile Include="Request_Email\EmailUpdateInfo\EmailUpdateInfoGrid.cs" />
+    <Compile Include="Request_Email\EmailUpdateInfo\EmailUpdateInfoDialog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Imports\FormContexts\FormContexts.log">
@@ -421,16 +480,22 @@
       <LastGenOutput>ServiceContracts.log</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <Compile Include="Imports\ServiceContracts\Ais.TesttRow.cs">
-      <DependentUpon>ServiceContracts.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Imports\ServiceContracts\Ais.TesttService.cs">
-      <DependentUpon>ServiceContracts.tt</DependentUpon>
-    </Compile>
     <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserRow.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
     <Compile Include="Imports\ServiceContracts\Request_Ais.AisUserService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\SubAdmin.SubAdminRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\SubAdmin.SubAdminService.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\SubAdmin.UsersRow.cs">
+      <DependentUpon>ServiceContracts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Imports\ServiceContracts\SubAdmin.UsersService.cs">
       <DependentUpon>ServiceContracts.tt</DependentUpon>
     </Compile>
   </ItemGroup>

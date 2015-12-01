@@ -1,3 +1,4 @@
+
 namespace AccController.Email
 {
     using jQueryApi;

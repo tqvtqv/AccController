@@ -11,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace AccController.Modules.Common.Helpers
 {
@@ -31,7 +32,7 @@ namespace AccController.Modules.Common.Helpers
             HasError = false;
             cultureInfo = new CultureInfo("vi");
             cultureInfo.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy";
-
+            
 
         }
         //public SpreedSheetHelper(DbContext ctx, string templatePath)
@@ -41,9 +42,9 @@ namespace AccController.Modules.Common.Helpers
         //}
         public MemoryStream OpenTemplate()
         {
-            if (System.IO.File.Exists(TemplatePath))
+            if (File.Exists(TemplatePath))
             {
-                var f = System.IO.File.OpenRead(TemplatePath);
+                var f = File.OpenRead(TemplatePath);
                 var stream = new MemoryStream();
                 f.CopyTo(stream);
                 f.Close();
@@ -52,12 +53,12 @@ namespace AccController.Modules.Common.Helpers
             else
                 return null;
         }
-        public CommonWorkSheet GetTemplateSheet(MemoryStream templateFile)
+        public CommonWorkSheet GetTemplateSheet()
         {
             try
             {
                 var sheet = new CommonWorkSheet();
-                var templateWorkPart = SpreadsheetDocument.Open(templateFile, false).WorkbookPart;
+                var templateWorkPart = SpreadsheetDocument.Open(OpenTemplate(), false).WorkbookPart;
                 sheet.Sheet = templateWorkPart.WorksheetParts.First().Worksheet;
                 #region build defined names
                 sheet.DefinedNames = BuildDefinedNamesTable(templateWorkPart, 0);
@@ -102,13 +103,13 @@ namespace AccController.Modules.Common.Helpers
 
             // cell format references style format 0, font 0, border 0, fill 2 and applies the fill
             styleSheet.CellFormats.AppendChild(new CellFormat { FormatId = 0, FontId = 0, BorderId = 0, FillId = 2, ApplyFill = true });
-
+            
             styleSheet.Save();
 
             errCellStyleIndex = styleSheet.CellFormats.Count - 1;
             #endregion
 
-            FillObject(container, workbookPart, GetTemplateSheet(OpenTemplate()));
+            FillObject(container, workbookPart, GetTemplateSheet());
             return container;
         }
 
@@ -134,14 +135,14 @@ namespace AccController.Modules.Common.Helpers
 
         public T GetTemplate<T>() where T : ICommonSheet, new()
         {
-            var f = System.IO.File.OpenRead(TemplatePath);
+            var f = File.OpenRead(TemplatePath);
             using (MemoryStream stream = new MemoryStream())
             {
                 f.CopyTo(stream);
 
             }
-            if (System.IO.File.Exists(TemplatePath))
-                return GetSheet<T>(System.IO.File.OpenRead(TemplatePath), 0);
+            if (File.Exists(TemplatePath))
+                return GetSheet<T>(File.OpenRead(TemplatePath), 0);
 
             return new T();
         }
@@ -161,7 +162,7 @@ namespace AccController.Modules.Common.Helpers
             else
                 data.SheetName = sheets.FirstOrDefault().Name;
             var defNames = workbookPart.Workbook.DefinedNames;
-            var x = GetTemplateSheet(OpenTemplate());
+            var x = GetTemplateSheet();
             return data;
 
         }
@@ -753,42 +754,48 @@ namespace AccController.Modules.Common.Helpers
 
 
         #region export Xls
-        public MemoryStream ExportXls<T>(IEnumerable<T> listObjs)
+        public static MemoryStream ExportXls<T>(IEnumerable<T> listObjs)
         {
             if (listObjs != null && listObjs.Any())
             {
-                var stream = OpenTemplate();
-                var templateSheet = GetTemplateSheet(stream);
-                stream.Seek(0, SeekOrigin.Begin);
-                using (SpreadsheetDocument workbook = SpreadsheetDocument.Open(stream, true))
+                var stream = new MemoryStream();
+                using (SpreadsheetDocument workbook = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook, true))
                 {
-                    var sheet = workbook.WorkbookPart.WorksheetParts.First().Worksheet;
-                    #region Fill Range cells
-                    var defRange = templateSheet.DefinedNames.FirstOrDefault(n => n.IsRange);
+                    // create the workbook
+                    var workbookPart = workbook.AddWorkbookPart();
+                    workbook.WorkbookPart.Workbook = new Workbook();     // create the worksheet
+                    workbook.WorkbookPart.Workbook.Sheets = new Sheets();
 
-                    var startRow = Convert.ToUInt32(defRange.StartRow);
+                    var sheetPart = workbook.WorkbookPart.AddNewPart<WorksheetPart>();
+                    var sheetData = new SheetData();
+                    sheetPart.Worksheet = new Worksheet(sheetData);
 
-                    SheetData sheetData = sheet.GetFirstChild<SheetData>();
-                    sheetData.Elements<Row>().FirstOrDefault(r => r.RowIndex == startRow).Remove();
-                    //Row lastRow = sheetData.Elements<Row>().LastOrDefault();
+                    Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<Sheets>();
+                    string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
+
+                    uint sheetId = 1;
+                    if (sheets.Elements<Sheet>().Count() > 0)
+                    {
+                        sheetId =
+                            sheets.Elements<Sheet>().Select(s => s.SheetId.Value).Max() + 1; 
+                    }
+
+                    Sheet sheet = new Sheet() { Id = relationshipId, SheetId = sheetId, Name = string.Format("DanhSach{0}", typeof(T).Name) };
+                    sheets.Append(sheet);
+
+
                     foreach (var item in listObjs)
                     {
-                        //startRow++;
-                        Row newRow = new Row ();
-                        foreach (var col in defRange.Columns)
-                        {
-                            PropertyInfo propInfo = item.GetType().GetProperty(col.Parameter.Field);
-                            Cell cell = new Cell();
-                            cell.DataType = CellValues.String;
-                            var value = propInfo.GetValue(item, null);
-                            cell.CellValue = new CellValue((value != null) ? value.ToString() : string.Empty); //
-                            newRow.AppendChild(cell);
-                        }
+                        Row newRow = new Row();
+
+                        Cell cell = new Cell();
+                        cell.DataType = CellValues.String;
+                        //cell.CellValue = new CellValue(item.SoDienThoai); //
+                        newRow.AppendChild(cell);
+
                         sheetData.AppendChild(newRow);
                     }
-                    #endregion
 
-                    workbook.WorkbookPart.Workbook.Save();
                 }
                 stream.Seek(0, SeekOrigin.Begin);
                 return stream;
@@ -796,7 +803,6 @@ namespace AccController.Modules.Common.Helpers
             else
                 return null;
         }
-
         #endregion
     }
     public class CommonWorkSheet : ICommonSheet

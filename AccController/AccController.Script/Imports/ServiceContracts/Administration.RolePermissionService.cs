@@ -1,3 +1,4 @@
+
 namespace AccController.Administration
 {
     using jQueryApi;

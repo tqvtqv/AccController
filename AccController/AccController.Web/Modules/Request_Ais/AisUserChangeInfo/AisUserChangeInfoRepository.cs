@@ -22,11 +22,6 @@ namespace AccController.Request_Ais.Repositories
         {
             return new MySaveHandler().Process(uow, request, SaveRequestType.Update);
         }
-        public SaveResponse UpdateResult(IUnitOfWork uow, SaveRequest<MyRow> request)
-        {
-            request.Entity.Status = 2;
-            return new MySaveHandler().Process(uow, request, SaveRequestType.Update);
-        }
 
         public DeleteResponse Delete(IUnitOfWork uow, DeleteRequest request)
         {

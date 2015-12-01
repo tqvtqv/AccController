@@ -2,6 +2,7 @@
 
 namespace AccController.Ais.Repositories
 {
+    using AccController.Administration;
     using Serenity;
     using Serenity.Data;
     using Serenity.Services;
@@ -16,6 +17,13 @@ namespace AccController.Ais.Repositories
 
         public SaveResponse Create(IUnitOfWork uow, SaveRequest<MyRow> request)
         {
+            UserRetrieveService user_service = new UserRetrieveService();
+            UserDefinition user = (UserDefinition)user_service.ByUsername(Thread.CurrentPrincipal.Identity.Name);
+            if (user.by_admin.IsEmptyOrNull() == false)
+                request.Entity.By_SubAdmin = Convert.ToInt32(user.by_admin);
+            else
+                request.Entity.By_SubAdmin = 0;
+
             request.Entity.Submit = "0";
             request.Entity.Result = 0;
             request.Entity.By_User = Thread.CurrentPrincipal.Identity.Name;
